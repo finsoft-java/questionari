@@ -9,11 +9,11 @@
         <div class="row">
             <div class=" col">
                 <label for="titolo_progetto">Titolo Progetto</label>
-                <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Progetto" [(ngModel)]="progetto.titolo" [ngModelOptions]="{standalone: true}">
+                <input type="text" class="form-control" [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" id="titolo_progetto" placeholder="Titolo Progetto" [(ngModel)]="progetto.titolo" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="col">
                 <label for="stato_progetto">Stato</label>                
-                <select class="form-control" required  [(ngModel)]="progetto.stato" [ngModelOptions]="{standalone: true}">
+                <select class="form-control" required [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" [(ngModel)]="progetto.stato" [ngModelOptions]="{standalone: true}">
                     <option *ngFor="let dati_stato_progetto of stato_progetto; index as i"
                         value="{{i}}">
                         {{ dati_stato_progetto }}
