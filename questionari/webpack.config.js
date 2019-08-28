@@ -33,7 +33,7 @@ module.exports = {
             // global app config object
             config: JSON.stringify({
                 //apiUrl: 'http://192.168.99.100/ws'                     //luca
-                apiUrl: 'http://127.0.0.1/ws_questionari/ws'        // ale
+                apiUrl: 'http://127.0.0.1/questionari/ws'        // ale
             })
         })
     ],

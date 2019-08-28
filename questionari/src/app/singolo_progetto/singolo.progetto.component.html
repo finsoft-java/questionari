@@ -21,12 +21,12 @@
                 </select>   
             </div>
         </div>  
-        <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="updProgetto(this)">Salva Progetto</button></div>      
+        <div><button class="btn btn-success" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" [disabled]="progetto.gia_compilato=='1'" style="margin-right:5px;margin-top:10px;" (click)="updProgetto(this)">Salva Progetto</button></div>      
     </form>
 
 
     <h5>Questionari per Progetto</h5>
-    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="newQuestionario()">Aggiungi Questionario</button>
+    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="newQuestionario()" [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Aggiungi Questionario</button>
     <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refreshQuestionario()">Refresh</button>
 
     <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
@@ -45,7 +45,7 @@
 
     <br/>
     <h5>Utenti per Progetto</h5>
-    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="save(progettoUtenti)">Salva</button>
+    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" (click)="save(progettoUtenti)">Salva</button>
     <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refresh()">Refresh</button>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
         <table mdbTable class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
