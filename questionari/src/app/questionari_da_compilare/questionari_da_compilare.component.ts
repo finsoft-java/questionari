@@ -13,6 +13,8 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
     questionari: VistaQuestionariCompilabili[];
     storico: boolean;
     loading = true;
+    searchString : string;
+    quest_comp_visibili : VistaQuestionariCompilabili[];
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -24,7 +26,6 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
             this.currentUser = user;
         });
-        
     } 
 
     ngOnInit() {
@@ -32,7 +33,6 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
             this.storico = (data['storico'] != null && data['storico'] != '' && data['storico']);
             this.getLista();
          });
-        
     }
 
     ngOnDestroy() {
@@ -45,11 +45,28 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
         this.questCompService.getAll(this.storico)
             .subscribe(response => {
                 this.questionari = response["data"];
+                this.calcola_questionari_visibili();
                 this.loading = false;
             });
     }
     removeItem(progressivoQuestComp: number) {
         let index = this.questionari.findIndex(obj => obj.progressivo_quest_comp == progressivoQuestComp);
         this.questionari.splice(index, 1);
+        this.calcola_questionari_visibili();
+    }
+    set_search_string(searchString) {
+        this.searchString = searchString;
+        this.calcola_questionari_visibili();
+    }
+    calcola_questionari_visibili() {
+        if (!this.searchString) {
+            this.quest_comp_visibili = this.questionari;
+        } else {
+            let s = this.searchString.toLowerCase();
+            this.quest_comp_visibili = this.questionari.filter(q => 
+                (q.titolo_progetto != null && q.titolo_progetto.toLowerCase().includes(s)) ||
+                (q.titolo_questionario != null && q.titolo_questionario.toLowerCase().includes(s))
+            );
+        }
     }
 }

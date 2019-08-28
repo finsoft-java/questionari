@@ -8,32 +8,22 @@ export class SearchComponent implements OnInit, OnDestroy {
     
     @Input() searchString : string;
     @Output() public doSearch = new EventEmitter<string>();
-    
     previousSearch : string;
-    timeout : any; // NodeJS.Timeout ?!?
-    utenti_visibili : User[];
 
     ngOnInit() {
     }
     ngOnDestroy() {
     }
-    /**
-     * Se l'utente scrive "Paperino", aspettiamo mezzo secondo dall'ultima lettera
-     * e poi lanciamo la ricerca una volta sola
-     */
-    wait_then_do_search() {
-        if (this.previousSearch == this.searchString) {
+    emit_do_search($event) {
+        if ($event != null && $event.key == "Escape") {
+            // Al tasto ESC ripulisco la casellina
+            this.previousSearch = this.searchString = null;
+        } else if (this.previousSearch == this.searchString) {
             // L'utente ha schiacciato CTRL, ENTER, SHIFT, ...
             return;
         }
         this.previousSearch = this.searchString;
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
-        this.timeout = setTimeout(() => {
-            this.timeout = null;
-            this.doSearch.emit(this.searchString);
-        }, 500);
+        this.doSearch.emit(this.searchString);
     }
 
 }

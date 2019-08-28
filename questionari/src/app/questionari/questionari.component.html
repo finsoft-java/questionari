@@ -2,6 +2,7 @@
 
 <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="crea()">Nuovo questionario</button>
 <button class="btn" style="margin-top:10px;" (click)="refresh()">Refresh</button>
+<search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
         <th>Titolo</th>
@@ -12,7 +13,7 @@
         <th>Azioni</th>
     </thead>
     <tbody>
-        <tr *ngFor="let q of questionari; let i= index">
+        <tr *ngFor="let q of questionari_visibili">
             <td>{{q.titolo}}</td>
             <td>{{q.stato_dec}}</td>
             <td>{{q.utente_creazione}}</td>
@@ -23,11 +24,11 @@
                     routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active"
                     [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''">
                     {{q.gia_compilato == '0' ? 'Apri' : 'Apri (read-only)'}}</button>
-                <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" (click)="duplica(i)">Duplica</button>
+                <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" (click)="duplica(q.id_questionario)">Duplica</button>
                 <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
                     [disabled]="q.gia_compilato=='1'"
                     [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''"
-                    (click)="elimina(i)">Elimina</button>
+                    (click)="elimina(q.id_questionario)">Elimina</button>
             </td>
         </tr>
     </tbody>

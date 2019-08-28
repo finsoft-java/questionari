@@ -1,6 +1,7 @@
 <h3>Progetti</h3>
 <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="crea()">Nuovo progetto</button>
 <button class="btn" style="margin-top:10px;" (click)="refresh()">Refresh</button>
+<search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
 
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
@@ -11,7 +12,7 @@
         <th>Azioni</th>
     </thead>
     <tbody>
-        <tr *ngFor="let p of progetti; let i= index">
+        <tr *ngFor="let p of progetti_visibili">
             <td>{{p.titolo}}</td>
             <td>{{p.stato_dec}}</td>
             <td>{{p.utente_creazione}}</td>
@@ -22,9 +23,9 @@
                     [title]="p.gia_compilato=='1' ? 'Questionario già compilato' : ''">
                     {{p.gia_compilato == '0' ? 'Apri' : 'Apri (read-only)'}}</button>
                 <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" 
-                    (click)="duplica(i)">Duplica</button>
+                    (click)="duplica(p.id_progetto)">Duplica</button>
                 <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
-                    [disabled]="p.gia_compilato=='1'" (click)="elimina(i)"
+                    [disabled]="p.gia_compilato=='1'" (click)="elimina(p.id_progetto)"
                     [title]="p.gia_compilato=='1' ? 'Questionario già compilato' : ''"
                      >Elimina</button>
             </td>

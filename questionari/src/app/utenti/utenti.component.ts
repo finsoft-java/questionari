@@ -57,11 +57,12 @@ export class UtentiComponent implements OnInit, OnDestroy {
         if (!this.searchString) {
             this.utenti_visibili = this.utenti;
         } else {
+            let s = this.searchString.toLowerCase();
             this.utenti_visibili = this.utenti.filter(user => 
-                (user.username != null && user.username.includes(this.searchString)) ||
-                (user.cognome != null && user.cognome.includes(this.searchString)) ||
-                (user.nome != null && user.nome.includes(this.searchString)) ||
-                (user.email != null && user.email.includes(this.searchString))
+                (user.username != null && user.username.toLowerCase().includes(s)) ||
+                (user.cognome != null && user.cognome.toLowerCase().includes(s)) ||
+                (user.nome != null && user.nome.toLowerCase().includes(s)) ||
+                (user.email != null && user.email.toLowerCase().includes(s))
             );
         }
     }

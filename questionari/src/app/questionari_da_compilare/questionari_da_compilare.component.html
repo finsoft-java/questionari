@@ -9,6 +9,7 @@
 </div>
 
 <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="getLista()">Refresh</button>
+<search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
 
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
@@ -19,7 +20,7 @@
         <th>Azioni</th>
     </thead>    
     <tbody>
-        <tr table-quest-comp-row *ngFor="let q of questionari; let i= index"  [data]="q" [storico]="storico"
+        <tr table-quest-comp-row *ngFor="let q of quest_comp_visibili"  [data]="q" [storico]="storico"
             (itemRemoved)="removeItem($event)"></tr>
     </tbody>
 </table>

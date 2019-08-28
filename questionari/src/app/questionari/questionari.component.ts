@@ -10,6 +10,9 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     currentUserSubscription: Subscription;
     currentUser: User;
     questionari : Questionario[];
+    searchString : string;
+    questionari_visibili : Questionario[];
+
     constructor(
         private authenticationService: AuthenticationService,
         private questionariService: QuestionariService,
@@ -51,26 +54,44 @@ export class QuestionariComponent implements OnInit, OnDestroy {
       this.questionariService.getAll()
         .subscribe(response => {
             this.questionari = response["data"];
+            this.calcola_questionari_visibili();
         },
         error => {
           this.alertService.error(error);
         });
     }
-    elimina(index: number): void {
+    elimina(id_questionario: number): void {
         this.alertService.error("Implementato, ma per sicurezza non te lo lascio schiacciare");
         return;
-        this.questionariService.delete(this.questionari[index].id_questionario)
+        this.questionariService.delete(id_questionario)
             .subscribe(response => {
+                let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
                 this.questionari.splice(index, 1);
+                this.calcola_questionari_visibili();
             },
             error => {
               this.alertService.error(error);
             });
     }
-    duplica(index: number) {
+    duplica(id_questionario: number) {
         this.alertService.error("Non implementato");
     }
     refresh() {
         this.getQuestionari();
+    }
+    set_search_string(searchString) {
+        this.searchString = searchString;
+        this.calcola_questionari_visibili();
+    }
+    calcola_questionari_visibili() {
+        if (!this.searchString) {
+            this.questionari_visibili = this.questionari;
+        } else {
+            let s = this.searchString.toLowerCase();
+            this.questionari_visibili = this.questionari.filter(q => 
+                (q.titolo != null && q.titolo.toLowerCase().includes(s)) ||
+                (q.utente_creazione != null && q.utente_creazione.toLowerCase().includes(s))
+            );
+        }
     }
 }
