@@ -40,6 +40,7 @@ export class UtentiComponent implements OnInit, OnDestroy {
         userNew.editing = true;
         userNew.creating = true;
         this.utenti.push(userNew);
+        this.set_search_string(null); // altrimenti la nuova riga non è visibile
     }
     getUsers(): void {
       this.userService.getAll()
