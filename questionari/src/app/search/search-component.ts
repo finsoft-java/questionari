@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { User } from '@/_models';
 
 @Component({
@@ -7,7 +7,7 @@ import { User } from '@/_models';
 export class SearchComponent implements OnInit, OnDestroy {
     @Output() public doSearch = new EventEmitter<string>();
     
-    searchString : string;
+    @Input() searchString : string;
     previousSearch : string;
     timeout : any; // NodeJS.Timeout ?!?
     utenti_visibili : User[];
