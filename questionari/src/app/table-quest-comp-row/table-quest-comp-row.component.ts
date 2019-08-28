@@ -36,7 +36,10 @@ export class TableQuestCompRowComponent implements OnInit {
               this.router.navigate(['/compila', response["value"].progressivo_quest_comp]);
           },
           error => {
-          this.alertService.error(error);
+            if (error === "OK") {
+              error = "Il server ha dato una risposta non attesa, si consiglia di aggiornare la pagina.";
+            }
+            this.alertService.error(error);
           });
 
   }
