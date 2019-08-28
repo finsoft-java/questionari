@@ -325,7 +325,7 @@ class ProgettiManager {
         global $con, $RUOLO;
         $arr = array();
         $sql = "SELECT ut.username as username, pr_ut.funzione as funzione FROM utenti as ut ".
-            "LEFT JOIN progetti_utenti pr_ut ON UT.username = pr_ut.nome_utente AND pr_ut.id_progetto = '".$progetto."' ".
+            "LEFT JOIN progetti_utenti pr_ut ON ut.username = pr_ut.nome_utente AND pr_ut.id_progetto = '".$progetto."' ".
             "ORDER BY pr_ut.funzione desc, ut.username";
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
