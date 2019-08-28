@@ -1,0 +1,25 @@
+
+<!--Questa pagina cambia in base al parametro "storico" (boolean)-->
+
+<div *ngIf="!storico">
+    <h3>Questionari che possono essere compilati dall'utente</h3>
+</div>
+<div *ngIf="storico">
+    <h3>Storico dei questionari già compilati</h3>
+</div>
+
+<button class="btn" style="margin-right:5px;margin-top:10px;" (click)="getLista()">Aggiorna</button>
+
+<table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+    <thead>
+        <th>Progetto</th>
+        <th>Questionario</th>
+        <th>Data compilazione</th>
+        <th *ngIf="storico && currentUser.ruolo == '2'">Utente</th>
+        <th>Azioni</th>
+    </thead>    
+    <tbody>
+        <tr table-quest-comp-row *ngFor="let q of questionari; let i= index"  [data]="q" [storico]="storico"
+            (itemRemoved)="removeItem($event)"></tr>
+    </tbody>
+</table>

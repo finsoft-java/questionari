@@ -1,0 +1,65 @@
+<div *ngIf="progetto == null">
+    Loading...
+</div>
+<div *ngIf="progetto != null">
+
+    <form style="margin-bottom:30px">
+        <h3>Progetto</h3> <br>
+        <h5>Dati Generali</h5> <br>
+        <div class="row">
+            <div class=" col">
+                <label for="titolo_progetto">Titolo Progetto</label>
+                <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Progetto" [(ngModel)]="progetto.titolo" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col">
+                <label for="stato_progetto">Stato</label>                
+                <select class="form-control" required  [(ngModel)]="progetto.stato" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let dati_stato_progetto of stato_progetto; index as i"
+                        value="{{i}}">
+                        {{ dati_stato_progetto }}
+                    </option>   
+                </select>   
+            </div>
+        </div>  
+        <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="updProgetto(this)">Salva Progetto</button></div>      
+    </form>
+
+
+    <h5>Questionari per Progetto</h5>
+    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="newQuestionario()">Aggiungi Questionario</button>
+    <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refreshQuestionario()">Refresh</button>
+
+    <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+        <thead>
+            <th>Nome Questionario</th>
+            <th>Tipo Questionario</th>
+            <th>Gruppo Compilanti</th>
+            <th>Gruppo Valutati</th>
+            <th>Autovalutazione</th>
+            <th>Azioni</th>     
+        </thead>    
+        <tbody>
+            <tr table-questionari-row *ngFor="let questionario_row of progetto.questionari; let i= index;" [progetto]="progetto"  [questionario]="questionario_row" [indexQuestionario]="i" (itemRemoved)="removeItem($event)"></tr>
+        </tbody>
+    </table>
+
+    <br/>
+    <h5>Utenti per Progetto</h5>
+    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="save(progettoUtenti)">Salva</button>
+    <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refresh()">Refresh</button>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table mdbTable class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+            <thead>
+                <th>Utente</th>
+                <th>Responsabile L1</th>
+                <th>Responsabile L2</th>
+                <th>Utenti Finali</th>
+            </thead>    
+            <tbody style="max-height:300px;overflow-y: scroll;"> 
+                <tr table-ruoli-row *ngFor="let utente_row of progettoUtenti; let i= index;" [idProgetto]="id_progetto"  [utente]="utente_row" [indexUser]="i" (itemRemoved)="removeItem($event)"></tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <button class="btn btn-dark" (click)="download()">Scarica tutti i questionari in formato Excel</button>
+</div>

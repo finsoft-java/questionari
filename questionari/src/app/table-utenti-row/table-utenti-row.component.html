@@ -1,0 +1,55 @@
+<td>
+    <div *ngIf="utente.creating">
+        <input class="form-control" style="width: auto;max-width: 130px;" [(ngModel)]="utente_in_modifica.username" required/>
+    </div>
+    <div *ngIf="!utente.creating">
+        <div tabindex="0" style="outline: none !important; line-height: 38px;" title="{{utente.username}}">{{ this.truncate(utente.username) }}&nbsp;</div>
+    </div>        
+</td>
+<td>
+    <div *ngIf="utente.editing">
+        <input class="form-control" style="width: auto;max-width: 130px;"  [(ngModel)]="utente_in_modifica.nome" required/>
+    </div>
+    <div *ngIf="!utente.editing">
+        <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.nome}}&nbsp;</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="utente.editing">
+        <input class="form-control" style="width: auto;max-width: 130px;"  [(ngModel)]="utente_in_modifica.cognome" required/>
+    </div>
+    <div *ngIf="!utente.editing">
+        <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.cognome}}&nbsp;</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="utente.editing">
+        <input class="form-control" style="width: auto;max-width: 130px;" title="{{utente.email}}" alt="{{utente.email}}"  [(ngModel)]="utente_in_modifica.email" required/>
+    </div>
+    <div *ngIf="!utente.editing">
+        <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.email}}&nbsp;</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="utente.editing">
+        <select class="form-control" [(ngModel)]="utente_in_modifica.ruolo" required>
+            <option *ngFor="let option of ruoliMap; index as i"
+                value="{{i}}">
+                {{ option }}
+            </option>
+
+
+        </select>
+    </div>
+    <div *ngIf="!utente.editing">
+        <div title="{{utente.ruolo_dec}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.ruolo_dec}}&nbsp;</div>
+    </div>
+</td>
+<td>
+    <div>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!utente.editing" (click)="goToEdit()">Modifica</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!utente.editing" (click)="delete(this.utente.username)">Elimina</button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="utente.editing" (click)="save()">Salva</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="utente.editing" (click)="returnFromEdit()">Annulla</button>
+    </div>
+</td>

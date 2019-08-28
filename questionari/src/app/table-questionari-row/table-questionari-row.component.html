@@ -1,0 +1,75 @@
+<td>
+    <div *ngIf="questionario.creating">
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.id_questionario">
+            <option>Selez. questionario</option>
+            <option *ngFor="let dato_questionario of elenco_questionari; index as i"
+                value="{{dato_questionario.id_questionario}}">
+                {{ dato_questionario.titolo }}
+            </option>   
+        </select>
+    </div>
+    <div *ngIf="!questionario.creating">
+        <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ questionario.titolo_questionario }}&nbsp;</div>
+    </div>        
+</td>
+<td>
+    <div *ngIf="questionario.creating">
+            <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.tipo_questionario">
+                    <option *ngFor="let option of tipo_questionario; index as i"
+                        value="{{i}}">
+                        {{ option }}
+                    </option>   
+                </select>      
+    </div>
+    <div *ngIf="!questionario.creating">
+        <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ questionario.tipo_questionario_dec }}&nbsp;</div>
+    </div>        
+</td>
+
+<td>
+    <div *ngIf="questionario.editing">
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.gruppo_compilanti">
+            <option></option>
+            <option *ngFor="let option of gruppi; index as i"
+                value="{{i}}">
+                {{ option }}
+            </option>   
+        </select>
+    </div>
+    <div *ngIf="!questionario.editing">
+        <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.gruppo_compilanti_dec }}</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="questionario.editing">
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.gruppo_valutati">
+                <option></option>
+            <option *ngFor="let option of gruppi; index as i"
+                value="{{i}}">
+                {{ option }}
+            </option>   
+        </select>
+    </div>
+    <div *ngIf="!questionario.editing">
+        <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.gruppo_valutati_dec }}</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="questionario.editing">
+        <input type="checkbox" [(ngModel)]="questionario_in_modifica.autovalutazione_bool" >
+    </div>
+    <div *ngIf="!questionario.editing">
+        <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.autovalutazione_dec }}</div>
+    </div>
+</td>
+
+<td>
+    <div>
+        
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!questionario.editing" (click)="goToEdit()">Modifica</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!questionario.editing" (click)="delete(this.questionario)">Elimina</button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="questionario.editing" (click)="save(questionario_in_modifica)">Salva</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="questionario.editing" (click)="returnFromEdit()">Annulla</button>
+        
+    </div>
+</td>

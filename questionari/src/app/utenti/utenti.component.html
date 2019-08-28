@@ -1,0 +1,17 @@
+﻿<h3>Utenti:</h3>
+        <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="newUser()">Nuovo Utente</button>
+        <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="refresh()">Aggiorna</button>
+        <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="sync()">Sincronizza LDAP</button>
+<table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+    <thead>
+        <th>Username</th>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Email</th>
+        <th>Ruolo</th>
+        <th>Azioni</th>     
+    </thead>    
+    <tbody>
+        <tr table-utenti-row *ngFor="let utente_row of utenti; let i= index;"  [utente]="utente_row" [indexUser]="i" (itemRemoved)="removeItem($event)"></tr>
+    </tbody>
+</table>

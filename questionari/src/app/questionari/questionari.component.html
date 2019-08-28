@@ -1,0 +1,39 @@
+<h3>Questionari</h3>
+
+<button class="btn" style="margin-right:5px;margin-top:10px;" (click)="crea()">Nuovo questionario</button>
+<button class="btn" style="margin-top:10px;" (click)="refresh()">Aggiorna</button>
+<table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+    <thead>
+        <th>Titolo</th>
+        <th>Stato</th>
+        <th>Creato da</th>
+        <th>Data</th>
+        <th>Comune</th>
+        <th>Azioni</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let q of questionari; let i= index">
+            <td>{{q.titolo}}</td>
+            <td>{{q.stato_dec}}</td>
+            <td>{{q.utente_creazione}}</td>
+            <td>{{q.data_creazione}}</td>
+            <td>{{q.flag_comune_dec}}</td>
+            <td style="width:30%">
+                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
+                    *ngIf="q.gia_compilato == '0'" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active">
+                    Apri</button>
+                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;"
+                    *ngIf="q.gia_compilato == '1'" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active"
+                    title="Questionario già compilato">Apri (read-only)</button>
+                <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" (click)="duplica(i)">Duplica</button>
+                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);"
+                    *ngIf="q.gia_compilato == '0'" (click)="elimina(i)">Elimina</button>
+                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);" disabled
+                    *ngIf="q.gia_compilato == '1'" title="Questionario già compilato">Elimina</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div>
+</div>
+

@@ -1,0 +1,37 @@
+<div *ngIf="questionario == null">
+    Loading...
+</div>
+<div *ngIf="questionario != null">
+
+    Pagina singolo questionario<br>
+    '{{questionario.titolo}}'<br>
+    stato {{questionario.stato_dec}}
+    <br><br>
+    
+    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
+            SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' <br>
+            <div *ngFor="let domanda of sezione_corrente.domande; let i= index;">
+                {{domanda.descrizione}}
+                <div *ngFor="let risposta of domanda.risposte">
+                        &gt;&gt; {{risposta.descrizione}}
+                </div>
+                <div>
+                        <button (click)="duplicaDomanda(i)">Duplica domanda</button>
+                        <button (click)="eliminaDomanda(i)">Elimina domanda</button>
+                </div>
+            </div>
+
+ 
+    </div>           
+    <div>
+        <button (click)="creaDomanda()">Aggiungi nuova domanda</button>
+        <button (click)="sezSuccessiva()">Sez. successiva</button>
+        <button (click)="sezPrecedente()">Sez. precedente</button>
+        <button (click)="creaSezione()">Crea sezione</button>
+        <button (click)="duplicaSezioneCorrente()">Duplica sezione</button>
+    </div>
+    <div *ngIf="questionario.sezioni.length == 0">
+            Questo questionario non ha ancora sezioni.
+    </div>
+
+</div>

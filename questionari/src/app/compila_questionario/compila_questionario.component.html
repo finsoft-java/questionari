@@ -1,0 +1,36 @@
+Pagina compilazione OPPURE consultazione di singolo questionario, dipende dall'attributo "compilabile" che è calcolato in PHP<br>
+
+<br>
+Compilazione n. {{progressivo_quest_comp}}<br>
+(Qui servirebbe il titolo questionario, ma al momento il ws non lo restituisce)
+
+<br>
+In alto, serve un menù a tendina per scegliere quale utente si sta valutando: {{utente_valutato_corrente}}<br>
+
+<br>
+
+<div *ngIf="sezione_corrente != null">
+
+        SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' <br>
+        <div *ngFor="let domanda of sezione_corrente.domande">
+                &gt; {{domanda.descrizione}}
+        <div *ngFor="let risposta of domanda.risposte">
+                &gt;&gt; {{risposta.descrizione}}
+        </div>
+        <div>
+                L'utente ha risposto: {{domanda.risposta_dell_utente.progressivo_risposta}} {{domanda.risposta_dell_utente.note}} .
+        </div>
+        </div>
+
+        <br>
+
+        <div>
+                <button (click)="sezSuccessiva()">Sez. successiva</button>
+                <button (click)="sezPrecedente()">Sez. precedente</button>
+        </div>
+
+</div>
+
+<br>
+Poi, solo se il questionario è tutto compilato, serve un bottone:<br>
+<button (click)="convalida()">Convalida il questionario</button>
