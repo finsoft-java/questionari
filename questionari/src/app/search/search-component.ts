@@ -5,9 +5,10 @@ import { User } from '@/_models';
     selector: 'search',
     templateUrl: 'search-component.html'})
 export class SearchComponent implements OnInit, OnDestroy {
-    @Output() public doSearch = new EventEmitter<string>();
     
     @Input() searchString : string;
+    @Output() public doSearch = new EventEmitter<string>();
+    
     previousSearch : string;
     timeout : any; // NodeJS.Timeout ?!?
     utenti_visibili : User[];
