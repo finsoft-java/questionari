@@ -15,6 +15,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     sezione_corrente: Sezione; //esplosa, con tutte le domande e risposte
     indice_sezione_corrente: number;
 
+    stato_questionario = ["Bozza","Valido","Annullato"];
 
     constructor(
         private authenticationService: AuthenticationService,

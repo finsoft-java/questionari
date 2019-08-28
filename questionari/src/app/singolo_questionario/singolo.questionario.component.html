@@ -3,6 +3,27 @@
 </div>
 <div *ngIf="questionario != null">
 
+    <form style="margin-bottom:30px">
+        <h3>Questionario</h3> <br>
+        <h5>Dati Generali</h5> <br>
+        <div class="row">
+            <div class=" col">
+                <label for="titolo_progetto">Titolo Questionario</label>
+                <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Questionario" [(ngModel)]="questionario.titolo" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col">
+                <label for="stato_progetto">Stato</label>                
+                <select class="form-control" required  [(ngModel)]="questionario.stato" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let dati_stato_progetto of stato_questionario; index as i" value="{{i}}">
+                        {{ dati_stato_progetto }}
+                    </option>   
+                </select>   
+            </div>
+        </div>  
+        <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="updQuestionario(this)">Salva Progetto</button></div>      
+    </form>
+
+
     Pagina singolo questionario<br>
     '{{questionario.titolo}}'<br>
     stato {{questionario.stato_dec}}

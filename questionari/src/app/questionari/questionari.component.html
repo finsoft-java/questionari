@@ -22,9 +22,9 @@
                 <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
                     *ngIf="q.gia_compilato == '0'" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active">
                     Apri</button>
-                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;"
+                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;opacity: 0.65 !important;"
                     *ngIf="q.gia_compilato == '1'" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active"
-                    title="Questionario già compilato">Apri (read-only)</button>
+                    title="Questionario già compilato" title="Read-only">Apri</button>
                 <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" (click)="duplica(i)">Duplica</button>
                 <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);"
                     *ngIf="q.gia_compilato == '0'" (click)="elimina(i)">Elimina</button>
