@@ -1,0 +1,22 @@
+cambiare il titolo di "pagina progetti:" e "pagina questionari:"
+
+per tutte le tabelline, l'utente deve capire che i dati si stanno caricando (rotellina che gira..)
+-> metterei un attributo "loading" in ogni component
+
+ELiminare il menu "Modifica dati" dell'utente, in alto a sinistra
+
+Casellina di ricerca in tutte le tabelline
+
+Pagina progetti: se il il progetto e' "già modificato", il bottone "Apri" diventa "Apri (read only)" e il progetto non 
+è modificabile, può solo cambiare di stato
+
+Pagina questionari: se il il questionario e' "già modificato", il bottone "Apri" diventa "Apri (read only)" e il questionario non 
+è modificabile in alcun modo (CHECK AFU)
+
+
+*** WISHLIST *********************************************************************************
+
+jwtinterceptor: rinominare "username" in "token" ....
+
+a fine lavori, mi piacerebbe riempire l'applicativo di tooltip, per spiegare all'utente ogni campo a che cosa serve, in particolare nella pagina compilazione questionario
+
