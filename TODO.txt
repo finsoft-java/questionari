@@ -13,6 +13,7 @@ Pagina progetti: se il il progetto e' "già modificato", il bottone "Apri" diven
 Pagina questionari: se il il questionario e' "già modificato", il bottone "Apri" diventa "Apri (read only)" e il questionario non 
 è modificabile in alcun modo (CHECK AFU)
 
+C'è il problema degli errori "OK", vedi ad esempio "Il server ha dato una risposta non attesa, si consiglia di aggiornare la pagina"
 
 *** WISHLIST *********************************************************************************
 

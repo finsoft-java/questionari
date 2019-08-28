@@ -83,3 +83,7 @@ ws/!.vscode/launch.json
 ws/!.vscode/extensions.json
 
 
+######################################
+
+#word backups
+~*
