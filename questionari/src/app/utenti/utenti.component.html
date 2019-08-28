@@ -2,6 +2,7 @@
         <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="newUser()">Nuovo Utente</button>
         <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="refresh()">Refresh</button>
         <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="sync()">Sincronizza LDAP</button>
+        &nbsp;<input placeholder="Search..." (keyup)="wait_then_refresh($event)" [(ngModel)]="searchString"  />
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
         <th>Username</th>
@@ -12,6 +13,8 @@
         <th>Azioni</th>     
     </thead>    
     <tbody>
-        <tr table-utenti-row *ngFor="let utente_row of utenti; let i= index;"  [utente]="utente_row" [indexUser]="i" (itemRemoved)="removeItem($event)"></tr>
+        <tr table-utenti-row *ngFor="let utente_row of utenti_visibili; let i= index;"  
+            [utente]="utente_row" [indexUser]="i"
+            (itemRemoved)="removeItem($event)"></tr>
     </tbody>
 </table>
