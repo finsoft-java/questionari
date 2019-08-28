@@ -1,1 +1,0 @@
-export * from './comp_questionari.component';
