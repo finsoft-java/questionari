@@ -23,6 +23,7 @@ import { SingoloQuestionarioComponent } from './singolo_questionario';
 import { CompilaQuestionarioComponent } from './compila_questionario';
 import { TableQuestionariRowComponent } from './table-questionari-row/table-questionari-row.component';
 import { TableRuoliRowComponent } from './table-ruoli-row';
+import { SearchComponent } from './search';
 
 
 
@@ -48,7 +49,8 @@ import { TableRuoliRowComponent } from './table-ruoli-row';
         TableUtentiRowComponent,
         TableQuestionariRowComponent,
         TableRuoliRowComponent,
-        LoginComponent
+        LoginComponent,
+        SearchComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
