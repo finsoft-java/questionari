@@ -1,7 +1,7 @@
 <h3>Questionari</h3>
 
 <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="crea()">Nuovo questionario</button>
-<button class="btn" style="margin-top:10px;" (click)="refresh()">Aggiorna</button>
+<button class="btn" style="margin-top:10px;" (click)="refresh()">Refresh</button>
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
         <th>Titolo</th>
@@ -19,17 +19,15 @@
             <td>{{q.data_creazione}}</td>
             <td>{{q.flag_comune_dec}}</td>
             <td style="width:30%">
-                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
-                    *ngIf="q.gia_compilato == '0'" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active">
-                    Apri</button>
-                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;opacity: 0.65 !important;"
-                    *ngIf="q.gia_compilato == '1'" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active"
-                    title="Questionario già compilato" title="Read-only">Apri</button>
-                <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" (click)="duplica(i)">Duplica</button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);"
-                    *ngIf="q.gia_compilato == '0'" (click)="elimina(i)">Elimina</button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);" disabled
-                    *ngIf="q.gia_compilato == '1'" title="Questionario già compilato">Elimina</button>
+                <button class="btn btn-success" style="min-width: calc((100% / 2) - 20px); margin-right: 5px;" 
+                    routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active"
+                    [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''">
+                    {{q.gia_compilato == '0' ? 'Apri' : 'Apri (read-only)'}}</button>
+                <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" (click)="duplica(i)">Duplica</button>
+                <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
+                    [disabled]="q.gia_compilato=='1'"
+                    [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''"
+                    (click)="elimina(i)">Elimina</button>
             </td>
         </tr>
     </tbody>

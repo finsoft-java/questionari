@@ -13,9 +13,7 @@ export class TableUtentiRowComponent implements OnInit {
 
   @Input() public utente: User; 
 
-  //usato per rimuovere la riga appena creata
-  @Input() public indexUser: number;
-  @Output() public itemRemoved = new EventEmitter<number>();
+  @Output() public itemRemoved = new EventEmitter<string>(); //emette lo username
   
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -49,7 +47,7 @@ export class TableUtentiRowComponent implements OnInit {
    */
   returnFromEdit() {
     if(this.utente.creating == true) {
-      this.itemRemoved.emit(this.indexUser);
+      this.itemRemoved.emit("");
     } else {
       this.utente.creating = false;
       this.utente.editing = false;    
@@ -62,7 +60,7 @@ export class TableUtentiRowComponent implements OnInit {
    */
   delete(username: string) {
     this.userService.delete(username).subscribe(resp => {
-          this.itemRemoved.emit(this.indexUser);
+          this.itemRemoved.emit(this.utente.username);
     },
     error => {
       this.alertService.error(error);

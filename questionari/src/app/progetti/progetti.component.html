@@ -1,6 +1,6 @@
 <h3>Progetti</h3>
 <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="crea()">Nuovo progetto</button>
-<button class="btn" style="margin-top:10px;" (click)="refresh()">Aggiorna</button>
+<button class="btn" style="margin-top:10px;" (click)="refresh()">Refresh</button>
 
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
@@ -17,19 +17,16 @@
             <td>{{p.utente_creazione}}</td>
             <td>{{p.data_creazione}}</td>
             <td style="width:30%">
-                    <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;"  
+                <button class="btn btn-success" style="min-width: calc((100% / 2) - 20px); margin-right: 5px;"  
                     routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active"
-                    *ngIf="p.gia_compilato == '0'" >Apri</button>
-                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;"  
-                    routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active"
-                    *ngIf="p.gia_compilato == '1'" 
-                    title="Questionario già compilato">Apri (read-only)</button>
-                <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
+                    [title]="p.gia_compilato=='1' ? 'Questionario già compilato' : ''">
+                    {{p.gia_compilato == '0' ? 'Apri' : 'Apri (read-only)'}}</button>
+                <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" 
                     (click)="duplica(i)">Duplica</button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);"
-                    *ngIf="p.gia_compilato == '0'" (click)="elimina(i)">Elimina</button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);" disabled
-                    *ngIf="p.gia_compilato == '1'" title="Questionario già compilato">Elimina</button>
+                <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
+                    [disabled]="p.gia_compilato=='1'" (click)="elimina(i)"
+                    [title]="p.gia_compilato=='1' ? 'Questionario già compilato' : ''"
+                     >Elimina</button>
             </td>
         </tr>
     </tbody>

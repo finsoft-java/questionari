@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy, Output } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { User } from '@/_models';
 import { UserService, AuthenticationService, AlertService } from '@/_services';
 
@@ -10,6 +10,9 @@ export class UtentiComponent implements OnInit, OnDestroy {
     utenti : User[];
     editing : boolean = false;
     message : string;
+    searchString : string;
+    utenti_visibili : User[]; //sottoinsieme di this.utenti determinato dalla Search
+    
     constructor(
         private authenticationService: AuthenticationService,
         private userService: UserService,
@@ -42,10 +45,29 @@ export class UtentiComponent implements OnInit, OnDestroy {
       this.userService.getAll()
         .subscribe(response => {
             this.utenti = response["data"];
+            this.calcola_utenti_visibili();
         });
     }
-    removeItem(index: number) {
-      this.utenti.splice(index, 1);
+    set_search_string(searchString) {
+        this.searchString = searchString;
+        this.calcola_utenti_visibili();
+    }
+    calcola_utenti_visibili() {
+        if (!this.searchString) {
+            this.utenti_visibili = this.utenti;
+        } else {
+            this.utenti_visibili = this.utenti.filter(user => 
+                (user.username != null && user.username.includes(this.searchString)) ||
+                (user.cognome != null && user.cognome.includes(this.searchString)) ||
+                (user.nome != null && user.nome.includes(this.searchString)) ||
+                (user.email != null && user.email.includes(this.searchString))
+            );
+        }
+    }
+    removeItem(username: string) {
+        let index = this.utenti.findIndex(user => user.username == username);
+        this.utenti.splice(index, 1);
+        this.calcola_utenti_visibili();
     }
     refresh() {
         this.getUsers();
