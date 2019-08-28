@@ -26,7 +26,8 @@ class QuestionarioCompilato {
         if (!isset($this->utenti_valutati)) {
             global $con;
             $arr = [];
-            $sql = "SELECT * FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' and `id_questionario`='$this->id_questionario' and `funzione`=`gruppo_valutati` ";
+            $sql = "SELECT * FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
+                " `id_questionario`='$this->id_questionario' AND `funzione`=`gruppo_valutati` ";
             
             if($result = mysqli_query($con, $sql)) {
                 $cr = 0;
@@ -214,22 +215,35 @@ class VistaQuestionariCompilabili {
         return $this->progetto;
     }
 
+    /**
+     * Restituisce tutti gli utenti del progetto
+     * 
+     * @return lista di oggetti ProgettoUtenti
+     */
     function get_progetto_utenti() {
         return $this->get_progetto()->get_progetti_utenti();
     }
 
+    /**
+     * Restituisce, tra gli utenti del progetto, quelli che sono da valutare
+     * 
+     * @return lista di stringhe (soltanto il nome utente)
+     */
     function get_utenti_valutati() {
+        global $progettiManager;
         if (!$this->utenti_valutati){
             global $con;
             $include_me = ($this->autovalutazione == '1');
             $funzione = $this->gruppo_valutati;
-            $progetto_utenti_valutati = $this->get_progetto()->get_progetto_utenti($this->id_progetto, $funzione, $include_me);
+            $progetto_utenti_valutati = $progettiManager->get_progetto_utenti($this->id_progetto, $funzione, $include_me);
             $this->utenti_valutati = array_map(function($x) {return $x->nome_utente;}, $progetto_utenti_valutati);
-            
         }
         return $this->utenti_valutati;
     }
 
+    /**
+     * @return un QuestionarioCompilato, oppure null
+     */
     function get_ultimo_questionario_compilato() {
         global $questionariCompilatiManager;
         if (!$this->progressivo_quest_comp) {
@@ -273,11 +287,13 @@ class QuestionariCompilatiManager {
                 $obj->sezione_corrente_num      = is_null($sezione_corrente_or_null) ? $obj->get_sezione_corrente($obj->utente_valutato_corrente) : $sezione_corrente_or_null;
                 $obj->sezione_corrente          = $obj->get_questionario()->get_sezione($obj->sezione_corrente_num);   // questa viene esplosa
                 $risposte_dell_utente = $obj->get_risposte($obj->utente_valutato_corrente, $obj->sezione_corrente->progressivo_sezione);
-                foreach ($obj->sezione_corrente->domande as $domanda) {
-                    foreach ($risposte_dell_utente as $risposta) {
-                        if ($risposta->progressivo_domanda == $domanda->progressivo_domanda) {
-                            $domanda->risposta_dell_utente = $risposta;
-                            break;
+                if ($obj->sezione_corrente != null) {
+                    foreach ($obj->sezione_corrente->domande as $domanda) {
+                        foreach ($risposte_dell_utente as $risposta) {
+                            if ($risposta->progressivo_domanda == $domanda->progressivo_domanda) {
+                                $domanda->risposta_dell_utente = $risposta;
+                                break;
+                            }
                         }
                     }
                 }
@@ -326,25 +342,24 @@ class QuestionariCompilatiManager {
             if($row = mysqli_fetch_assoc($result))
             {
                 
-                if($row['gruppo_compilanti'] != ''){
+                if($row['gruppo_compilanti'] != null){
                     $gruppo_compilanti = $row['gruppo_compilanti'];
                     $gruppo_compilanti_dec = $GRUPPI[$row['gruppo_compilanti']];
-                }else{
-                    $gruppo_compilanti = '';
-                    $gruppo_compilanti_dec = '';
+                } else {
+                    $gruppo_compilanti = null;
+                    $gruppo_compilanti_dec = null;
                 }
-                if($row['gruppo_valutati'] != ''){
+                if($row['gruppo_valutati'] != null){
                     $gruppo_valutati = $row['gruppo_valutati'];
                     $gruppo_valutati_dec = $GRUPPI[$row['gruppo_valutati']];
-                }else{
-                    $gruppo_valutati = '';
-                    $gruppo_valutati_dec = '';
+                } else {
+                    $gruppo_valutati = null;
+                    $gruppo_valutati_dec = null;
                 }
-
                 if($row['stato_quest_comp'] != null){
                     $stato_quest_comp       = $row['stato_quest_comp'];
                     $stato_quest_comp_dec   = $STATO_QUEST_COMP[$row['stato_quest_comp']];
-                }else{                    
+                } else {                    
                     $stato_quest_comp       = null;
                     $stato_quest_comp_dec   = null;
                 }

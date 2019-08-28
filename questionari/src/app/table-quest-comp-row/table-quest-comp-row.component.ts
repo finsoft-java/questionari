@@ -33,7 +33,7 @@ export class TableQuestCompRowComponent implements OnInit {
   creaQuestionarioCompilato() {
       this.questCompService.creaNuovo(this.data.id_progetto, this.data.id_questionario)
           .subscribe(response => {
-              this.router.navigate(['/compila', response["value"].progressivo_quest_comp]);
+              this.router.navigate(['/questionari_da_compilare', response["value"].progressivo_quest_comp]);
           },
           error => {
             if (error === "OK") {
