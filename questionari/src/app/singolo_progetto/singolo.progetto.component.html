@@ -73,5 +73,7 @@
     <br>
     <button *ngIf="progetto.gia_compilato=='1'" class="btn btn-dark" (click)="download()">Scarica tutti i questionari compilati in formato Excel</button>
     <button *ngIf="progetto.gia_compilato=='1' && progetto.stato == '1'" 
-        class="btn btn-danger" (click)="completa()" title="Manda il progetto in stato 'Completato'">Completa</button>
+        class="btn btn-danger" (click)="completa()" title="Manda il progetto in stato 'Completato'">Completa progetto</button>
+        <button *ngIf="progetto.stato == '3'" 
+        class="btn btn-danger" (click)="riapri()" title="Rimanda il progetto in stato 'Valido'">Riapri progetto</button>
 </div>

@@ -157,20 +157,21 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
             this.utenti = response["data"];
         });
     }
-    
     removeItem(index: number) {
         this.progetto.questionari.splice(index, 1);
     
     }
-    
     getUtentiRuoli(){
         this.progettiService.getProgettiUtenti(this.id_progetto).subscribe(resp => {
             this.progettoUtenti = resp["data"];
         });
     }
-    
     completa(){
         this.progetto.stato = '3';
+        this.updProgetto();
+    }
+    riapri(){
+        this.progetto.stato = '1';
         this.updProgetto();
     }
 }
