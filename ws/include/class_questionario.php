@@ -197,6 +197,7 @@ class QuestionariManager {
     
     function aggiorna($questionario, $json_data) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN;
+        
         $sql = update("questionari", ["titolo" => $json_data->titolo,
                                   "stato" => $json_data->stato,
                                   "flag_comune" => ($json_data->flag_comune ? $json_data->flag_comune : '0')],

@@ -3,11 +3,6 @@
 // In un'ottica REST, questi URL sarebbero meglio: /Questionario(123)/Sezioni(2)/Domanda(3)/Copy ma col PHP è un casino...
 //
 // POST CopyDomanda?id_questionario=xxx&progressivo_sezione=yyy&progressivo_domanda=zzz
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: OPTIONS,GET,PUT,POST,DELETE");
-header("Access-Control-Allow-Headers: Authorization");
-
 include("include/all.php");
 $con = connect();
 
