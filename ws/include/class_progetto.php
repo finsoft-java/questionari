@@ -299,10 +299,10 @@ class ProgettiManager {
             while($row = mysqli_fetch_assoc($result))
             {
                 $obj = new ProgettoQuestionari();
+                $obj->id_progetto            = $row['id_progetto'];
+                $obj->titolo_progetto        = $row['titolo_progetto'];
                 $obj->id_questionario        = $row['id_questionario'];
-                $obj->titolo                 = $row['titolo_questionario'];
-                $obj->stato                  = $row['stato_questionario'];
-                $obj->stato_dec              = $STATO_QUESTIONARIO[$row['stato_questionario']];
+                $obj->titolo_questionario    = $row['titolo_questionario'];
                 $obj->tipo_questionario      = $row['tipo_questionario'];
                 $obj->tipo_questionario_dec  = $TIPO_QUESTIONARIO[$row['tipo_questionario']];
                 $obj->gruppo_compilanti      = $row['gruppo_compilanti'];
