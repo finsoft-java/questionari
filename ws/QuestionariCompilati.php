@@ -6,10 +6,9 @@
 // PUT QuestionariCompilat          -> procedura di creazione del nuovo questionario, e anche di tutte le risposte
 // POST QuestionariCompilati        -> serve per aggiornare lo stato del questionario (non le risposte!!!)
 
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: OPTIONS,GET,PUT,POST,DELETE");
-header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Headers: Authorization");
 
 include("include/all.php");
 $con = connect();

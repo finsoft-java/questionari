@@ -9,7 +9,7 @@ sudo apt-get install php-zip
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: OPTIONS,GET");
-header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Headers: Authorization");
 
 include("include/all.php");
 $con = connect();
