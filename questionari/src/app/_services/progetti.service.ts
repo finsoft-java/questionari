@@ -8,7 +8,7 @@ export class ProgettiService {
     constructor(private http: HttpClient) { }
 
     getProgettiUtenti(id_progetto: number) {
-        return this.http.get<UserRuoli[]>(`${config.apiUrl}/ProgettoUtenti.php?progetto=${id_progetto}`);
+        return this.http.get<UserRuoli[]>(`${config.apiUrl}/ProgettoUtenti.php?id_progetto=${id_progetto}`);
     }
     saveProgettiUtenti(progetto: object) {
         return this.http.post(`${config.apiUrl}/ProgettoUtenti.php`, progetto);
