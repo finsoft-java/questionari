@@ -85,13 +85,13 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
           this.alertService.error(error);
         });
     }
-    updProgetto(prog){        
-        this.progettiService.update(prog.progetto).subscribe(response => {
+    updProgetto(){        
+        this.progettiService.update(this.progetto).subscribe(response => {
                 let id_progetto = response["value"].id_progetto;
                 this.router.navigate(['/progetti', id_progetto]);
             },
             error => {
-            this.alertService.error(error);
+                this.alertService.error(error);
             });
     }
     download(): void {
@@ -167,5 +167,10 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         this.progettiService.getProgettiUtenti(this.id_progetto).subscribe(resp => {
             this.progettoUtenti = resp["data"];
         });
+    }
+    
+    completa(){
+        this.progetto.stato = '3';
+        this.updProgetto();
     }
 }

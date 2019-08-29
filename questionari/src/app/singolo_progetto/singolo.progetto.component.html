@@ -26,7 +26,7 @@
             </div>
         </div>  
         <div><button class="btn btn-success" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}"
-            [disabled]="progetto.gia_compilato=='1'" style="margin-right:5px;margin-top:10px;" (click)="updProgetto(this)">Salva Progetto</button></div>      
+            [disabled]="progetto.gia_compilato=='1'" style="margin-right:5px;margin-top:10px;" (click)="updProgetto()">Salva Progetto</button></div>      
     </form>
 
 
@@ -72,4 +72,6 @@
     </div>
     <br>
     <button *ngIf="progetto.gia_compilato=='1'" class="btn btn-dark" (click)="download()">Scarica tutti i questionari compilati in formato Excel</button>
+    <button *ngIf="progetto.gia_compilato=='1' && progetto.stato == '1'" 
+        class="btn btn-danger" (click)="completa()" title="Manda il progetto in stato 'Completato'">Completa</button>
 </div>
