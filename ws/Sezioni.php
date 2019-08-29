@@ -9,10 +9,6 @@
 // POST Sezioni                                                 -> update Sezione esistente
 // DELETE Sezioni?id_questionario=xxx&progressivo_sezione=yyy   -> elimina Sezione esistente
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: OPTIONS,GET,PUT,POST,DELETE");
-header("Access-Control-Allow-Headers: Authorization");
-
 include("include/all.php");
 $con = connect();
 

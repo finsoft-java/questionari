@@ -8,10 +8,6 @@
 // POST User -> update utente esistente
 // DELETE User?username=xxx -> elimina utente esistente
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: OPTIONS,GET,PUT,POST,DELETE");
-header("Access-Control-Allow-Headers: Authorization");
-
 include("include/all.php");    
 $con = connect();
 

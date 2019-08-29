@@ -4,10 +4,6 @@
 //
 // POST CopySezione?id_questionario=xxx&progressivo_sezione=yyy
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: OPTIONS,GET,PUT,POST,DELETE");
-header("Access-Control-Allow-Headers: Authorization");
-
 include("include/all.php");
 $con = connect();
 

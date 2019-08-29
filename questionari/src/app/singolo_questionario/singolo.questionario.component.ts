@@ -16,6 +16,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     indice_sezione_corrente: number;
 
     stato_questionario = ["Bozza","Valido","Annullato"];
+    flag_comune_select = ["No","Si"];
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -60,7 +61,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
       this.questionariService.getById(this.id_questionario)
         .subscribe(response => {
             this.questionario = response["value"];
-
+            console.log(this.questionario);
             //Ora che ho il questionario, carico la prima sezione con tutte le domande
             this.caricaSezione(0);
         },
