@@ -1,6 +1,6 @@
 <td>
     <div *ngIf="utente.creating">
-        <input class="form-control" style="width: auto;max-width: 130px;" [(ngModel)]="utente_in_modifica.username" required/>
+        <input class="form-control" style="width: auto;max-width: 130px;" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" />
     </div>
     <div *ngIf="!utente.creating">
         <div tabindex="0" style="outline: none !important; line-height: 38px;" title="{{utente.username}}">{{ this.truncate(utente.username) }}&nbsp;</div>
@@ -8,7 +8,7 @@
 </td>
 <td>
     <div *ngIf="utente.editing">
-        <input class="form-control" style="width: auto;max-width: 130px;"  [(ngModel)]="utente_in_modifica.nome" required/>
+        <input class="form-control" style="width: auto;max-width: 130px;"  [(ngModel)]="utente_in_modifica.nome" required title="Nome" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.nome}}&nbsp;</div>
@@ -16,7 +16,7 @@
 </td>
 <td>
     <div *ngIf="utente.editing">
-        <input class="form-control" style="width: auto;max-width: 130px;"  [(ngModel)]="utente_in_modifica.cognome" required/>
+        <input class="form-control" style="width: auto;max-width: 130px;"  [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.cognome}}&nbsp;</div>
@@ -24,7 +24,7 @@
 </td>
 <td>
     <div *ngIf="utente.editing">
-        <input class="form-control" style="width: auto;max-width: 130px;" title="{{utente.email}}" alt="{{utente.email}}"  [(ngModel)]="utente_in_modifica.email" required/>
+        <input type="email" class="form-control" style="width: auto;max-width: 130px;" alt="{{utente.email}}"  [(ngModel)]="utente_in_modifica.email" required title="Email" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.email}}&nbsp;</div>
