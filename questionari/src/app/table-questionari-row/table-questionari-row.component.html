@@ -14,7 +14,7 @@
     </div>        
 </td>
 <td>
-    <div *ngIf="questionario.creating">
+    <div *ngIf="questionario.editing">
             <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.tipo_questionario"
                 title="Chi compila il questionario deve valutare qualcuno/qualcosa? O semplicemente rispondere a delle domande?">
                     <option *ngFor="let option of tipo_questionario; index as i"
@@ -23,7 +23,7 @@
                     </option>   
                 </select>      
     </div>
-    <div *ngIf="!questionario.creating">
+    <div *ngIf="!questionario.editing">
         <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ questionario.tipo_questionario_dec }}&nbsp;</div>
     </div>        
 </td>
@@ -45,7 +45,9 @@
 </td>
 <td>
     <div *ngIf="questionario.editing">
-        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.gruppo_valutati"
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="questionario_in_modifica.gruppo_valutati"
+            [required]="questionario_in_modifica.tipo_questionario == '1' ? false : true"
+            [disabled]="questionario_in_modifica.tipo_questionario == '1' ? true : false"
             title="Quale gruppo di persone verrà valutato?">
                 <option></option>
             <option *ngFor="let option of gruppi; index as i"
@@ -60,7 +62,9 @@
 </td>
 <td>
     <div *ngIf="questionario.editing">
-        <input type="checkbox" [(ngModel)]="questionario_in_modifica.autovalutazione_bool" title="Il compilante dovrà anche valutare se stesso?" >
+        <input type="checkbox" [(ngModel)]="questionario_in_modifica.autovalutazione_bool"
+            [disabled]="questionario_in_modifica.tipo_questionario == '1' ? true : false"
+            title="Il compilante dovrà anche valutare se stesso?" >
     </div>
     <div *ngIf="!questionario.editing">
         <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.autovalutazione_dec }}</div>
