@@ -84,7 +84,7 @@ class QuestionarioCompilato {
             if($result = mysqli_query($con, $sql)) {
                 while($row = mysqli_fetch_assoc($result))
                 {
-                    $obj = new VistaQuestionariCompilabili();
+                    $obj = new QuestionarioCompilatoRisposta();
                     $obj->progressivo_quest_comp    = $row['progressivo_quest_comp'];
                     $obj->progressivo_sezione       = $row['progressivo_sezione'];
                     $obj->progressivo_domanda       = $row['progressivo_domanda'];
