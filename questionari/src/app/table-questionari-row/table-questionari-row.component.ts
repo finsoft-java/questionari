@@ -1,8 +1,7 @@
 import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import { User, UserRole, Questionario, ProgettoQuestionari, Progetto } from '@/_models';
-import { AuthenticationService, UserService, AlertService, QuestionariService } from '@/_services';
+import { AuthenticationService, UserService, AlertService, ProgettiService } from '@/_services';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: '[table-questionari-row]',
@@ -24,8 +23,9 @@ export class TableQuestionariRowComponent implements OnInit {
   //ruoliMap = ["Utente normale", "Gestore progetti", "Amministratore"];
   gruppi = ["Utente finale","Responsabile L.2","Responsabile L.1"];
   tipo_questionario = ["Q. di valutazione","Q. generico"];
+
   constructor(private authenticationService: AuthenticationService,
-              private questService: QuestionariService,              
+              private progettiService: ProgettiService,              
               private userService: UserService,              
               private alertService: AlertService) {
                 
@@ -65,8 +65,8 @@ export class TableQuestionariRowComponent implements OnInit {
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Elimina
    */
-  delete(questionario) {
-    this.questService.deleteQuestionario(questionario).subscribe(resp => {
+  delete() {
+    this.progettiService.deleteProgettoQuestionario(this.questionario).subscribe(resp => {
           this.itemRemoved.emit(this.indexQuestionario);
     },
     error => {
@@ -77,23 +77,19 @@ export class TableQuestionariRowComponent implements OnInit {
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
-  save(questionario_in_modifica) {
-    //console.log("QUI", this.questionario_in_modifica.ruolo, this.ruoliMap[parseInt(this.questionario_in_modifica.ruolo)]);
+  save() {
+    console.log("SAVE");
+    if(this.controlloDatiImmessi()){
 
-    //this.questionario_in_modifica.ruolo_dec = this.ruoliMap[parseInt(this.questionario_in_modifica.ruolo)];
-    if(this.controlloDatiImmessi(questionario_in_modifica)){
-
-    //se il flg nuovo utente è settato sarà una insert altrimenti update
-      questionario_in_modifica.id_progetto = this.progetto.id_progetto;
+    //se il flg creating è settato sarà una insert altrimenti update
+      this.questionario_in_modifica.id_progetto = this.progetto.id_progetto;
       this.questionario_in_modifica.autovalutazione = this.questionario_in_modifica.autovalutazione_bool == false ? '0' : '1';    
 
       if(this.questionario_in_modifica.creating == true) {
-        this.questService.insertQuestionario(questionario_in_modifica).subscribe(resp => {
+        this.progettiService.insertProgettoQuestionario(this.questionario_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) { 
 
             this.questionario_in_modifica = null;
-            console.log(this.questionario);
-            console.log(resp);
             Object.assign(this.questionario, resp["value"]); // meglio evitare this.utente = ...
             this.questionario.editing = false;
             this.questionario.creating = false;
@@ -103,7 +99,7 @@ export class TableQuestionariRowComponent implements OnInit {
           this.alertService.error(error);
         });
       } else {
-        this.questService.updQuestionario(questionario_in_modifica).subscribe(resp => {
+        this.progettiService.updateProgettoQuestionario(this.questionario_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) {
             this.questionario_in_modifica = null;
             Object.assign(this.questionario, resp["value"]); // meglio evitare this.utente = ...
@@ -114,18 +110,35 @@ export class TableQuestionariRowComponent implements OnInit {
     }   
   }
 
-
-  controlloDatiImmessi(questionario_in_modifica){
-    var error_i = 0;
-    if(!questionario_in_modifica.id_questionario){
+  controlloDatiImmessi(){
+    console.log(this.questionario_in_modifica);
+    if(!this.questionario_in_modifica.id_questionario){
       this.alertService.error("Seleziona un Questionario");
       this.scrollToTop();
       return false;
     }
-    if(!questionario_in_modifica.tipo_questionario){
+    if(!this.questionario_in_modifica.tipo_questionario){
       this.alertService.error("Seleziona un Tipo Questionario");
       this.scrollToTop();
       return false;
+    }
+    if(!this.questionario_in_modifica.gruppo_compilanti){
+      this.alertService.error("Seleziona un Gruppo Compilanti");
+      this.scrollToTop();
+      return false;
+    }
+    if (this.questionario_in_modifica.tipo_questionario == '0') {
+      // Questionario di valutazione, c'è un campo obbligatorio in più
+      if(!this.questionario_in_modifica.gruppo_valutati){
+        this.alertService.error("Seleziona un Gruppo Valutati");
+        this.scrollToTop();
+        return false;
+      }
+    } else {
+      // Questionario generico, ci sono 2 campi disabilitati
+      this.questionario_in_modifica.gruppo_valutati = null;
+      this.questionario_in_modifica.autovalutazione = '0';
+      this.questionario_in_modifica.autovalutazione_bool = false;
     }
     return true;
   }
@@ -152,7 +165,7 @@ export class TableQuestionariRowComponent implements OnInit {
  }
 
  getQuestionari(): void {
-  this.questService.getAll()
+  this.progettiService.getAll()
     .subscribe(response => {
         this.elenco_questionari = response["data"];
     },

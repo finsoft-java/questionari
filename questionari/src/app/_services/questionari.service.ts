@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Questionario, Sezione } from '@/_models';
 
@@ -15,22 +15,6 @@ export class QuestionariService {
     }
     insert(q: Questionario) {
         return this.http.put(`${config.apiUrl}/Questionari.php`, q);
-    }
-
-    insertQuestionario(q: Questionario) {
-        return this.http.put(`${config.apiUrl}/ProgettoQuestionari.php`, q);
-    }
-    updQuestionario(q: Questionario) {
-        return this.http.post(`${config.apiUrl}/ProgettoQuestionari.php`, q);
-    }   
-    deleteQuestionario(questionario) {
-        const options = {
-            headers: new HttpHeaders({
-              'Content-Type': 'application/json'
-            }),
-            body: questionario
-          }
-        return this.http.delete(`${config.apiUrl}/ProgettoQuestionari.php`,options);
     }
     update(q: Questionario) {
         return this.http.post(`${config.apiUrl}/Questionari.php`, q);

@@ -74,12 +74,15 @@
 <td>
     <div>
         
-        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!questionario.editing" (click)="goToEdit()" [disabled]="progetto.gia_compilato=='1'" 
-        title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" >Modifica</button>
-        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!questionario.editing" (click)="delete(this.questionario)" [disabled]="progetto.gia_compilato=='1'" 
-        title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Elimina</button>
-        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="questionario.editing" (click)="save(questionario_in_modifica)" [disabled]="progetto.gia_compilato=='1'" 
-        title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Salva</button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!questionario.editing"
+            (click)="goToEdit()" [disabled]="progetto.gia_compilato=='1'" 
+            title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" >Modifica</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!questionario.editing" (click)="delete()"
+            [disabled]="progetto.gia_compilato=='1'" 
+            title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Elimina</button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="questionario.editing" (click)="save()"
+            [disabled]="progetto.gia_compilato=='1'" 
+            title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Salva</button>
         <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="questionario.editing" (click)="returnFromEdit()">Annulla</button>
         
     </div>

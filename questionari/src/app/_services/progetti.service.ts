@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Progetto, UserRuoli } from '@/_models';
+import { Progetto, UserRuoli, ProgettoQuestionari } from '@/_models';
 
 @Injectable({ providedIn: 'root' })
 export class ProgettiService {
@@ -31,5 +31,21 @@ export class ProgettiService {
     download(id_progetto: number) {
         return this.http.get(`${config.apiUrl}/ExportReportExcel.php?id_progetto=${id_progetto}`,
             {responseType: 'arraybuffer'} );
+    }
+
+    insertProgettoQuestionario(q: ProgettoQuestionari) {
+        return this.http.put(`${config.apiUrl}/ProgettoQuestionari.php`, q);
+    }
+    updateProgettoQuestionario(q: ProgettoQuestionari) {
+        return this.http.post(`${config.apiUrl}/ProgettoQuestionari.php`, q);
+    }   
+    deleteProgettoQuestionario(q: ProgettoQuestionari) {
+        const options = {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json'
+            }),
+            body: q
+          }
+        return this.http.delete(`${config.apiUrl}/ProgettoQuestionari.php`,options);
     }
 }

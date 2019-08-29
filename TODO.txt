@@ -15,7 +15,10 @@ C'è il problema degli errori "OK", vedi ad esempio "Il server ha dato una rispo
 Ci sarebbero da rinominare alcuni component...
   table-ruoli-row => table-progetti-utenti-row
   table questionari-row => table-progetti-questionari-row
-  
+
+Pagina Progetto, tabellina questionari:
+    -> c'è qualcosa che non va nel menu a tendina del questionario, viene mostrata una opzione "Seleziona un questionario"
+    -> i controlli di validazione fatti così bruttini... Si riesce a colorare di rosso la casellina anzichè dare il messaggio?
 
 *** WISHLIST *********************************************************************************
 
