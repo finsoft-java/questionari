@@ -13,14 +13,20 @@
             </div>
             <div class="col">
                 <label for="stato_progetto">Stato</label>                
+                <input type="checkbox" [(ngModel)]="questionario.flag_comune">
+            </div>
+            <div class="col">
+                <label for="stato_progetto">Stato</label>                
                 <select class="form-control" required  [(ngModel)]="questionario.stato" [ngModelOptions]="{standalone: true}">
                     <option *ngFor="let dati_stato_progetto of stato_questionario; index as i" value="{{i}}">
                         {{ dati_stato_progetto }}
                     </option>   
                 </select>   
             </div>
+
+            flag_comune
         </div>  
-        <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="updQuestionario(this)">Salva Progetto</button></div>      
+        <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Progetto</button></div>      
     </form>
 
 

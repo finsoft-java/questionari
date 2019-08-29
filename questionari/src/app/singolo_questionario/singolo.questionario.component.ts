@@ -121,4 +121,15 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     eliminaDomanda(index: number) {
         this.alertService.error("Non implementato");
     }
+
+    updQuestionario(questionario){
+        console.log(questionario);
+        this.questionariService.update(questionario).subscribe(response => {
+            let id_progetto = response["value"].id_progetto;
+            //this.router.navigate(['/progetti', id_progetto]);
+        },
+        error => {
+        this.alertService.error(error);
+        });
+    }
 }
