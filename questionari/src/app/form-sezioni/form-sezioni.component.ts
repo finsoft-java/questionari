@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class FormSezioniComponent implements OnInit {
 
+  /*
   @Input() public questionario: ProgettoQuestionari; 
   @Input() public progetto: Progetto;
   //usato per rimuovere la riga appena creata
@@ -23,34 +24,41 @@ export class FormSezioniComponent implements OnInit {
   utenti: User;
   
   tipo_questionario = ["Q. di valutazione","Q. generico"];
+  */
   constructor(private authenticationService: AuthenticationService,
               private questService: QuestionariService,              
               private userService: UserService,              
               private alertService: AlertService) {
                 
-              this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+              /*this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
                   this.currentUser = user;
-              });
+              });*/
   }
  
   ngOnInit() {
-    this.getQuestionari();
+    /*this.getQuestionari();
     if (this.questionario.creating) 
       this.goToEdit();
+    */
   }
 
   /**
    * Attiva tutti i campi INPUT sulla riga corrente
    */
+
+
+   /*
   goToEdit() {
     this.questionario.editing = true;
     this.questionario_in_modifica = this.simpleClone(this.questionario);
     this.questionario_in_modifica.autovalutazione_bool = this.questionario_in_modifica.autovalutazione == '1' ? true : false; 
   }
-
+  */
+  
   /**
    * Disattiva tutti i campi INPUT sulla riga corrente, annulla tutte le modifiche effettuate
    */
+  /*
   returnFromEdit() {
     if(this.questionario.creating == true) {
       this.itemRemoved.emit(this.indexQuestionario);
@@ -60,10 +68,11 @@ export class FormSezioniComponent implements OnInit {
       this.questionario_in_modifica = null;
     }
   }
-
+*/
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Elimina
    */
+  /*
   delete(questionario) {
     this.questService.deleteQuestionario(questionario).subscribe(resp => {
           this.itemRemoved.emit(this.indexQuestionario);
@@ -72,10 +81,11 @@ export class FormSezioniComponent implements OnInit {
       this.alertService.error(error);
     });
   }
-
+*/
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
+  /*
   save(questionario_in_modifica) {
     //console.log("QUI", this.questionario_in_modifica.ruolo, this.ruoliMap[parseInt(this.questionario_in_modifica.ruolo)]);
 
@@ -112,8 +122,6 @@ export class FormSezioniComponent implements OnInit {
       } 
     }   
   }
-
-
   controlloDatiImmessi(questionario_in_modifica){
     var error_i = 0;
     if(!questionario_in_modifica.id_questionario){
@@ -168,5 +176,7 @@ getUsers(): void {
   simpleClone(obj: any) {
     return Object.assign({}, obj);
   }
+
+*/
 
 }
