@@ -1,8 +1,8 @@
 <td>
     <div *ngIf="questionario.creating">
-        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.id_questionario"
-            title="Scegliere un questionario dall'elenco">
-            <option>Selez. questionario</option>
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required
+            [(ngModel)]="questionario_in_modifica.id_questionario"
+            title="Scegliere un questionario dall'elenco" >
             <option *ngFor="let dato_questionario of elenco_questionari; index as i"
                 value="{{dato_questionario.id_questionario}}">
                 {{ dato_questionario.titolo }}

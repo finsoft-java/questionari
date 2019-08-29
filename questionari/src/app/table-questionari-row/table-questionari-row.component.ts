@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import { User, UserRole, Questionario, ProgettoQuestionari, Progetto } from '@/_models';
-import { AuthenticationService, UserService, AlertService, ProgettiService } from '@/_services';
+import { AuthenticationService, UserService, AlertService, ProgettiService, QuestionariService } from '@/_services';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,12 +20,14 @@ export class TableQuestionariRowComponent implements OnInit {
   questionario_in_modifica: ProgettoQuestionari;
   elenco_questionari: Questionario;
   utenti: User;
-  //ruoliMap = ["Utente normale", "Gestore progetti", "Amministratore"];
   gruppi = ["Utente finale","Responsabile L.2","Responsabile L.1"];
   tipo_questionario = ["Q. di valutazione","Q. generico"];
 
+  questionari_loaded = false;
+
   constructor(private authenticationService: AuthenticationService,
-              private progettiService: ProgettiService,              
+              private progettiService: ProgettiService,
+              private questionariService: QuestionariService,              
               private userService: UserService,              
               private alertService: AlertService) {
                 
@@ -78,7 +80,6 @@ export class TableQuestionariRowComponent implements OnInit {
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
   save() {
-    console.log("SAVE");
     if(this.controlloDatiImmessi()){
 
     //se il flg creating è settato sarà una insert altrimenti update
@@ -111,7 +112,6 @@ export class TableQuestionariRowComponent implements OnInit {
   }
 
   controlloDatiImmessi(){
-    console.log(this.questionario_in_modifica);
     if(!this.questionario_in_modifica.id_questionario){
       this.alertService.error("Seleziona un Questionario");
       this.scrollToTop();
@@ -165,12 +165,15 @@ export class TableQuestionariRowComponent implements OnInit {
  }
 
  getQuestionari(): void {
-  this.progettiService.getAll()
+  this.questionari_loaded = false;
+  this.questionariService.getAll()
     .subscribe(response => {
         this.elenco_questionari = response["data"];
+        this.questionari_loaded = true;
     },
     error => {
       this.alertService.error(error);
+      this.questionari_loaded = true;
     });
 }
 getUsers(): void {
