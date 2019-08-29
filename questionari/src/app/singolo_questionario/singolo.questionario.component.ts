@@ -61,7 +61,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
       this.questionariService.getById(this.id_questionario)
         .subscribe(response => {
             this.questionario = response["value"];
-            console.log(this.questionario);
             //Ora che ho il questionario, carico la prima sezione con tutte le domande
             this.caricaSezione(0);
         },
@@ -124,7 +123,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
 
     updQuestionario(questionario){
-        console.log(questionario);
         this.questionariService.update(questionario).subscribe(response => {
             let id_progetto = response["value"].id_progetto;
             //this.router.navigate(['/progetti', id_progetto]);
