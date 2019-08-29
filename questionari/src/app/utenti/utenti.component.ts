@@ -12,6 +12,7 @@ export class UtentiComponent implements OnInit, OnDestroy {
     message : string;
     searchString : string;
     utenti_visibili : User[]; //sottoinsieme di this.utenti determinato dalla Search
+    loading = true;
     
     constructor(
         private authenticationService: AuthenticationService,
@@ -43,11 +44,17 @@ export class UtentiComponent implements OnInit, OnDestroy {
         this.set_search_string(null); // altrimenti la nuova riga non è visibile
     }
     getUsers(): void {
-      this.userService.getAll()
-        .subscribe(response => {
-            this.utenti = response["data"];
-            this.calcola_utenti_visibili();
-        });
+        this.loading = true;
+        this.userService.getAll()
+            .subscribe(response => {
+                this.utenti = response["data"];
+                this.calcola_utenti_visibili();
+                this.loading = false;
+            },
+            error => {
+                this.alertService.error(error);
+                this.loading = false;
+            });
     }
     set_search_string(searchString) {
         this.searchString = searchString;

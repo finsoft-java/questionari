@@ -14,6 +14,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
     progetti : Progetto[];
     searchString : string;
     progetti_visibili : Progetto[];
+    loading = true;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -53,14 +54,16 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             });
     }
     getProgetti(): void {
-      this.progettiService.getAll()
-        .subscribe(response => {
-            this.progetti = response["data"];
-            this.calcola_progetti_visibili();
-        },
-        error => {
-          this.alertService.error(error);
-        });
+        this.progettiService.getAll()
+            .subscribe(response => {
+                this.progetti = response["data"];
+                this.calcola_progetti_visibili();
+                this.loading = false;
+            },
+            error => {
+                this.alertService.error(error);
+                this.loading = false;
+            });
     }
     elimina(id_progetto: number): void {
         this.alertService.error("Implementato, ma per sicurezza non te lo lascio schiacciare");

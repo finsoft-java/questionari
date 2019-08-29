@@ -47,6 +47,10 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
                 this.questionari = response["data"];
                 this.calcola_questionari_visibili();
                 this.loading = false;
+            },
+            error => {
+                this.alertService.error(error);
+                this.loading = false;
             });
     }
     removeItem(progressivoQuestComp: number) {

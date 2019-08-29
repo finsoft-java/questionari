@@ -12,6 +12,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     questionari : Questionario[];
     searchString : string;
     questionari_visibili : Questionario[];
+    loading = true;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -47,18 +48,21 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/questionari', id_questionario]);
             },
             error => {
-            this.alertService.error(error);
+                this.alertService.error(error);
             });
     }
     getQuestionari(): void {
-      this.questionariService.getAll()
-        .subscribe(response => {
-            this.questionari = response["data"];
-            this.calcola_questionari_visibili();
-        },
-        error => {
-          this.alertService.error(error);
-        });
+        this.loading = true;
+        this.questionariService.getAll()
+            .subscribe(response => {
+                this.questionari = response["data"];
+                this.calcola_questionari_visibili();
+                this.loading = false;
+            },
+            error => {
+                this.alertService.error(error);
+                this.loading = false;
+            });
     }
     elimina(id_questionario: number): void {
         this.alertService.error("Implementato, ma per sicurezza non te lo lascio schiacciare");
