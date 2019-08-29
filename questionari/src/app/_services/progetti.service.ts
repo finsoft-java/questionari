@@ -7,8 +7,8 @@ import { Progetto, UserRuoli } from '@/_models';
 export class ProgettiService {
     constructor(private http: HttpClient) { }
 
-    getProgettiUtenti(progetto: number) {
-        return this.http.get<UserRuoli[]>(`${config.apiUrl}/ProgettoUtenti.php?progetto=${progetto}`);
+    getProgettiUtenti(id_progetto: number) {
+        return this.http.get<UserRuoli[]>(`${config.apiUrl}/ProgettoUtenti.php?progetto=${id_progetto}`);
     }
     saveProgettiUtenti(progetto: object) {
         return this.http.post(`${config.apiUrl}/ProgettoUtenti.php`, progetto);
@@ -16,8 +16,8 @@ export class ProgettiService {
     getAll() {
         return this.http.get<Progetto[]>(`${config.apiUrl}/Progetti.php`);
     }
-    getById(id: number) {
-        return this.http.get(`${config.apiUrl}/Progetti.php?id_progetto=${id}`);
+    getById(id_progetto: number) {
+        return this.http.get(`${config.apiUrl}/Progetti.php?id_progetto=${id_progetto}`);
     }
     insert(progetto: Progetto) {
         return this.http.put(`${config.apiUrl}/Progetti.php`, progetto);
@@ -25,11 +25,11 @@ export class ProgettiService {
     update(progetto: Progetto) {
         return this.http.post(`${config.apiUrl}/Progetti.php`, progetto);
     }
-    delete(id: number) {
-        return this.http.delete(`${config.apiUrl}/Progetti.php?id_progetto=${id}`);
+    delete(id_progetto: number) {
+        return this.http.delete(`${config.apiUrl}/Progetti.php?id_progetto=${id_progetto}`);
     }
-    download(id: number) {
-        return this.http.get(`${config.apiUrl}/ExportReportExcel.php?id_progetto=${id}`,
+    download(id_progetto: number) {
+        return this.http.get(`${config.apiUrl}/ExportReportExcel.php?id_progetto=${id_progetto}`,
             {responseType: 'arraybuffer'} );
     }
 }

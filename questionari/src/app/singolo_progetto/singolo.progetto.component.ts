@@ -165,7 +165,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     
     getUtentiRuoli(){
         this.progettiService.getProgettiUtenti(this.id_progetto).subscribe(resp => {
-            this.progettoUtenti = resp["value"];
+            this.progettoUtenti = resp["data"];
         });
     }
 }

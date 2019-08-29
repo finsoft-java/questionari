@@ -22,23 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     
 require_logged_user_JWT();
 
-$username = '';
+$username = null;
 if (isset($_GET['username'])) {
     $username = $con->escape_string($_GET['username']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-    if (isset($_GET['progetto'])) {
-        $progetto = $con->escape_string($_GET['progetto']);
+    $id_progetto = null;
+    if (isset($_GET['id_progetto'])) {
+        $id_progetto = $con->escape_string($_GET['id_progetto']);
+    }
+    if (!$id_progetto) {
+        print_error(404, "Missing id_progetto");
     }
     //==========================================================
-    $utente = $progettiManager->get_utenti_funzioni($progetto);
-    if (!$utente) {
+    $utenti = $progettiManager->get_utenti_funzioni($id_progetto);
+    if (!$utenti) {
         print_error(404, 'Not found');
     }
     header('Content-Type: application/json');
-    echo json_encode(['value' => $utente]);    
+    echo json_encode(['data' => $utenti]);    
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
