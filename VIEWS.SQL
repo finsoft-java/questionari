@@ -36,14 +36,32 @@ SELECT p.id_progetto,p.titolo AS titolo_progetto,p.stato AS stato_progetto,
     q.id_questionario,q.titolo AS titolo_questionario,q.stato AS stato_questionario,
     x.tipo_questionario,x.gruppo_compilanti,x.gruppo_valutati,x.autovalutazione,
     u.nome_utente,u.funzione,
-    v.progressivo_quest_comp,v.stato as stato_quest_comp,v.data_compilazione
+    qc.progressivo_quest_comp,qc.stato as stato_quest_comp,qc.data_compilazione
 FROM progetti p
 JOIN progetti_questionari x ON p.id_progetto=x.id_progetto
 JOIN questionari q ON q.id_questionario=x.id_questionario
 JOIN progetti_utenti u ON p.id_progetto=u.id_progetto
-LEFT JOIN v_ultimi_questionari_compilati v ON v.id_progetto=x.id_progetto AND v.id_questionario=x.id_questionario AND v.utente_compilazione=u.nome_utente
-WHERE q.stato > '0' AND p.stato > '0' AND x.gruppo_compilanti = u.funzione;
-         
+LEFT JOIN questionari_compilati qc ON qc.id_progetto=x.id_progetto AND qc.id_questionario=x.id_questionario
+    AND qc.utente_compilazione=u.nome_utente AND qc.stato in ('0', '1')
+WHERE q.stato > '0' AND p.stato > '0' AND x.gruppo_compilanti = u.funzione
+     AND (qc.stato IS NULL OR qc.stato = '0');
+-- spiegazione: prima escludo i '2', poi verifico che non ci sia nessun '1' 
+
+
+CREATE OR REPLACE VIEW v_questionari_storici_per_utente AS
+SELECT p.id_progetto,p.titolo AS titolo_progetto,p.stato AS stato_progetto,
+    q.id_questionario,q.titolo AS titolo_questionario,q.stato AS stato_questionario,
+    x.tipo_questionario,x.gruppo_compilanti,x.gruppo_valutati,x.autovalutazione,
+    u.nome_utente,u.funzione,
+    qc.progressivo_quest_comp,qc.stato as stato_quest_comp,qc.data_compilazione
+FROM progetti p
+JOIN progetti_questionari x ON p.id_progetto=x.id_progetto
+JOIN questionari q ON q.id_questionario=x.id_questionario
+JOIN progetti_utenti u ON p.id_progetto=u.id_progetto
+JOIN questionari_compilati qc ON qc.id_progetto=x.id_progetto AND qc.id_questionario=x.id_questionario
+    AND qc.utente_compilazione=u.nome_utente
+WHERE qc.stato in ('1', '2') AND x.gruppo_compilanti = u.funzione;
+
          
 CREATE OR REPLACE VIEW v_questionari_domande AS
 SELECT q.id_questionario,s.progressivo_sezione,d.progressivo_domanda
