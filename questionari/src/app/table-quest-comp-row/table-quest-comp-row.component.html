@@ -29,6 +29,7 @@
             class="btn btn-success" routerLinkActive="active">Apri (read-only)</button>
         <button *ngIf="currentUser.ruolo == '2' && data.stato_quest_comp < '2'" 
             style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" 
-            class="btn btn-danger" (click)="invalida()"> Invalida compilazione</button>
+            class="btn btn-danger" (click)="invalida()"
+            title="L'utente dovrà ricompilare il questionario"> Invalida</button>
     </div>
 </td>
