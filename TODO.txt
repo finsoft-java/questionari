@@ -12,6 +12,11 @@ Pagina questionari: se il il questionario e' "già modificato", il bottone "Apri
 
 C'è il problema degli errori "OK", vedi ad esempio "Il server ha dato una risposta non attesa, si consiglia di aggiornare la pagina"
 
+Ci sarebbero da rinominare alcuni component...
+  table-ruoli-row => table-progetti-utenti-row
+  table questionari-row => table-progetti-questionari-row
+  
+
 *** WISHLIST *********************************************************************************
 
 jwtinterceptor: rinominare "username" in "token" ....
