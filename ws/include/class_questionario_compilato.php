@@ -396,7 +396,12 @@ class QuestionariCompilatiManager {
     function get_vista_questionari_compilabili_o_compilati($storici, $id_progetto_or_null = null, $id_questionario_or_null = null) {
         global $con, $logged_user, $BOOLEAN, $STATO_QUESTIONARIO, $STATO_PROGETTO, $GRUPPI, $STATO_QUEST_COMP;
         $arr = [];
-        $sql = "SELECT * FROM v_questionari_compilabili_per_utente WHERE 1=1 ";
+        if ($storici) {
+            $vista = "v_questionari_storici_per_utente";
+        } else {
+            $vista = "v_questionari_compilabili_per_utente";
+        }
+        $sql = "SELECT * FROM $vista WHERE 1=1 ";
         if (!($storici and utente_admin())) {
             // solo gli amministratori possono vedere tutto, e solo nella pagina dello storico
             $sql .= " AND nome_utente = '$logged_user->nome_utente' ";
@@ -407,11 +412,7 @@ class QuestionariCompilatiManager {
         if ($id_questionario_or_null) {
             $sql .= " AND id_questionario = '$id_questionario_or_null' ";
         }
-        if ($storici) {
-            $sql .= " AND stato_quest_comp IN ('1', '2') ";
-        } else {
-            $sql .= " AND (stato_quest_comp IS NULL OR stato_quest_comp = '0') ";
-        }
+
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
