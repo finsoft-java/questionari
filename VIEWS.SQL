@@ -43,7 +43,7 @@ JOIN questionari q ON q.id_questionario=x.id_questionario
 JOIN progetti_utenti u ON p.id_progetto=u.id_progetto
 LEFT JOIN questionari_compilati qc ON qc.id_progetto=x.id_progetto AND qc.id_questionario=x.id_questionario
     AND qc.utente_compilazione=u.nome_utente AND qc.stato in ('0', '1')
-WHERE q.stato > '0' AND p.stato > '0' AND x.gruppo_compilanti = u.funzione
+WHERE q.stato = '1' AND p.stato = '1' AND x.gruppo_compilanti = u.funzione
      AND (qc.stato IS NULL OR qc.stato = '0');
 -- spiegazione: prima escludo i '2', poi verifico che non ci sia nessun '1' 
 
