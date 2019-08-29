@@ -171,6 +171,7 @@ class SezioniManager {
 
     function crea($json_data) {
         global $con, $logged_user;
+        var_dump($json_data);
         $sql = insert("sezioni", ["id_questionario" => $json_data->id_questionario,
                                   "progressivo_sezione" => $json_data->progressivo_sezione,
                                   "titolo" => $json_data->titolo,

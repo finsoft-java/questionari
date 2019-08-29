@@ -24,6 +24,7 @@ import { CompilaQuestionarioComponent } from './compila_questionario';
 import { TableQuestionariRowComponent } from './table-questionari-row/table-questionari-row.component';
 import { TableRuoliRowComponent } from './table-ruoli-row';
 import { SearchComponent } from './search';
+import { FormSezioniComponent } from './form-sezioni';
 
 
 
@@ -49,6 +50,7 @@ import { SearchComponent } from './search';
         TableUtentiRowComponent,
         TableQuestionariRowComponent,
         TableRuoliRowComponent,
+        FormSezioniComponent,
         LoginComponent,
         SearchComponent
     ],

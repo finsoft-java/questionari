@@ -57,10 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['value' => $questionario]);
     
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //==========================================================
-    echo 'p';
-    return false;
-    
+    //==========================================================    
     $postdata = file_get_contents("php://input");
     $json_data = json_decode($postdata);
     if (!$json_data) {
