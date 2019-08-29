@@ -69,7 +69,8 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
             let s = this.searchString.toLowerCase();
             this.quest_comp_visibili = this.questionari.filter(q => 
                 (q.titolo_progetto != null && q.titolo_progetto.toLowerCase().includes(s)) ||
-                (q.titolo_questionario != null && q.titolo_questionario.toLowerCase().includes(s))
+                (q.titolo_questionario != null && q.titolo_questionario.toLowerCase().includes(s)) ||
+                (q.stato_quest_comp_dec != null && q.stato_quest_comp_dec.toLowerCase().includes(s))
             );
         }
     }

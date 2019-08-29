@@ -94,7 +94,8 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             let s = this.searchString.toLowerCase();
             this.questionari_visibili = this.questionari.filter(q => 
                 (q.titolo != null && q.titolo.toLowerCase().includes(s)) ||
-                (q.utente_creazione != null && q.utente_creazione.toLowerCase().includes(s))
+                (q.utente_creazione != null && q.utente_creazione.toLowerCase().includes(s)) ||
+                (q.stato_dec != null && q.stato_dec.toLowerCase().includes(s))
             );
         }
     }
