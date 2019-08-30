@@ -17,14 +17,19 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout();
                 location.reload(true);
             }
-            //modificato per far visualizzari i messaggi di errore dati da PHP
-            if(err.error["error"]["value"] != null){
-                const error  = err.error["error"]["value"];
-                return throwError(error);
-            }else{
-                const error  = err.error.message || err.statusText;
-                return throwError(error);
+            
+            // Il messaggio può essere in molti punti diversi, dipende dal browser
+            //  Per Firefox è in err.error.error.value
+            let msg  = (err.error.error && err.error.error.value) || err.error.message || err.message || err.statusText;
+            
+            // Qui interveniamo per personalizzare gli errori
+            if (!msg) {
+                msg = "Errore sconosciuto";
+            } else if (msg.toLowerCase().includes("http failure response")) {
+                msg = "Impossibile connettersi al server PHP";
             }
+            
+            return throwError(msg);
         }))
     }
 }

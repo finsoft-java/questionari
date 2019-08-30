@@ -55,7 +55,13 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alertService.error("Credenziali non valide");
+                    if (error.status == 401 || error.status == 403)
+                    {
+                        this.alertService.error("Credenziali non valide");
+                    } else {
+                        // Ad esempio: Impossibile conettersi al server PHP
+                        this.alertService.error(error);
+                    }
                     this.loading = false;
                 });               
     }
