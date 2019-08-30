@@ -22,4 +22,7 @@ export class UserService {
     delete(username: string) {
         return this.http.delete(`${config.apiUrl}/User.php?username=${username}`);
     }
+    sync() {
+        return this.http.post(`${config.apiUrl}/SyncLDAP.php`, '');
+    }
 }

@@ -82,7 +82,16 @@ export class UtentiComponent implements OnInit, OnDestroy {
         this.getUsers();
     }
     sync() {
-        this.alertService.error("Non implementato");
+        this.loading = true;
+        this.userService.sync()
+            .subscribe(response => {
+                this.alertService.success(response.toString());
+                this.getUsers();
+            },
+            error => {
+                this.alertService.error(error);
+                this.loading = false;
+            });
     }
 
 }
