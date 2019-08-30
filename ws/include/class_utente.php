@@ -120,52 +120,53 @@ class UtenteManager {
         $utenti_inseriti = 0;
         $utenti_eliminati_su_LDAP = 0;
 
-        // $ldap_password = 'PASSWORD';
-        // $ldap_username = 'USERNAME@DOMAIN';
         $ldap_connection = ldap_connect(AD_SERVER);
-        if (FALSE === $ldap_connection){
-            // Uh-oh, something is wrong...
+        if (FALSE === $ldap_connection) {
+            print_error(500, "Errore interno nella configurazione di Active Directory: " . AD_SERVER);
         }
 
         // We have to set this option for the version of Active Directory we are using.
         ldap_set_option($ldap_connection, LDAP_OPT_PROTOCOL_VERSION, 3) or die('Unable to set LDAP protocol version');
         ldap_set_option($ldap_connection, LDAP_OPT_REFERRALS, 0); // We need this for doing an LDAP search.
 
-        if (TRUE === ldap_bind($ldap_connection, $ldap_username, $ldap_password)){
-            $ldap_base_dn = AD_BASE_DN;
-            $search_filter = AD_FILTER;
-            $attributes = array();
-            $attributes[] = 'givenname';
-            $attributes[] = 'mail';
-            $attributes[] = 'samaccountname';
-            $attributes[] = 'sn';
-            $result = ldap_search($ldap_connection, $ldap_base_dn, $search_filter, $attributes);
-            if (FALSE !== $result){
-                $entries = ldap_get_entries($ldap_connection, $result);
-                for ($x=0; $x < $entries['count']; $x++){
-                    if (array_has_key($utenti_map, $entries['samaccountname'])) {
-                        // UPDATE
-                        $u = $utenti_map[$entries['samaccountname']];
-                        $u->nome = $entries['givenname'];
-                        $u->cognome = $entries['givenname']; //?!? FIXME
-                        $u->email = $entries['mail'];
-                        $this->aggiorna($u, $u);
-                        ++$utenti_aggiornati;
-                    } else {
-                        // INSERT
-                        $u = new Utente();
-                        $u->username = $entries['samaccountname'];
-                        $u->nome = $entries['givenname'];
-                        $u->cognome = $entries['givenname']; //?!? FIXME
-                        $u->email = $entries['mail'];
-                        $u->ruolo = '0';
-                        $this->crea($u);
-                        ++$utenti_inseriti;
-                    }
+        ini_set('display_errors', 0);  // Se ci sono errori, ldap_bind() scrive sullo stdout e fa casino....
+        $bind = ldap_bind($ldap_connection, AD_USERNAME, AD_PASSWORD);
+        if ($bind !== TRUE) {
+            print_error(502, "Impossibile connettersi al server Active Directory");
+        }
+        $ldap_base_dn = AD_BASE_DN;
+        $search_filter = AD_FILTER;
+        $attributes = array();
+        $attributes[] = 'givenname';
+        $attributes[] = 'mail';
+        $attributes[] = 'samaccountname';
+        $attributes[] = 'sn';
+        $result = ldap_search($ldap_connection, $ldap_base_dn, $search_filter, $attributes);
+        if (FALSE !== $result){
+            $entries = ldap_get_entries($ldap_connection, $result);
+            for ($x=0; $x < $entries['count']; $x++){
+                if (array_has_key($utenti_map, $entries['samaccountname'])) {
+                    // UPDATE
+                    $u = $utenti_map[$entries['samaccountname']];
+                    $u->nome = $entries['givenname'];
+                    $u->cognome = $entries['givenname']; //?!? FIXME
+                    $u->email = $entries['mail'];
+                    $this->aggiorna($u, $u);
+                    ++$utenti_aggiornati;
+                } else {
+                    // INSERT
+                    $u = new Utente();
+                    $u->username = $entries['samaccountname'];
+                    $u->nome = $entries['givenname'];
+                    $u->cognome = $entries['givenname']; //?!? FIXME
+                    $u->email = $entries['mail'];
+                    $u->ruolo = '0';
+                    $this->crea($u);
+                    ++$utenti_inseriti;
                 }
             }
-            ldap_unbind($ldap_connection); // Clean up after ourselves.
         }
+        ldap_unbind($ldap_connection); // Clean up after ourselves.
 
         $utenti_eliminati_su_LDAP = count($utenti_su_db_map) - $utenti_aggiornati;
 

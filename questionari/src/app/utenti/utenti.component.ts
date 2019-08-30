@@ -85,7 +85,7 @@ export class UtentiComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.userService.sync()
             .subscribe(response => {
-                this.alertService.success(response.toString());
+                this.alertService.success(response["msg"]);
                 this.getUsers();
             },
             error => {
