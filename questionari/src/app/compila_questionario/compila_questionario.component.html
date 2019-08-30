@@ -1,37 +1,44 @@
-Pagina compilazione OPPURE consultazione di singolo questionario, dipende dall'attributo "compilabile" che è calcolato in PHP<br>
+
+<h3>Questionario</h3>
 
 <br>
-Compilazione n. {{progressivo_quest_comp}}<br>
 Progetto: {{questionarioCompilato.progetto.titolo}}<br>
 Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 
-<br>
-In alto, serve un menù a tendina per scegliere quale utente si sta valutando: {{utente_valutato_corrente}}<br>
 
-<br>
+<div *ngIf="questionarioCompilato.utenti_valutati">
+        Quale utente stai valutando?
+        <select [(ngModel)]="utente_valutato_corrente" >
+                <option *ngFor="let utente of questionarioCompilato.utenti_valutati"value="{{utente}}">{{ utente }}</option>
+        </select>
+</div>
 
 <div *ngIf="sezione_corrente != null">
 
-        SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' <br>
+        <h2>SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' </h2>
         <div *ngFor="let domanda of sezione_corrente.domande">
-                &gt; {{domanda.descrizione}}
-        <div *ngFor="let risposta of domanda.risposte">
-                &gt;&gt; {{risposta.descrizione}}
-        </div>
-        <div>
-                L'utente ha risposto: {{domanda.risposta.progressivo_risposta}} {{domanda.risposta.note}} .
-        </div>
+                Domanda n. {{domanda.progressivo_domanda}} <br/>
+                {{domanda.descrizione}}
+
+                <div *ngIf="domanda.risposte.length > 0">
+                        Risposta:
+                        <select [(ngModel)]="domanda.risposta.progressivo_risposta" [disabled]="questionarioCompilato.stato != '0'">
+                                <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
+                        </select>
+                        <br/>
+                        Note:
+                </div>
+                <textarea [(ngModel)]="domanda.risposta.note" [disabled]="questionarioCompilato.stato != '0'"></textarea>
+
         </div>
 
-        <br>
-
-        <div>
-                <button (click)="sezSuccessiva()">Sez. successiva</button>
-                <button (click)="sezPrecedente()">Sez. precedente</button>
-        </div>
+<div>
+        <button class="btn" (click)="sezPrecedente()">Sez. precedente</button>
+        <button class="btn" (click)="sezSuccessiva()">Sez. successiva</button>
+</div>
 
 </div>
 
-<br>
-Poi, solo se il questionario è tutto compilato, serve un bottone:<br>
-<button (click)="convalida()">Convalida il questionario</button>
+
+Questo bottone deve comparire solo se il questionario è tutto compilato, per tutte le sezioni e per tutti gli utenti valutati:
+<button *ngIf="questionarioCompilato.stato == '0'" class="btn btn-danger" (click)="convalida()" >Convalida il questionario</button>
