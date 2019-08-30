@@ -65,8 +65,8 @@
                 <th>Utenti Finali</th>
             </thead>    
             <tbody style="max-height:300px;overflow-y: scroll;"> 
-                <tr table-ruoli-row *ngFor="let utente_row of progettoUtenti; let i= index;" [idProgetto]="id_progetto"
-                    [utente]="utente_row" [indexUser]="i" (itemRemoved)="removeItem($event)"></tr>
+                <tr table-ruoli-row *ngFor="let utente_row of progettoUtenti; let i= index;" [progetto]="progetto"
+                    [utente]="utente_row" ></tr>
             </tbody>
         </table>
     </div>

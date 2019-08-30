@@ -5,20 +5,28 @@
 </td>
 <td>
     <div>
-        <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;" [(ngModel)]="utente.responsabileL1" 
-            [disabled]="utente.responsabileL2||utente.utenteFinale" [checked]="utente.responsabileL1" required title=""
-            />
+        <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;"
+            [(ngModel)]="utente.responsabileL1" 
+            [disabled]="utente.responsabileL2||utente.utenteFinale||progetto.gia_compilato=='1'"
+            [checked]="utente.responsabileL1"
+            title=""/>
     </div>
 </td>
 <td>
     <div>
-        <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;" [(ngModel)]="utente.responsabileL2"
-        [disabled]="utente.responsabileL1||utente.utenteFinale" [checked]="utente.responsabileL2" required title=""/>
+        <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;"
+            [(ngModel)]="utente.responsabileL2"
+            [disabled]="utente.responsabileL1||utente.utenteFinale||progetto.gia_compilato=='1'"
+            [checked]="utente.responsabileL2"
+            title=""/>
     </div>
 </td>
 <td>
     <div>
-        <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;" [(ngModel)]="utente.utenteFinale"
-        [disabled]="utente.responsabileL2||utente.responsabileL1" [checked]="utente.utenteFinale" required title=""/>
+        <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;"
+            [(ngModel)]="utente.utenteFinale"
+            [disabled]="utente.responsabileL2||utente.responsabileL1||progetto.gia_compilato=='1'"
+            [checked]="utente.utenteFinale"
+            title=""/>
     </div>
 </td>
