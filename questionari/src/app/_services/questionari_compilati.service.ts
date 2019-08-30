@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { VistaQuestionariCompilabili, QuestionarioCompilato } from '@/_models';
+import { VistaQuestionariCompilabili, QuestionarioCompilato, Sezione } from '@/_models';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionariCompilatiService {
@@ -12,16 +12,21 @@ export class QuestionariCompilatiService {
         let storico_str: string = storico ? '1' : '0';
         return this.http.get<VistaQuestionariCompilabili[]>(`${config.apiUrl}/QuestionariCompilati.php?storico=${storico_str}`);
     }
-    getById(progressivo_quest_comp: number, utente_valutato_corrente?: string, progressivo_sezione_corrente?: number) {
+    getById(progressivo_quest_comp) {
         // gli ultimi due possono anche essere null
         let url = `${config.apiUrl}/QuestionariCompilati.php?progressivo_quest_comp=${progressivo_quest_comp}`;
+        return this.http.get<QuestionarioCompilato>(url);
+    }
+    getSezione(progressivo_quest_comp: number, progressivo_sezione_corrente?: number, utente_valutato_corrente?: string) {
+        // gli ultimi due possono anche essere null
+        let url = `${config.apiUrl}/QuestionariCompilatiSezione.php?progressivo_quest_comp=${progressivo_quest_comp}`;
         if (utente_valutato_corrente) {
             url += `&utente_valutato_corrente=${utente_valutato_corrente}`;
         }
         if (progressivo_sezione_corrente) {
             url += `&sezione_corrente=${progressivo_sezione_corrente}`;
         }
-        return this.http.get<QuestionarioCompilato>(url);
+        return this.http.get<Sezione>(url);
     }
     creaNuovo(id_progetto: number, id_questionario: number){
         return this.http.put<QuestionarioCompilato>(`${config.apiUrl}/QuestionariCompilati.php`, {

@@ -7,14 +7,8 @@ export class QuestionarioCompilato {
     stato: string;
     utente_compilazione: string;
     data_compilazione: Date;
-    risposte: RispostaQuestionarioCompilato[];
-    
     sezioni?: Sezione[];
     utenti_valutati?: string[];
-    utente_valutato_corrente?: string;
-    sezione_corrente_num?: number;
-    sezione_corrente?: Sezione;
-    risposte_sez_corrente?: RispostaAmmessa[];
 }
 
 export class RispostaQuestionarioCompilato {

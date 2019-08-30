@@ -14,9 +14,8 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     progressivo_quest_comp: number;
     
     utente_valutato_corrente: string;
-    indice_sezione_corrente: number;
+    indice_sezione_corrente: number;    // l'indice non è per forza uguale al progressivo
     sezione_corrente: Sezione;
-    risposte_sez_corrente: RispostaAmmessa[];
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -47,14 +46,12 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
       this.questCompService.getById(this.progressivo_quest_comp)
         .subscribe(response => {
             this.questionarioCompilato = response["value"];
-
-            //Per semplicità, mi faccio restituire tutto dallo stesso servizio, ma forse non è una buona idea
-            this.utente_valutato_corrente = this.questionarioCompilato.utente_valutato_corrente;
-            this.sezione_corrente = this.questionarioCompilato.sezione_corrente; // ogni domanda include risposta_dell_utente
-
-            // ora devo calcolarmi l'indice...
-            this.indice_sezione_corrente = this.questionarioCompilato.sezioni
-                .findIndex(s => s.progressivo_sezione == this.sezione_corrente.progressivo_sezione);
+            this.utente_valutato_corrente = null;
+            if(this.questionarioCompilato.utenti_valutati) {
+                // l'utente è null per i questionari generici
+                this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[0];
+            }
+            this.caricaSezione(this.utente_valutato_corrente, 0);
         },
         error => {
           this.alertService.error(error);
@@ -77,12 +74,11 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         }
         let progressivo_sezione = this.questionarioCompilato.sezioni[indice].progressivo_sezione;
 
-        this.questCompService.getById(this.progressivo_quest_comp, nome_utente_valutato, progressivo_sezione)
+        this.questCompService.getSezione(this.progressivo_quest_comp, progressivo_sezione, nome_utente_valutato)
             .subscribe(response => {
                 this.indice_sezione_corrente = indice;
 
-                let quest: QuestionarioCompilato = response["value"];
-                this.sezione_corrente = quest.sezione_corrente; // ogni domanda include risposta_dell_utente
+                this.sezione_corrente = response["value"];
                 this.utente_valutato_corrente = nome_utente_valutato;
                 this.indice_sezione_corrente = indice;
             },

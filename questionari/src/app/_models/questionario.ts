@@ -39,7 +39,8 @@ export class Domanda {
     html_maxlenght: number;
     risposte?: RispostaAmmessa[];
 
-    risposta_dell_utente?: RispostaQuestionarioCompilato;
+    // QUesta c'è solo al momento della compilazione del questionario
+    risposta?: RispostaQuestionarioCompilato;
 }
 
 export class RispostaAmmessa {
