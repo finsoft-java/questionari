@@ -2,24 +2,24 @@
 
 $questionariCompilatiManager = new QuestionariCompilatiManager();
 class QuestionarioCompilato {
-    private $questionario;
-    private $progetto;
-    private $tutte_le_risposte;
+    private $_progetto;
+    private $_questionario;
+    private $_tutte_le_risposte;
     
     function get_questionario() {
         global $questionariManager;
-        if (!$this->questionario) {
-            $this->questionario = $questionariManager->get_questionario($this->id_questionario);
+        if (!$this->_questionario) {
+            $this->_questionario = $questionariManager->get_questionario($this->id_questionario);
         }
-        return $this->questionario;
+        return $this->_questionario;
     }
 
     function get_progetto() {
         global $progettiManager;
-        if (!$this->progetto) {
-            $this->progetto = $progettiManager->get_progetto($this->id_progetto);
+        if (!$this->_progetto) {
+            $this->_progetto = $progettiManager->get_progetto($this->id_progetto);
         }
-        return $this->progetto;
+        return $this->_progetto;
     }
     
     function get_utenti_valutati() {
@@ -52,7 +52,7 @@ class QuestionarioCompilato {
     }
 
     function get_tutte_le_risposte_divise_per_utente() {
-        if (!$this->tutte_le_risposte) {
+        if (!$this->_tutte_le_risposte) {
             global $con;
             $arr = [];
             foreach ($this->get_utenti_valutati() as $u) {
@@ -75,9 +75,9 @@ class QuestionarioCompilato {
             } else {
                 print_error(500, $con ->error);
             }
-            $this->tutte_le_risposte = $arr;
+            $this->_tutte_le_risposte = $arr;
         }
-        return $this->tutte_le_risposte;
+        return $this->_tutte_le_risposte;
     }
     
     /**
@@ -258,6 +258,8 @@ class QuestionariCompilatiManager {
                 $obj->compilabile               = $obj->is_compilabile();
                 $obj->sezioni                   = $obj->get_questionario()->get_sezioni(); // solo la lista, non esplosa
                 $obj->utenti_valutati           = $obj->get_utenti_valutati();
+                $obj->progetto                  = $obj->get_progetto();
+                $obj->questionario              = $obj->get_questionario();
                 
             } else {
                 return null;

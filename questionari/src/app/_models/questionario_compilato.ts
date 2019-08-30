@@ -1,4 +1,6 @@
 import { Sezione, RispostaAmmessa } from ".";
+import { Progetto } from "./progetto";
+import { Questionario } from "./questionario";
 
 export class QuestionarioCompilato {
     progressivo_quest_comp: number;
@@ -7,6 +9,8 @@ export class QuestionarioCompilato {
     stato: string;
     utente_compilazione: string;
     data_compilazione: Date;
+    progetto: Progetto;
+    questionario: Questionario;
     sezioni?: Sezione[];
     utenti_valutati?: string[];
 }
