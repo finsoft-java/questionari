@@ -170,7 +170,7 @@ class RispostaAmmessa {
 class SezioniManager {
 
     function crea($json_data) {
-        global $con, $logged_user;
+        global $con, $logged_user, $questionariManager;
         $sql = insert("sezioni", ["id_questionario" => $json_data->id_questionario,
                                   "progressivo_sezione" => $json_data->progressivo_sezione,
                                   "titolo" => $json_data->titolo,
@@ -179,7 +179,7 @@ class SezioniManager {
         if ($con ->error) {
             print_error(500, $con ->error);
         }
-        return $sezioniManager->get_sezione($json_data->id_questionario, $json_data->progressivo_sezione);
+        return $questionariManager->get_questionario($json_data->id_questionario)->get_sezione($json_data->progressivo_sezione);
     }
     
     function aggiorna($sezione, $json_data) {

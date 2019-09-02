@@ -62,18 +62,25 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             });
     }
     getQuestionario(): void {
+    
       this.questionariService.getById(this.id_questionario)
         .subscribe(response => {
+            
             this.questionario = response["value"];
+            let prog_sess = 1;
+            if(this.questionario.sezioni != null){
+                let prog_sess = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
+                this.max_sezione = prog_sess;
+            }
             this.nuova_sezione = {
                 id_questionario: this.id_questionario,
-                progressivo_sezione: this.max_sezione = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1,
+                progressivo_sezione: prog_sess,
                 titolo: "",
                 descrizione: "",
                 domande: []
             };
             //Ora che ho il questionario, carico la prima sezione con tutte le domande
-            this.caricaSezione(0);
+            this.caricaSezione(1);
         },
         error => {
           this.alertService.error(error);
@@ -91,17 +98,24 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         }
         this.caricaSezione(this.indice_sezione_corrente-1);
     }
-    creaSezione(nuova_sezione) {
+    creaSezione() {
         this.insert_sezione = true;
-        console.log(this);
-        this.max_sezione = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
+        this.max_sezione = 1;
+        if(this.questionario.sezioni[0] != null){
+            this.max_sezione = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
+        }
         
         if (this.questionario == null) {
             console.log("Questionario non ancora caricato, questo non dovrebbe succedere");
             return;
         }
-        /*
-        this.questionariService.creaSezione(this.questionario.id_questionario)
+    
+          
+    }
+
+    salvaSezione(nuova_sezione){
+            
+        this.questionariService.creaSezione(nuova_sezione)
           .subscribe(response => {
                 let nuova_sezione = response["value"];
                 this.questionario.sezioni.push(nuova_sezione);
@@ -111,7 +125,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
           error => {
             this.alertService.error(error);
           });
-          */
     }
     duplicaSezioneCorrente() {
         if (this.sezione_corrente == null) {

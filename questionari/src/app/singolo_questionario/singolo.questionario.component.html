@@ -51,10 +51,10 @@
         </div>
         <div class="col">
             <label for="stato_progetto">Descrizione</label>                
-            <textarea class="form-control" [(ngModel)]="nuova_sezione.titolo">{{nuova_sezione.descrizione}}</textarea>
+            <textarea class="form-control" [(ngModel)]="nuova_sezione.descrizione" [ngModelOptions]="{standalone: true}">{{nuova_sezione.descrizione}}</textarea>
         </div>
     </div>
-    <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="creaSezione(nuova_sezione)">Salva Sezione</button></div>      
+    <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(nuova_sezione)">Salva Sezione</button></div>      
 </form>
 <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
     
