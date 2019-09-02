@@ -99,22 +99,20 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.caricaSezione(this.indice_sezione_corrente-1);
     }
     creaSezione() {
-        this.insert_sezione = true;
-        this.max_sezione = 1;
-        console.log(this);
-        if(this.questionario.sezioni[0]){
-            this.max_sezione = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
-            this.nuova_sezione.progressivo_sezione = this.max_sezione;
-        }
-        
         if (this.questionario == null) {
             console.log("Questionario non ancora caricato, questo non dovrebbe succedere");
             return;
         }
-    
-          
+        this.insert_sezione = true;
+        this.nuova_sezione.progressivo_sezione = this.getNuovoProgressivoSezione();
     }
-
+    getNuovoProgressivoSezione() {
+        let nuovo_progr_sezione = 1;
+        if(this.questionario.sezioni[0]){
+            nuovo_progr_sezione = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
+        }
+        return nuovo_progr_sezione;
+    }
     salvaSezione(nuova_sezione){            
         this.questionariService.creaSezione(nuova_sezione)
           .subscribe(response => {
