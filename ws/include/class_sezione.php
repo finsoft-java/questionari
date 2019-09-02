@@ -3,13 +3,13 @@
 $sezioniManager = new SezioniManager();
 
 class Sezione {
-    private $questionario;
+    private $_questionario;
     
     function get_questionario() {
-        if (!$this->questionario) {
-            $this->questionario = $questionariManager->get_questionario($this->id_questionario);
+        if (!$this->_questionario) {
+            $this->_questionario = $questionariManager->get_questionario($this->id_questionario);
         }
-        return $this->questionario;
+        return $this->_questionario;
     }
     
     function get_domanda($progressivo_domanda, $explode = true) {
@@ -171,7 +171,6 @@ class SezioniManager {
 
     function crea($json_data) {
         global $con, $logged_user;
-        var_dump($json_data);
         $sql = insert("sezioni", ["id_questionario" => $json_data->id_questionario,
                                   "progressivo_sezione" => $json_data->progressivo_sezione,
                                   "titolo" => $json_data->titolo,
@@ -286,6 +285,70 @@ class SezioniManager {
             // Tipicamente, qui potrebbe esserci un problema di concorrenza
             print_error(500, $con ->error);
         }
+    }
+
+    function creaDomandaERisposte($sezione, $json_data) {
+        global $con;
+        $sql = insert("domande", ["id_questionario" => $sezione->id_questionario,
+                                    "progressivo_sezione" => $sezione->progressivo_sezione,
+                                    "progressivo_domanda" => $json_data->progressivo_domanda,
+                                    "descrizione" => $json_data->descrizione,
+                                    "obbligatorieta" => $json_data->obbligatorieta,
+                                    "coeff_valutazione" => $json_data->coeff_valutazione,
+                                    "html_type" => $json_data->html_type,
+                                    "html_pattern" => $json_data->html_pattern,
+                                    "html_min" => $json_data->html_min,
+                                    "html_max" => $json_data->html_max,
+                                    "html_maxlength" => $json_data->html_maxlength,
+                                    "rimescola" => $json_data->rimescola]);
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            print_error(500, $con ->error);
+        }
+        $this->_insert_risposte($json_data->risposte);
+        return $sezioniManager->get_sezione($json_data->id_questionario, $json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
+    }
+    function _insert_risposte($risposte) {
+        foreach ($risposte as $r) {
+            $sql = insert("risposte_ammesse", ["id_questionario" => $r->id_questionario,
+                                                "progressivo_sezione" => $r->progressivo_sezione,
+                                                "progressivo_domanda" => $r->progressivo_domanda,
+                                                "progressivo_risposta" => $r->progressivo_risposta,
+                                                "descrizione" => $r->descrizione,
+                                                "valore" => $r->valore]);
+            mysqli_query($con, $sql);
+            if ($con ->error) {
+                print_error(500, $con ->error);
+            }
+        }
+    }
+    function aggiornaDomandaERisposte($domanda, $json_data) {
+        global $con;
+        $sql = insert("domande", [ "descrizione" => $json_data->descrizione,
+                                    "obbligatorieta" => $json_data->obbligatorieta,
+                                    "coeff_valutazione" => $json_data->coeff_valutazione,
+                                    "html_type" => $json_data->html_type,
+                                    "html_pattern" => $json_data->html_pattern,
+                                    "html_min" => $json_data->html_min,
+                                    "html_max" => $json_data->html_max,
+                                    "html_maxlength" => $json_data->html_maxlength,
+                                    "rimescola" => $json_data->rimescola],
+                                 [ "id_questionario" => $json_data->id_questionario,
+                                 "progressivo_sezione" => $json_data->progressivo_sezione,
+                                 "progressivo_domanda" => $json_data->progressivo_domanda]);
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            print_error(500, $con ->error);
+        }
+        // faccio DELETE e INSERT
+        $sql = "DELETE FROM risposte_ammesse WHERE id_questionario='$json_data->id_questionario' AND ".
+                "progressivo_sezione='$json_data->progressivo_sezione' AND progressivo_domanda='$json_data->progressivo_domanda'";
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            print_error(500, $con ->error);
+        }
+        $this->_insert_risposte($json_data->risposte);
+        return $sezioniManager->get_sezione($json_data->id_questionario, $json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
     }
 }
 
