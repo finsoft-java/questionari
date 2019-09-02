@@ -18,12 +18,13 @@ export class TableDomandeRowComponent implements OnInit {
   @Output() public itemRemoved = new EventEmitter<number>();
   currentUser: User;
   currentUserSubscription: Subscription;
-  domanda_in_modifica: ProgettoQuestionari;
+  domanda_in_modifica: Domanda;
   elenco_questionari: Questionario;
   utenti: User;
   gruppi = ["Utente finale","Responsabile L.2","Responsabile L.1"];
   tipo_questionario = ["Q. di valutazione","Q. generico"];
-
+  //html_type_array = ["text","number","date","button","checkbox","color","datetime-local","month","range","tel","time","week"];
+  html_type_array = ["text","number"];
   questionari_loaded = false;
 
   constructor(private authenticationService: AuthenticationService,
@@ -51,7 +52,6 @@ export class TableDomandeRowComponent implements OnInit {
   goToEdit() {
     this.domanda.editing = true;
     this.domanda_in_modifica = this.simpleClone(this.domanda);
-    this.domanda_in_modifica.autovalutazione_bool = this.domanda_in_modifica.autovalutazione == '1' ? true : false; 
   }
 
   /**
@@ -83,14 +83,12 @@ export class TableDomandeRowComponent implements OnInit {
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
   save() {
-    if(this.controlloDatiImmessi()){
+    //if(this.controlloDatiImmessi()){
 
     //se il flg creating è settato sarà una insert altrimenti update
-      this.domanda_in_modifica.id_progetto = this.questionario.id_progetto;
-      this.domanda_in_modifica.autovalutazione = this.domanda_in_modifica.autovalutazione_bool == false ? '0' : '1';    
 
       if(this.domanda_in_modifica.creating == true) {
-        this.progettiService.insertProgettoQuestionario(this.domanda_in_modifica).subscribe(resp => {
+        this.domandeService.creaDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) { 
 
             this.domanda_in_modifica = null;
@@ -103,7 +101,7 @@ export class TableDomandeRowComponent implements OnInit {
           this.alertService.error(error);
         });
       } else {
-        this.progettiService.updateProgettoQuestionario(this.domanda_in_modifica).subscribe(resp => {
+        this.domandeService.updateDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) {
             this.domanda_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
@@ -112,9 +110,10 @@ export class TableDomandeRowComponent implements OnInit {
         });
       } 
     }   
-  }
+  //}
 
   controlloDatiImmessi(){
+    /*
     if(!this.domanda_in_modifica.id_questionario){
       this.alertService.error("Seleziona un Questionario");
       this.scrollToTop();
@@ -143,6 +142,7 @@ export class TableDomandeRowComponent implements OnInit {
       this.domanda_in_modifica.autovalutazione = '0';
       this.domanda_in_modifica.autovalutazione_bool = false;
     }
+    */
     return true;
   }
 

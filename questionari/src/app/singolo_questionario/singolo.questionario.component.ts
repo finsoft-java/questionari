@@ -53,6 +53,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.indice_sezione_corrente = indice;
                 this.sezione_corrente = response["value"];
+                console.log(this.sezione_corrente);
+                console.log(this.questionario.sezioni.length);
             },
             error => {
                 this.alertService.error(error);
