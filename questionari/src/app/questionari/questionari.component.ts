@@ -65,17 +65,17 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             });
     }
     elimina(id_questionario: number): void {
-        this.alertService.error("Implementato, ma per sicurezza non te lo lascio schiacciare");
-        return;
-        this.questionariService.delete(id_questionario)
-            .subscribe(response => {
-                let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
-                this.questionari.splice(index, 1);
-                this.calcola_questionari_visibili();
-            },
-            error => {
-              this.alertService.error(error);
-            });
+        if(confirm("Stai per eliminare l'intero questionario! Procedere?")) {
+            this.questionariService.delete(id_questionario)
+                .subscribe(response => {
+                    let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
+                    this.questionari.splice(index, 1);
+                    this.calcola_questionari_visibili();
+                },
+                error => {
+                this.alertService.error(error);
+                });
+        }
     }
     duplica(id_questionario: number) {
         this.alertService.error("Non implementato");

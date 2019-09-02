@@ -66,17 +66,17 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             });
     }
     elimina(id_progetto: number): void {
-        this.alertService.error("Implementato, ma per sicurezza non te lo lascio schiacciare");
-        return;
-        this.progettiService.delete(id_progetto)
-            .subscribe(response => {
-                let index = this.progetti.findIndex(p => p.id_progetto == id_progetto);
-                this.progetti.splice(index, 1);
-                this.calcola_progetti_visibili();
-            },
-            error => {
-              this.alertService.error(error);
-            });
+        if(confirm("Stai per eliminare l'intero progetto! Procedere?")) {
+            this.progettiService.delete(id_progetto)
+                .subscribe(response => {
+                    let index = this.progetti.findIndex(p => p.id_progetto == id_progetto);
+                    this.progetti.splice(index, 1);
+                    this.calcola_progetti_visibili();
+                },
+                error => {
+                this.alertService.error(error);
+                });
+        }
     }
     duplica(id_progetto: number) {
         this.alertService.error("Non implementato");
