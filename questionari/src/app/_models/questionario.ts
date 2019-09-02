@@ -38,9 +38,10 @@ export class Domanda {
     html_max: string; //number oppure Date !
     html_maxlenght: number;
     risposte?: RispostaAmmessa[];
-
     // QUesta c'è solo al momento della compilazione del questionario
     risposta?: RispostaQuestionarioCompilato;
+    editing?: boolean;
+    creating?: boolean;
 }
 
 export class RispostaAmmessa {

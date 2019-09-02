@@ -1,20 +1,14 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Progetto, UserRuoli, ProgettoQuestionari } from '@/_models';
+import { Progetto, UserRuoli, Domanda } from '@/_models';
 
 @Injectable({ providedIn: 'root' })
-export class ProgettiService {
+export class DomandeService {
     constructor(private http: HttpClient) { }
 
-    getProgettiUtenti(id_progetto: number) {
-        return this.http.get<UserRuoli[]>(`${config.apiUrl}/ProgettoUtenti.php?id_progetto=${id_progetto}`);
-    }
-    saveProgettiUtenti(progetto: object) {
-        return this.http.post(`${config.apiUrl}/ProgettoUtenti.php`, progetto);
-    }
     getAll() {
-        return this.http.get<Progetto[]>(`${config.apiUrl}/Progetti.php`);
+        return this.http.get<Domanda[]>(`${config.apiUrl}/Domanda.php`);
     }
     getById(id_progetto: number) {
         return this.http.get(`${config.apiUrl}/Progetti.php?id_progetto=${id_progetto}`);
@@ -28,6 +22,7 @@ export class ProgettiService {
     delete(id_progetto: number) {
         return this.http.delete(`${config.apiUrl}/Progetti.php?id_progetto=${id_progetto}`);
     }
+    /*
     download(id_progetto: number) {
         return this.http.get(`${config.apiUrl}/ExportReportExcel.php?id_progetto=${id_progetto}`,
             {responseType: 'arraybuffer'} );
@@ -47,4 +42,5 @@ export class ProgettiService {
           }
         return this.http.delete(`${config.apiUrl}/ProgettoQuestionari.php`,options);
     }
+    */
 }

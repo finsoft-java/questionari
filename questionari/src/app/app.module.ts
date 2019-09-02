@@ -25,6 +25,7 @@ import { TableQuestionariRowComponent } from './table-questionari-row/table-ques
 import { TableRuoliRowComponent } from './table-ruoli-row';
 import { SearchComponent } from './search';
 import { FormSezioniComponent } from './form-sezioni';
+import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 
 
@@ -51,6 +52,7 @@ import { AboutComponent } from './about';
         TableUtentiRowComponent,
         TableQuestionariRowComponent,
         TableRuoliRowComponent,
+        TableDomandeRowComponent,
         FormSezioniComponent,
         LoginComponent,
         SearchComponent,
