@@ -26,6 +26,7 @@ import { TableRuoliRowComponent } from './table-ruoli-row';
 import { SearchComponent } from './search';
 import { FormSezioniComponent } from './form-sezioni';
 import { TableDomandeRowComponent } from './table-domande-row';
+import { AboutComponent } from './about';
 
 
 
@@ -54,7 +55,8 @@ import { TableDomandeRowComponent } from './table-domande-row';
         TableDomandeRowComponent,
         FormSezioniComponent,
         LoginComponent,
-        SearchComponent
+        SearchComponent,
+        AboutComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
