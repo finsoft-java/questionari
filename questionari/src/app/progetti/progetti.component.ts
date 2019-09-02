@@ -78,8 +78,15 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                 });
         }
     }
-    duplica(id_progetto: number) {
-        this.alertService.error("Non implementato");
+    duplica(id_questionario: number) {
+        this.progettiService.duplica(id_questionario)
+            .subscribe(response => {
+                this.progetti.push(response["value"]);
+                this.calcola_progetti_visibili();
+            },
+            error => {
+                this.alertService.error(error);
+            });
     }
     refresh() {
         this.getProgetti();

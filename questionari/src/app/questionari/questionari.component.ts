@@ -79,12 +79,13 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     }
     duplica(id_questionario: number) {
         this.questionariService.duplica(id_questionario)
-        .subscribe(response => {
-            this.refresh();
-        },
-        error => {
-            this.alertService.error(error);
-        });
+            .subscribe(response => {
+                this.questionari.push(response["value"]);
+                this.calcola_questionari_visibili();
+            },
+            error => {
+                this.alertService.error(error);
+            });
     }
     refresh() {
         this.getQuestionari();

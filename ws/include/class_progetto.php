@@ -204,6 +204,54 @@ class ProgettiManager {
             print_error(500, $con ->error);
         }
     }
+
+    function duplica($progetto) {
+        // Di fatto copio soltanto il titolo
+        global $con, $logged_user, $progettiManager;
+        $sql = insert_select("progetti", ["id_progetto", "stato", "titolo", "utente_creazione"],
+                                            ["id_progetto" => null,
+                                            "stato" => '0',
+                                            "gia_compilato" => '0',
+                                            "utente_creazione" => $logged_user->nome_utente],
+                                            ["id_progetto" => $progetto->id_progetto]
+                                            );
+                                            //no data_creazione
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            // Tipicamente, qui potrebbe esserci un problema di concorrenza
+            print_error(500, $con ->error);
+        }
+        $nuovo_id_progetto = mysqli_insert_id($con);
+        $this->_duplica_progetto_questionari($progetto, $nuovo_id_progetto);
+        $this->_duplica_progetto_utenti($progetto, $nuovo_id_progetto);
+        return $progettiManager->get_progetto($nuovo_id_progetto);
+    }
+
+    function _duplica_progetto_questionari($progetto, $nuovo_id_progetto) {
+        global $con;
+        $sql = insert_select("progetti_questionari", ["id_progetto", "id_questionario", "tipo_questionario", "gruppo_compilanti", "gruppo_valutati", "autovalutazione"],
+                                        ["id_progetto" => $nuovo_id_progetto],
+                                        ["id_progetto" => $progetto->id_progetto]
+                                        );
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            // Tipicamente, qui potrebbe esserci un problema di concorrenza
+            print_error(500, $con ->error);
+        }
+    }
+
+    function _duplica_progetto_utenti($progetto, $nuovo_id_progetto) {
+        global $con;
+        $sql = insert_select("progetti_utenti", ["id_progetto", "nome_utente", "funzione"],
+                                        ["id_progetto" => $nuovo_id_progetto],
+                                        ["id_progetto" => $progetto->id_progetto]
+                                        );
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            // Tipicamente, qui potrebbe esserci un problema di concorrenza
+            print_error(500, $con ->error);
+        }
+    }
     
     function utente_puo_creare_progetti() {
         global $logged_user;
