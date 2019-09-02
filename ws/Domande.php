@@ -111,6 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$progressivo_sezione) {
         print_error(400, 'Missing progressivo_sezione');
     }
+    if (!$progressivo_domanda) {
+        print_error(400, 'Missing progressivo_domanda');
+    }
     $questionario = $questionariManager->get_questionario($json_data->id_questionario);
     if (!$questionario) {
         print_error(404, 'Not found');
@@ -125,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$sezione) {
         print_error(404, 'Not found');
     }
-    $sezioniManager->elimina($sezione);
+    $sezioniManager->eliminaDomandaERisposte($id_questionario, $progressivo_sezione, $progressivo_domanda);
 
 } else {
     //==========================================================

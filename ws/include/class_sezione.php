@@ -350,6 +350,16 @@ class SezioniManager {
         $this->_insert_risposte($json_data->risposte);
         return $sezioniManager->get_sezione($json_data->id_questionario, $json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
     }
+    
+    function eliminaDomandaERisposte($id_questionario, $progressivo_sezione, $progressivo_domanda) {
+        global $con;
+        $sql = "DELETE FROM domande WHERE id_questionario = '$id_questionario' AND progressivo_sezione = '$progressivo_sezione' ".
+            "AND progressivo_domanda = '$progressivo_domanda'"; // on delete cascade!!!
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            print_error(500, $con ->error);
+        }
+    }
 }
 
 
