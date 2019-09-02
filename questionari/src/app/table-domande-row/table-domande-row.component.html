@@ -1,0 +1,87 @@
+<!--
+
+<td>
+    <div *ngIf="domanda.creating">
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required
+            [(ngModel)]="domanda_in_modifica.id_questionario"
+            title="Scegliere un questionario dall'elenco" >
+            <option *ngFor="let dato_questionario of elenco_questionari; index as i"
+                value="{{dato_questionario.id_questionario}}">
+                {{ dato_questionario.titolo }}
+            </option>   
+        </select>
+    </div>
+    <div *ngIf="!domanda.creating">
+        <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.titolo_questionario }}&nbsp;</div>
+    </div>        
+</td>
+<td>
+    <div *ngIf="domanda.editing">
+            <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="domanda_in_modifica.tipo_questionario"
+                title="Chi compila il questionario deve valutare qualcuno/qualcosa? O semplicemente rispondere a delle domande?">
+                    <option *ngFor="let option of tipo_questionario; index as i"
+                        value="{{i}}">
+                        {{ option }}
+                    </option>   
+                </select>      
+    </div>
+    <div *ngIf="!domanda.editing">
+        <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ questionario.tipo_questionario_dec }}&nbsp;</div>
+    </div>        
+</td>
+
+<td>
+    <div *ngIf="domanda.editing">
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="domanda_in_modifica.gruppo_compilanti"
+            title="Quale gruppo di persone dovrà compilare il questionario?">
+            <option></option>
+            <option *ngFor="let option of gruppi; index as i"
+                value="{{i}}">
+                {{ option }}
+            </option>   
+        </select>
+    </div>
+    <div *ngIf="!domanda.editing">
+        <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.gruppo_compilanti_dec }}</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="domanda.editing">
+        <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda_in_modifica.gruppo_valutati"
+            [required]="domanda_in_modifica.tipo_questionario == '1' ? false : true"
+            [disabled]="domanda_in_modifica.tipo_questionario == '1' ? true : false"
+            title="Quale gruppo di persone verrà valutato?">
+                <option></option>
+            <option *ngFor="let option of gruppi; index as i"
+                value="{{i}}">
+                {{ option }}
+            </option>   
+        </select>
+    </div>
+    <div *ngIf="!domanda.editing">
+        <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.gruppo_valutati_dec }}</div>
+    </div>
+</td>
+<td>
+    <div *ngIf="domanda.editing">
+        <input type="checkbox" [(ngModel)]="domanda_in_modifica.autovalutazione_bool"
+            [disabled]="domanda_in_modifica.tipo_questionario == '1' ? true : false"
+            title="Il compilante dovrà anche valutare se stesso?" >
+    </div>
+    <div *ngIf="!domanda.editing">
+        <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.autovalutazione_dec }}</div>
+    </div>
+</td>
+
+<td>
+    <div>
+        
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing"
+            (click)="goToEdit()">Modifica</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete()">Elimina</button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" (click)="save()">Salva</button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Annulla</button>
+        
+    </div>
+</td>
+-->

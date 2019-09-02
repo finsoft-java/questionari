@@ -31,27 +31,66 @@
         </div>
         <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Progetto</button></div>      
     </form>
-
+<!--
     <div form-sezioni></div>
     Pagina singolo questionario<br>
     '{{questionario.titolo}}'<br>
     stato {{questionario.stato_dec}}
     <br><br>
-    
-    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
-            SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' <br>
-            <div *ngFor="let domanda of sezione_corrente.domande; let i= index;">
-                {{domanda.descrizione}}
-                <div *ngFor="let risposta of domanda.risposte">
-                        &gt;&gt; {{risposta.descrizione}}
-                </div>
-                <div>
-                        <button (click)="duplicaDomanda(i)">Duplica domanda</button>
-                        <button (click)="eliminaDomanda(i)">Elimina domanda</button>
-                </div>
-            </div>
+--> 
 
- 
+<button (click)="creaSezione()">Crea sezione</button>
+
+<form style="margin-bottom:30px" *ngIf="insert_sezione">
+    <h3>Sezione N° {{max_sezione}}</h3> <br>
+    <h5>Dati Generali</h5> <br>
+    <div class="row">
+        <div class=" col">
+            <label for="titolo_progetto">Titolo Sezione</label>
+            <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Questionario" [(ngModel)]="nuova_sezione.titolo" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col">
+            <label for="stato_progetto">Descrizione</label>                
+            <textarea class="form-control" [(ngModel)]="nuova_sezione.titolo">{{nuova_sezione.descrizione}}</textarea>
+        </div>
+    </div>
+    <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="creaSezione(nuova_sezione)">Salva Sezione</button></div>      
+</form>
+<div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
+    
+    
+    
+    <!--
+    <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+        <thead>
+            <th>Descrizione</th>
+            <th>Obbligatoria</th>
+            <th>Coefficiente</th>
+            <th>HTML Type</th>
+            <th>Pattern</th>
+            <th>Min</th>     
+            <th>Max</th>   
+            <th>Azioni</th>       
+        </thead>    
+        <tbody>
+            <tr table-domande-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" [questionario]="questionario"  [domanda]="domanda_row"
+                [indexDomanda]="i" (itemRemoved)="removeItem($event)"></tr>
+        </tbody>
+    </table>
+    -->
+</div>
+    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
+        SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' <br>
+        <div *ngFor="let domanda of sezione_corrente.domande; let i= index;">
+            {{domanda.descrizione}}
+            <div *ngFor="let risposta of domanda.risposte">
+                    &gt;&gt; {{risposta.descrizione}}
+            </div>
+            <div>
+                    <button (click)="duplicaDomanda(i)">Duplica domanda</button>
+                    <button (click)="eliminaDomanda(i)">Elimina domanda</button>
+            </div>
+        </div> 
     </div>           
     <div>
         <button (click)="creaDomanda()">Aggiungi nuova domanda</button>
