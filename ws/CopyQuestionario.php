@@ -14,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_logged_user_JWT();
 
-if (isset($_POST['id_questionario'])) {
-    $id_questionario = $con->escape_string($_POST['id_questionario']);
+if (isset($_GET['id_questionario'])) {
+    $id_questionario = $con->escape_string($_GET['id_questionario']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     header('Content-Type: application/json');
     echo json_encode(['value' => $nuovo_questionario]);
-    }
 } else {
+    //===========================================================
     print_error(406, "Unsupported method: " . $_SERVER['REQUEST_METHOD']);
 }
 

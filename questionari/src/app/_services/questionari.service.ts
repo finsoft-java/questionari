@@ -23,7 +23,6 @@ export class QuestionariService {
         return this.http.delete(`${config.apiUrl}/Questionari.php?id_questionario=${id_questionario}`);
     }
     duplica(id_questionario: number) {
-        // FIXME verificare come passare i parametri
         return this.http.post(`${config.apiUrl}/CopyQuestionario.php?id_questionario=${id_questionario}`, "");
     }
     getSezioneById(id_questionario: number, progressivo_sezione: number) {
@@ -35,9 +34,9 @@ export class QuestionariService {
     creaSezione(s: Sezione) {
         return this.http.put(`${config.apiUrl}/Sezioni.php`, s);
     }
-    duplicaSezione(s: Sezione) {
+    duplicaSezione(id_questionario: number, progressivo_sezione: number) {
         // FIXME verificare come passare i parametri
-        return this.http.post(`${config.apiUrl}/CopySezione.php`, s);
+        return this.http.post(`${config.apiUrl}/CopySezione.php?id_questionario=${id_questionario}&progressivo_sezione=${progressivo_sezione}`, '');
     }
     creaDomandaConRisposte(d: Domanda) {
         return this.http.put(`${config.apiUrl}/Domande.php`, d);

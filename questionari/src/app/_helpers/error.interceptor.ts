@@ -25,7 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             // Qui interveniamo per personalizzare gli errori
             if (!msg) {
                 msg = "Errore sconosciuto";
-            } else if (msg.toLowerCase().includes("http failure response")) {
+            } else if (msg.toLowerCase().includes("http failure response") && (!err.status)) {
                 msg = "Impossibile connettersi al server PHP";
             }
             

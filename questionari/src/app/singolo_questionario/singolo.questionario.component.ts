@@ -143,7 +143,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             console.log("Duplico la sezione null?!? questo non dovrebbe succedere");
             return;
         }
-        this.questionariService.duplicaSezione(this.sezione_corrente)
+        this.questionariService.duplicaSezione(this.sezione_corrente.id_questionario, this.sezione_corrente.progressivo_sezione)
           .subscribe(response => {
                 let nuova_sezione = response["value"];
                 this.questionario.sezioni.push(nuova_sezione);

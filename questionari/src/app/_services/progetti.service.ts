@@ -28,6 +28,9 @@ export class ProgettiService {
     delete(id_progetto: number) {
         return this.http.delete(`${config.apiUrl}/Progetti.php?id_progetto=${id_progetto}`);
     }
+    duplica(id_progetto: number) {
+        return this.http.post(`${config.apiUrl}/CopyProgetto.php?id_progetto=${id_progetto}`, "");
+    }
     download(id_progetto: number) {
         return this.http.get(`${config.apiUrl}/ExportReportExcel.php?id_progetto=${id_progetto}`,
             {responseType: 'arraybuffer'} );
