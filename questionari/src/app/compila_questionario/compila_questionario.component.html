@@ -1,7 +1,9 @@
 
 <h3>Questionario</h3>
 
-<br>
+
+<div *ngIf="questionarioCompilato != null">
+
 Progetto: {{questionarioCompilato.progetto.titolo}}<br>
 Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 
@@ -13,28 +15,52 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
         </select>
 </div>
 
+<br/>
+
 <div *ngIf="sezione_corrente != null">
 
         <h2>SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' </h2>
-        <div *ngFor="let domanda of sezione_corrente.domande">
-                Domanda n. {{domanda.progressivo_domanda}} <br/>
-                {{domanda.descrizione}}
+        {{sezione_corrente.descrizione}}
 
-                <div *ngIf="domanda.risposte.length > 0">
-                        Risposta:
-                        <select [(ngModel)]="domanda.risposta.progressivo_risposta" [disabled]="questionarioCompilato.stato != '0'">
-                                <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
-                        </select>
-                        <br/>
-                        Note:
-                </div>
-                <textarea [(ngModel)]="domanda.risposta.note" [disabled]="questionarioCompilato.stato != '0'"></textarea>
-
-        </div>
+        <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+                <thead>
+                        <th style="width:50%">Domanda</th>
+                        <th>Risposta</th>
+                        <th>Note</th>
+                </thead>
+                <tr *ngFor="let domanda of sezione_corrente.domande">
+                        <td>
+                                {{domanda.progressivo_domanda}}.
+                                {{domanda.descrizione}}
+                        </td>
+                        <td>
+                                <div *ngIf="domanda.risposte.length > 0"> <!-- DOMANDA CHIUSA -->
+                                        <select [(ngModel)]="domanda.risposta.progressivo_risposta" [disabled]="questionarioCompilato.stato != '0'">
+                                                <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
+                                        </select>
+                                        <br/>
+                                </div>
+                                <div *ngIf="domanda.risposte.length == 0"> <!-- DOMANDA APERTA -->
+                                        <input
+                                                [(ngModel)]="domanda.risposta.risposta_aperta"
+                                                [disabled]="questionarioCompilato.stato != '0'"
+                                                [type]="domanda.html_type || 'text'"
+                                                [pattern]="domanda.html_pattern"
+                                                [max]="domanda.html_max"
+                                                [min]="domanda.html_min"
+                                                [maxlength]="domanda.html_maxlength"
+                                        />
+                                </div>
+                        </td>
+                        <td>
+                                <textarea [(ngModel)]="domanda.risposta.note" [disabled]="questionarioCompilato.stato != '0'"></textarea>
+                        </td>
+                </tr>
+        </table>
 
 <div>
         <button class="btn" (click)="sezPrecedente()">Sez. precedente</button>
-        <button class="btn" (click)="sezSuccessiva()">Sez. successiva</button>
+        <button class="btn" (click)="sezSuccessiva()" [disabled]="!is_sezione_completata()">Sez. successiva</button>
 </div>
 
 </div>
@@ -42,3 +68,5 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 
 Questo bottone deve comparire solo se il questionario è tutto compilato, per tutte le sezioni e per tutti gli utenti valutati:
 <button *ngIf="questionarioCompilato.stato == '0'" class="btn btn-danger" (click)="convalida()" >Convalida il questionario</button>
+
+</div>

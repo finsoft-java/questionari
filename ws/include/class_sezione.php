@@ -31,7 +31,7 @@ class Sezione {
                 $domanda->html_pattern          = $row['html_pattern'];
                 $domanda->html_min              = $row['html_min'];
                 $domanda->html_max              = $row['html_max'];
-                $domanda->html_maxlenght        = $row['html_maxlenght'];
+                $domanda->html_maxlength        = $row['html_maxlength'];
                 if ($explode) {
                     $domanda->risposte_ammesse  = $domanda->get_risposte();
                 }
@@ -75,7 +75,7 @@ class Sezione {
                     $obj->html_pattern          = $row['html_pattern'];
                     $obj->html_min              = $row['html_min'];
                     $obj->html_max              = $row['html_max'];
-                    $obj->html_maxlenght        = $row['html_maxlenght'];
+                    $obj->html_maxlength        = $row['html_maxlength'];
                     if ($explode) {
                         $obj->risposte          = $obj->get_risposte();
                     }
@@ -227,7 +227,7 @@ class SezioniManager {
 
     function _duplica_domande($sezione, $nuovo_progressivo_sezione) {
         global $con;
-        $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlenght", "rimescola"],
+        $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlength", "rimescola"],
                                                  ["progressivo_sezione" => $nuovo_progressivo_sezione],
                                                  ["id_questionario" => $sezione->id_questionario,
                                                  "progressivo_sezione" => $sezione->progressivo_sezione]
@@ -257,7 +257,7 @@ class SezioniManager {
         global $con;
         $sezione = $domanda->get_sezione();
         $nuovo_progressivo_domanda = $sezione->get_prossima_domanda($id_questionario, $progressivo_sezione);
-        $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlenght", "rimescola"],
+        $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlength", "rimescola"],
                                              ["progressivo_domanda" => $nuovo_progressivo_domanda],
                                              ["id_questionario" => $domanda->id_questionario,
                                              "progressivo_sezione" => $domanda->progressivo_sezione,

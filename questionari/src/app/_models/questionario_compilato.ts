@@ -21,6 +21,7 @@ export class RispostaQuestionarioCompilato {
     progressivo_domanda: number;
     nome_utente_valutato: string;
     progressivo_risposta: number;
+    risposta_aperta: string;
     note: string;
 }
 

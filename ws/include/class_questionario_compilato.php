@@ -69,6 +69,7 @@ class QuestionarioCompilato {
                     $obj->progressivo_domanda       = $row['progressivo_domanda'];
                     $obj->nome_utente_valutato      = $row['nome_utente_valutato'];
                     $obj->progressivo_risposta      = $row['progressivo_risposta'];
+                    $obj->risposta_aperta           = $row['risposta_aperta'];
                     $obj->note                      = $row['note'];
                     $arr[$obj->nome_utente_valutato][] = $obj;
                 }
@@ -88,7 +89,7 @@ class QuestionarioCompilato {
         global $con;
         $sql = "SELECT MIN(progressivo_sezione) AS progressivo_sezione FROM risposte_quest_compilati WHERE " .
                 "progressivo_quest_comp = $this->progressivo_quest_comp " . 
-                "AND progressivo_risposta IS NULL AND note IS NULL";
+                "AND progressivo_risposta IS NULL AND risposta_aperta IS NULL AND note IS NULL";
         if ($nome_utente_valutato) {
             $sql .= " AND nome_utente_valutato = '$nome_utente_valutato' ";
         }
@@ -297,6 +298,7 @@ class QuestionariCompilatiManager {
                 $obj->progressivo_domanda       = $row['progressivo_domanda'];
                 $obj->nome_utente_valutato      = $row['nome_utente_valutato'];
                 $obj->progressivo_risposta      = $row['progressivo_risposta'];
+                $obj->risposta_aperta           = $row['risposta_aperta'];
                 $obj->note                      = $row['note'];
                 $arr[$cr++] = $obj;
             }
@@ -535,6 +537,7 @@ class QuestionariCompilatiManager {
     function update_singola_risposta($json_data) {
         global $con;
         $sql = update("risposte_quest_compilati", ["progressivo_risposta" => $json_data->progressivo_risposta,
+                                                   "risposta_aperta" => $json_data->risposta_aperta,
                                                    "note" => $json_data->note],
                                                   ["progressivo_quest_comp" => $json_data->progressivo_quest_comp,
                                                    "progressivo_sezione" => $json_data->progressivo_sezione,

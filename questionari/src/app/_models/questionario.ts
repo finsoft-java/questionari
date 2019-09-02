@@ -36,7 +36,7 @@ export class Domanda {
     html_pattern: string;
     html_min: string; //number oppure Date !
     html_max: string; //number oppure Date !
-    html_maxlenght: number;
+    html_maxlength: number;
     risposte?: RispostaAmmessa[];
     // QUesta c'è solo al momento della compilazione del questionario
     risposta?: RispostaQuestionarioCompilato;

@@ -98,5 +98,5 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         }
         this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente-1);
     }
-
+    
 }
