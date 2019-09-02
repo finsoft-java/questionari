@@ -41,20 +41,21 @@
 
 <button (click)="creaSezione()">Crea sezione</button>
 
-<form style="margin-bottom:30px" *ngIf="insert_sezione">
-    <h3>Sezione N° {{max_sezione}}</h3> <br>
+<form style="margin-bottom:30px" *ngIf="sezione_corrente">
+    <h3>Sezione N° {{sezione_corrente.progressivo_sezione}}</h3> <br>
     <h5>Dati Generali</h5> <br>
     <div class="row">
         <div class=" col">
             <label for="titolo_progetto">Titolo Sezione</label>
-            <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Questionario" [(ngModel)]="nuova_sezione.titolo" [ngModelOptions]="{standalone: true}">
+            <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Questionario" [(ngModel)]="sezione_corrente.titolo" [ngModelOptions]="{standalone: true}">
         </div>
         <div class="col">
             <label for="stato_progetto">Descrizione</label>                
-            <textarea class="form-control" [(ngModel)]="nuova_sezione.descrizione" [ngModelOptions]="{standalone: true}">{{nuova_sezione.descrizione}}</textarea>
+            <textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea>
         </div>
     </div>
-    <div><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(nuova_sezione)">Salva Sezione</button></div>      
+    <div *ngIf="!is_nuova_sezione"><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)">Modifica Sezione</button></div>  
+    <div *ngIf="is_nuova_sezione"><button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)">Salva Sezione</button></div>      
 </form>
 <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
     
