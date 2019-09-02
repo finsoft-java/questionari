@@ -80,7 +80,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 domande: []
             };
             //Ora che ho il questionario, carico la prima sezione con tutte le domande
-            this.caricaSezione(1);
+            this.caricaSezione(0);
         },
         error => {
           this.alertService.error(error);
@@ -101,8 +101,10 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     creaSezione() {
         this.insert_sezione = true;
         this.max_sezione = 1;
-        if(this.questionario.sezioni[0] != null){
+        console.log(this);
+        if(this.questionario.sezioni[0]){
             this.max_sezione = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
+            this.nuova_sezione.progressivo_sezione = this.max_sezione;
         }
         
         if (this.questionario == null) {
@@ -113,14 +115,24 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
           
     }
 
-    salvaSezione(nuova_sezione){
-            
+    salvaSezione(nuova_sezione){            
         this.questionariService.creaSezione(nuova_sezione)
           .subscribe(response => {
                 let nuova_sezione = response["value"];
                 this.questionario.sezioni.push(nuova_sezione);
                 this.indice_sezione_corrente = this.questionario.sezioni.length-1;
                 this.sezione_corrente = nuova_sezione;
+                this.insert_sezione = false;
+
+                let prog_sess = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
+
+                this.nuova_sezione = {
+                    id_questionario: this.id_questionario,
+                    progressivo_sezione: prog_sess,
+                    titolo: "",
+                    descrizione: "",
+                    domande: []
+                };
           },
           error => {
             this.alertService.error(error);

@@ -80,7 +80,7 @@
     -->
 </div>
     <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
-        SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' <br>
+        SEZIONE N. {{sezione_corrente.progressivo_sezione}} <strong>{{sezione_corrente.titolo}} </strong><br>
         <div *ngFor="let domanda of sezione_corrente.domande; let i= index;">
             {{domanda.descrizione}}
             <div *ngFor="let risposta of domanda.risposte">
