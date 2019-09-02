@@ -50,7 +50,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/progetti', id_progetto]);
             },
             error => {
-            this.alertService.error(error);
+                this.alertService.error(error);
             });
     }
     getProgetti(): void {

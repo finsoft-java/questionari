@@ -73,7 +73,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                     this.calcola_questionari_visibili();
                 },
                 error => {
-                this.alertService.error(error);
+                    this.alertService.error(error);
                 });
         }
     }
