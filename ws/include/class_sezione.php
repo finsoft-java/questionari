@@ -170,7 +170,7 @@ class RispostaAmmessa {
 class SezioniManager {
 
     function crea($json_data) {
-        global $con, $logged_user, $questionariManager;
+        global $con, $questionariManager;
         $sql = insert("sezioni", ["id_questionario" => $json_data->id_questionario,
                                   "progressivo_sezione" => $json_data->progressivo_sezione,
                                   "titolo" => $json_data->titolo,
@@ -208,7 +208,7 @@ class SezioniManager {
     }
 
     function duplica($sezione) {
-        global $con;
+        global $con, $questionariManager;
         $nuovo_progressivo_sezione = $sezione->get_questionario()->get_prossima_sezione();
         $sql = insert_select("sezioni", ["id_questionario", "progressivo_sezione", "titolo", "descrizione"],
                                         ["progressivo_sezione" => $nuovo_progressivo_sezione],
@@ -222,7 +222,7 @@ class SezioniManager {
         }
         $this->_duplica_domande($sezione, $nuovo_progressivo_sezione);
         $this->_duplica_risposte($sezione, $nuovo_progressivo_sezione);
-        return $sezioniManager->get_sezione($sezione->id_questionario, $nuovo_progressivo_sezione);
+        return $questionariManager->get_questionario($sezione->id_questionario)->get_sezione($nuovo_progressivo_sezione);
     }
 
     function _duplica_domande($sezione, $nuovo_progressivo_sezione) {
@@ -288,7 +288,7 @@ class SezioniManager {
     }
 
     function creaDomandaERisposte($sezione, $json_data) {
-        global $con;
+        global $con, $questionariManager;
         $sql = insert("domande", ["id_questionario" => $sezione->id_questionario,
                                     "progressivo_sezione" => $sezione->progressivo_sezione,
                                     "progressivo_domanda" => $json_data->progressivo_domanda,
@@ -306,7 +306,7 @@ class SezioniManager {
             print_error(500, $con ->error);
         }
         $this->_insert_risposte($json_data->risposte);
-        return $sezioniManager->get_sezione($json_data->id_questionario, $json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
+        return $questionariManager->get_questionario($sezione->id_questionario)->get_sezione($json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
     }
     function _insert_risposte($risposte) {
         foreach ($risposte as $r) {
@@ -323,7 +323,7 @@ class SezioniManager {
         }
     }
     function aggiornaDomandaERisposte($domanda, $json_data) {
-        global $con;
+        global $con, $questionariManager;
         $sql = insert("domande", [ "descrizione" => $json_data->descrizione,
                                     "obbligatorieta" => $json_data->obbligatorieta,
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
@@ -348,7 +348,7 @@ class SezioniManager {
             print_error(500, $con ->error);
         }
         $this->_insert_risposte($json_data->risposte);
-        return $sezioniManager->get_sezione($json_data->id_questionario, $json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
+        return $questionariManager->get_questionario($sezione->id_questionario)->get_sezione($json_data->progressivo_sezione)->get_domanda($json_data->progressivo_domanda);
     }
     
     function eliminaDomandaERisposte($id_questionario, $progressivo_sezione, $progressivo_domanda) {
