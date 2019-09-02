@@ -28,39 +28,21 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
                         <th>Risposta</th>
                         <th>Note</th>
                 </thead>
-                <tr *ngFor="let domanda of sezione_corrente.domande">
-                        <td>
-                                {{domanda.progressivo_domanda}}.
-                                {{domanda.descrizione}}
-                        </td>
-                        <td>
-                                <div *ngIf="domanda.risposte.length > 0"> <!-- DOMANDA CHIUSA -->
-                                        <select [(ngModel)]="domanda.risposta.progressivo_risposta" [disabled]="questionarioCompilato.stato != '0'">
-                                                <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
-                                        </select>
-                                        <br/>
-                                </div>
-                                <div *ngIf="domanda.risposte.length == 0"> <!-- DOMANDA APERTA -->
-                                        <input
-                                                [(ngModel)]="domanda.risposta.risposta_aperta"
-                                                [disabled]="questionarioCompilato.stato != '0'"
-                                                [type]="domanda.html_type || 'text'"
-                                                [pattern]="domanda.html_pattern"
-                                                [max]="domanda.html_max"
-                                                [min]="domanda.html_min"
-                                                [maxlength]="domanda.html_maxlength"
-                                        />
-                                </div>
-                        </td>
-                        <td>
-                                <textarea [(ngModel)]="domanda.risposta.note" [disabled]="questionarioCompilato.stato != '0'"></textarea>
-                        </td>
+                <tr compila-questionario-domanda *ngFor="let domanda of sezione_corrente.domande"
+                        [domanda]="domanda"
+                        [questionario_modificabile]="questionarioCompilato.stato == '0'"
+                        (compiled)="calc_is_sezione_compilata()">
                 </tr>
         </table>
 
 <div>
         <button class="btn" (click)="sezPrecedente()">Sez. precedente</button>
-        <button class="btn" (click)="sezSuccessiva()" [disabled]="!is_sezione_completata()">Sez. successiva</button>
+        <button class="btn btn-success" (click)="salvaSezione()"
+                [disabled]="!is_sezione_compilata"
+                [title]="(this.is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Salva</button>
+        <button class="btn" (click)="sezSuccessiva()"
+                [disabled]="!is_sezione_compilata"
+                [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Sez. successiva</button>
 </div>
 
 </div>

@@ -529,7 +529,7 @@ class QuestionariCompilatiManager {
     function update_risposte($json_data_array) {
         // Mi aspetto che il frontend salvi in una botta sola tutte le risposte della sezione corrente
         // e che le passi in un array
-        foreach ($json_data as $json_data) {
+        foreach ($json_data_array as $json_data) {
             $this->update_singola_risposta($json_data);
         }
     }

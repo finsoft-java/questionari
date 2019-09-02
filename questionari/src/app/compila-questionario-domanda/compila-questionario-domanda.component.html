@@ -1,0 +1,33 @@
+<td>
+        {{domanda.progressivo_domanda}}.
+        {{domanda.descrizione}}
+</td>
+<td>
+        <div *ngIf="domanda.risposte.length > 0"> <!-- DOMANDA CHIUSA -->
+                <select
+                        [(ngModel)]="domanda.risposta.progressivo_risposta"
+                        [disabled]="!questionario_modificabile"
+                        (change)="calc_flags()">
+
+                        <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
+                </select>
+                <span *ngIf="domanda.obbligatorieta == '1'" style="color:red">&nbsp;*</span>
+        </div>
+        <div *ngIf="domanda.risposte.length == 0"> <!-- DOMANDA APERTA -->
+                <input
+                        [(ngModel)]="domanda.risposta.risposta_aperta"
+                        [required]="domanda.obbligatorieta == '1'"
+                        [disabled]="!questionario_modificabile"
+                        [type]="domanda.html_type || 'text'"
+                        [pattern]="domanda.html_pattern"
+                        [max]="domanda.html_max"
+                        [min]="domanda.html_min"
+                        [maxlength]="domanda.html_maxlength"
+                        (keyup)="calc_flags()"
+                />
+                <span *ngIf="domanda.obbligatorieta == '1'" style="color:red">&nbsp;*</span>
+        </div>
+</td>
+<td>
+        <textarea [(ngModel)]="domanda.risposta.note" [disabled]="!questionario_modificabile"></textarea>
+</td>

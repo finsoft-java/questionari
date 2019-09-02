@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($questionario_compilato->utente_compilazione !== $logged_user->nome_utente) {
         print_error(403, "Utente non autorizzato a compilare questo Questionario.");
     }
-    if ($questionario_compilato->stato <> '1') {
-        print_error(403, "Il Questionario Compilato non è in stato Valido.");
+    if ($questionario_compilato->stato <> '0') {
+        print_error(403, "Il Questionario Compilato non è in stato Bozza.");
     }
     if ($questionario_compilato->get_questionario()->stato <> '1') {
         print_error(403, "Il Questionario non è in stato Valido.");
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_array($json_data_array)) {
         print_error(403, "Era atteso un Array di risposte.");
     }
-    for ($json_data_array as $json_data) {
+    foreach ($json_data_array as $json_data) {
         if ($json_data->progressivo_quest_comp != $progressivo_quest_comp) {
             print_error(403, "Era atteso un Array di risposte del Questionario Compilato $questionario_compilato->progressivo_quest_comp non $json_data->progressivo_quest_comp.");
         }
