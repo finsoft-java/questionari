@@ -25,6 +25,7 @@ import { TableQuestionariRowComponent } from './table-questionari-row/table-ques
 import { TableRuoliRowComponent } from './table-ruoli-row';
 import { SearchComponent } from './search';
 import { FormSezioniComponent } from './form-sezioni';
+import { AboutComponent } from './about';
 
 
 
@@ -52,7 +53,8 @@ import { FormSezioniComponent } from './form-sezioni';
         TableRuoliRowComponent,
         FormSezioniComponent,
         LoginComponent,
-        SearchComponent
+        SearchComponent,
+        AboutComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
