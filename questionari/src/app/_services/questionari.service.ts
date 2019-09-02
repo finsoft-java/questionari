@@ -32,11 +32,7 @@ export class QuestionariService {
     updateSezione(s: Sezione) {
         return this.http.post(`${config.apiUrl}/Sezioni.php`, s);
     }
-    creaSezione(id_questionario: number) {
-        let s = new Sezione();
-        s.id_questionario = id_questionario;
-        s.progressivo_sezione = null; // lo setta il server        s.titolo = "Nuova sezione";
-        s.descrizione = "";
+    creaSezione(s: Sezione) {
         return this.http.put(`${config.apiUrl}/Sezioni.php`, s);
     }
     duplicaSezione(s: Sezione) {
