@@ -15,11 +15,10 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     questionario: Questionario;  // con l'elenco di tutte le sezioni, ma non esplose
     sezione_corrente: Sezione; //esplosa, con tutte le domande e risposte
     indice_sezione_corrente: number;
-    insert_sezione:boolean;
     stato_questionario = ["Bozza","Valido","Annullato"];
     flag_comune_select = ["No","Si"];
     nuova_sezione: Sezione;
-
+    is_nuova_sezione: boolean;
     constructor(
         private authenticationService: AuthenticationService,
         private questionariService: QuestionariService,
@@ -36,8 +35,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
-            
-            
          });
     }
 
@@ -103,8 +100,14 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             console.log("Questionario non ancora caricato, questo non dovrebbe succedere");
             return;
         }
-        this.insert_sezione = true;
-        this.nuova_sezione.progressivo_sezione = this.getNuovoProgressivoSezione();
+        this.is_nuova_sezione = true;
+        this.sezione_corrente = {
+            id_questionario: this.id_questionario,
+            progressivo_sezione: this.getNuovoProgressivoSezione(),
+            titolo: "",
+            descrizione: "",
+            domande: []
+        };
     }
     getNuovoProgressivoSezione() {
         let nuovo_progr_sezione = 1;
@@ -120,7 +123,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 this.questionario.sezioni.push(nuova_sezione);
                 this.indice_sezione_corrente = this.questionario.sezioni.length-1;
                 this.sezione_corrente = nuova_sezione;
-                this.insert_sezione = false;
 
                 let prog_sess = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
 
@@ -131,10 +133,21 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                     descrizione: "",
                     domande: []
                 };
+                this.is_nuova_sezione = false;
           },
           error => {
             this.alertService.error(error);
           });
+    }
+    modificaSezione(nuova_sezione){
+        this.questionariService.updateSezione(nuova_sezione).subscribe(response => {
+            this.indice_sezione_corrente = this.nuova_sezione.progressivo_sezione;
+            this.sezione_corrente = nuova_sezione;
+            this.is_nuova_sezione = false;
+        },
+        error => {
+            this.alertService.error(error);
+        });
     }
     duplicaSezioneCorrente() {
         if (this.sezione_corrente == null) {
