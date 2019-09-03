@@ -148,7 +148,9 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        this.salvaSezione();
+        if (this.questionarioCompilato.stato == '0') {
+            this.salvaSezione();
+        }
         if (this.indice_sezione_corrente < this.questionarioCompilato.sezioni.length) {
             ++this.indice_sezione_corrente;
         } else {
@@ -163,7 +165,9 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        this.salvaSezione();
+        if (this.questionarioCompilato.stato == '0') {
+            this.salvaSezione();
+        }
         if (this.indice_sezione_corrente > 0) {
             --this.indice_sezione_corrente;
         } else {
