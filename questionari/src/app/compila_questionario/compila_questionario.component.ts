@@ -49,12 +49,23 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
       this.questCompService.getById(this.progressivo_quest_comp)
         .subscribe(response => {
             this.questionarioCompilato = response["value"];
-            this.utente_valutato_corrente = null;
-            if(this.questionarioCompilato.utenti_valutati) {
-                // l'utente è null per i questionari generici
-                this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[0];
+
+            let utente_da_caricare = null;
+            let indice_sezione_da_caricare = 0;
+
+            if (this.questionarioCompilato.progressivo_sezione_corrente != null) {
+                // Una parte del questionario è già stata compilata, vado all'ultima sezione compilata
+                utente_da_caricare = this.questionarioCompilato.utente_valutato_corrente;
+                indice_sezione_da_caricare = this.questionarioCompilato.sezioni.findIndex(s =>
+                        s.progressivo_sezione == this.questionarioCompilato.progressivo_sezione_corrente);
+            } else {
+                if(this.questionarioCompilato.utenti_valutati) {
+                    // l'utente è null per i questionari generici
+                    utente_da_caricare = this.questionarioCompilato.utenti_valutati[0].username;
+                }
             }
-            this.caricaSezione(this.utente_valutato_corrente, 0);
+            this.utente_valutato_corrente = utente_da_caricare;
+            this.caricaSezione(utente_da_caricare, indice_sezione_da_caricare);
         },
         error => {
           this.alertService.error(error);
@@ -121,6 +132,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
             .subscribe(response => {
+                this.alertService.success("Salvataggio effettuato.");
                 this.loading = false;
             },
             error => {

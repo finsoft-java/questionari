@@ -11,7 +11,7 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 <div *ngIf="questionarioCompilato.utenti_valutati">
         Quale utente stai valutando?
         <select [(ngModel)]="utente_valutato_corrente" >
-                <option *ngFor="let utente of questionarioCompilato.utenti_valutati"value="{{utente}}">{{ utente }}</option>
+                <option *ngFor="let utente of questionarioCompilato.utenti_valutati"value="{{utente.username}}">{{ utente.nome }} {{ utente.cognome }}</option>
         </select>
 </div>
 
