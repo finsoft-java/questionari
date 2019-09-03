@@ -176,7 +176,7 @@ class QuestionarioCompilatoRisposta {
     
     function get_desc_risposta() {
         if ($this->risposta_aperta) {
-            return risposta_aperta;
+            return $this->risposta_aperta;
         } elseif ($this->progressivo_risposta) {
             return $this->get_risposta_ammessa()->descrizione;
         }
