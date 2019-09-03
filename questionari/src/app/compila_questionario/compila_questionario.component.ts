@@ -119,16 +119,13 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         }
     }
     salvaSezione() {
-        console.log("QUA");
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        console.log("QUA 2");
         let risposte : RispostaQuestionarioCompilato[] = [];
         this.sezione_corrente.domande.forEach(domanda => {
             risposte.push(domanda.risposta);
         });
-        console.log(risposte);
         this.loading = true;
         this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
             .subscribe(response => {
