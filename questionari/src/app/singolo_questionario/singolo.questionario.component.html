@@ -3,9 +3,9 @@
 </div>
 <div *ngIf="questionario != null">
 
-    <form style="margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;">
-        <h3>Questionario</h3>
-        <h5>Dati Generali</h5>
+    <form style="margin-bottom:30px">
+        <h3>Questionario</h3> <br>
+        <h5>Dati Generali</h5> <br>
         <div class="row">
             <div class=" col">
                 <label for="titolo_progetto">Titolo Questionario</label>
@@ -29,15 +29,15 @@
                 </select>  
             </div>
         </div>
-        <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Progetto</button></div>      
+        <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Questionario</button></div>      
     </form>
     
 
-    <button (click)="creaSezione()" class="btn btn-success">Crea Nuova Sezione</button>
+    
 
-    <form style="margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;" *ngIf="sezione_corrente"> 
-        <h3>Sezione N° {{sezione_corrente.progressivo_sezione}}</h3> <br>
-        <h5>Dati Generali</h5> <br>
+    <button (click)="creaSezione()" class="btn btn-success">Crea Nuova Sezione</button>
+    <form style="margin-top:30px;margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;" *ngIf="sezione_corrente"> 
+        <h5>Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
         <div class="row">
             <div class=" col"> 
                 <label for="titolo_progetto">Titolo Sezione</label>
@@ -48,6 +48,7 @@
                 <textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea>
             </div>
         </div>
+        <div class="row"></div>
         <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)">Modifica Sezione</button>
         <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)">Salva Sezione</button>      
         <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()">Duplica sezione</button>
@@ -55,15 +56,19 @@
 
 
     <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
+        <h5>Domande/Risposte Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
+        <button (click)="creaDomanda()" class="btn btn-success">Crea Nuova Domanda</button>
         <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
             <thead>
-                <th>Descrizione</th>
-                <th>Obbligatoria</th>
-                <th>Coefficiente</th>
-                <th>HTML Type</th>
-                <th>Pattern</th>
-                <th>Min</th>     
-                <th>Max</th>   
+                <th alt="Descrizione" title="Descrizione">Descrizione</th>
+                <th alt="Obbligatoria" title="Obbligatoria">Obblig.</th>
+                <th alt="Coefficiente valutazione" title="Coefficiente valutazione">Coeff.</th>
+                <th alt="Rimescola" title="Rimescola">Rimescola</th>
+                <th alt="HTML Type" title="HTML Type">Type</th>
+                <th alt="HTML Maxlenght" title="HTML Maxlenght">Maxlenght</th>
+                <th alt="Pattern" title="Pattern">Pattern</th>
+                <th alt="Min" title="Min">Min</th>     
+                <th alt="Max" title="Max">Max</th>   
                 <th>Azioni</th>       
             </thead>    
             <tbody>
@@ -89,9 +94,9 @@
         </div> 
     </div>           
 -->
-    <div class="col" style="padding:0px;">
-        <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()">Sez. precedente</button>
-        <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()">Sez. successiva</button>
+    <div class="col" style="padding:0px;" *ngIf="(questionario.sezioni.length > 1) && (sezione_corrente != null)">
+        <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente"><i class="fa fa-step-backward"></i></button>
+        <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva"><i class="fa fa-step-forward"></i></button>
     </div>
     <div *ngIf="questionario.sezioni.length == 0">
             Questo questionario non ha ancora sezioni.

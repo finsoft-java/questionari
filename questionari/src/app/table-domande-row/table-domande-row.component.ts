@@ -21,10 +21,9 @@ export class TableDomandeRowComponent implements OnInit {
   domanda_in_modifica: Domanda;
   elenco_questionari: Questionario;
   utenti: User;
-  gruppi = ["Utente finale","Responsabile L.2","Responsabile L.1"];
-  tipo_questionario = ["Q. di valutazione","Q. generico"];
   //html_type_array = ["text","number","date","button","checkbox","color","datetime-local","month","range","tel","time","week"];
   html_type_array = ["text","number"];
+  rimescola_array = ["NO","SI"];
   questionari_loaded = false;
 
   constructor(private authenticationService: AuthenticationService,

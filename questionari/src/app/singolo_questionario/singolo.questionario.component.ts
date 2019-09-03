@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { User, Questionario, Sezione } from '@/_models';
+import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestionarioCompilato } from '@/_models';
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
 import { ActivatedRoute } from '@angular/router';
 
@@ -19,6 +19,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     flag_comune_select = ["No","Si"];
     nuova_sezione: Sezione;
     is_nuova_sezione: boolean;
+    nuova_domanda: Domanda;
     constructor(
         private authenticationService: AuthenticationService,
         private questionariService: QuestionariService,
@@ -146,6 +147,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             this.indice_sezione_corrente = this.nuova_sezione.progressivo_sezione;
             this.sezione_corrente = nuova_sezione;
             this.is_nuova_sezione = false;
+            this.alertService.success("Sezione modificata con successo");
+            this.scrollToTop();
         },
         error => {
             this.alertService.error(error);
@@ -168,8 +171,29 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
           });
     }
     creaDomanda() {
-        this.alertService.error("Non implementato");
+        this.nuova_domanda = {
+            coeff_valutazione:null,
+            descrizione:null,
+            html_max:null,
+            html_min:null,
+            html_maxlength:0,
+            html_pattern:null,
+            html_type:null,
+            html_type_dec:null,
+            id_questionario: this.id_questionario,
+            obbligatorieta: null,
+            obbligatorieta_dec: null,
+            rimescola_dec:null,
+            progressivo_domanda: null,
+            progressivo_sezione: null,
+            rimescola:null,
+            risposte:null,
+            risposta: null,
+            creating:true
+        };
+        this.sezione_corrente.domande.push(this.nuova_domanda);
     }
+        
     duplicaDomanda(index: number) {
         this.alertService.error("Non implementato");
     }
@@ -186,4 +210,14 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.alertService.error(error);
         });
     }
+    scrollToTop(){
+        let scrollToTop = window.setInterval(() => {
+            let pos = window.pageYOffset;
+            if (pos > 0) {
+                window.scrollTo(0, pos - 20); // how far to scroll on each step
+            } else {
+                window.clearInterval(scrollToTop);
+            }
+        }, 16);
+      }
 }

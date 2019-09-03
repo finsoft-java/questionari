@@ -1,7 +1,7 @@
 
         <td>
             <div *ngIf="domanda.editing">
-                <input class="form-control" type="text" [(ngModel)]="domanda.descrizione"/>
+                <input class="form-control" type="text" [(ngModel)]="domanda.descrizione" style="max-width: 110px;"/>
             </div>
             <div *ngIf="!domanda.editing">
                 <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.descrizione }}&nbsp;</div>
@@ -9,7 +9,7 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                    <input class="form-control" type="checkbox" style="width: auto;max-width: 130px;"
+                    <input class="form-control" type="checkbox" style="width: auto;max-width: 70px;"
                     [(ngModel)]="domanda.obbligatorieta"
                     [checked]="domanda.obbligatorieta"
                     title=""/>      
@@ -20,7 +20,7 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 130px;"
+                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
                     [(ngModel)]="domanda.coeff_valutazione"
                     title="" min="0" max="300"/>      
             </div>
@@ -30,20 +30,44 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                    <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda.html_type">
-                        <option></option>
-                        <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
-                            {{ option }}
-                        </option>   
+                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda.rimescola">
+                    <option></option>
+                    <option *ngFor="let option of rimescola_array; index as i" value="{{i}}">
+                        {{ option }}
+                    </option>   
+                </select>     
+            </div>
+            <div *ngIf="!domanda.editing">
+                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.rimescola_dec }}&nbsp;</div>
+            </div>        
+        </td>
+        <td>
+            <div *ngIf="domanda.editing">
+                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda.html_type">
+                    <option></option>
+                    <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
+                        {{ option }}
+                    </option>   
                 </select>     
             </div>
             <div *ngIf="!domanda.editing">
                 <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_type_dec }}&nbsp;</div>
             </div>        
         </td>
+        
         <td>
             <div *ngIf="domanda.editing">
-                    <input class="form-control" type="text" style="width: auto;max-width: 130px;"
+                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
+                    [(ngModel)]="domanda.html_maxlength"
+                    title=""/>      
+            </div>
+            <div *ngIf="!domanda.editing">
+                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_maxlength }}&nbsp;</div>
+            </div>        
+        </td>
+        <td>
+            <div *ngIf="domanda.editing">
+                    <input class="form-control" type="text" style="width: auto;max-width: 70px;"
                     [(ngModel)]="domanda.html_pattern"
                     title=""/>      
             </div>
@@ -53,7 +77,7 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 130px;"
+                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
                     [(ngModel)]="domanda.html_min"
                     title=""/>      
             </div>
@@ -63,7 +87,7 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 130px;"
+                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
                     [(ngModel)]="domanda.html_max"
                     title=""/>      
             </div>
@@ -74,11 +98,10 @@
         <td>
             <div>
                 
-                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing"
-                    (click)="goToEdit()">Modifica</button>
-                <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete()">Elimina</button>
-                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" (click)="save()">Salva</button>
-                <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Annulla</button>
+                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
+                <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete()"><i class="fa fa-trash-alt"></i></button>
+                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
+                <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()"><i class="fa fa-undo"></i></button>
                 
             </div>
         </td>
