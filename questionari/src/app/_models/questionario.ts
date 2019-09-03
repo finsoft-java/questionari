@@ -33,6 +33,7 @@ export class Domanda {
     rimescola_dec: string;
     coeff_valutazione: number;
     html_type: string;
+    html_type_dec: string;
     html_pattern: string;
     html_min: string; //number oppure Date !
     html_max: string; //number oppure Date !
