@@ -27,8 +27,8 @@
                 <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" (click)="duplica(q.id_questionario)">Duplica</button>
                 <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
                     [disabled]="q.gia_compilato=='1'"
-                    [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''"
-                    (click)="elimina(q.id_questionario)">Elimina</button>
+                    [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : 'Elimina'"
+                    (click)="elimina(q.id_questionario)"><i class="fa fa-trash-alt"></i></button>
             </td>
         </tr>
     </tbody>

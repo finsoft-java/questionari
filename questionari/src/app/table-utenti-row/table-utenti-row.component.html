@@ -47,9 +47,9 @@
 </td>
 <td>
     <div>
-        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!utente.editing" (click)="goToEdit()">Modifica</button>
-        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!utente.editing" (click)="delete(this.utente.username)">Elimina</button>
-        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="utente.editing" (click)="save()">Salva</button>
-        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="utente.editing" (click)="returnFromEdit()">Annulla</button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!utente.editing" (click)="goToEdit()" title="Modifica"><i class="fa fa-edit"></i></button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!utente.editing" (click)="delete(this.utente.username)" title="Elimina"><i class="fa fa-trash-alt"></i></button>
+        <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="utente.editing" (click)="save()" title="Salva"><i class="fa fa-save"></i></button>
+        <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="utente.editing" (click)="returnFromEdit()" title="Annulla"><i class="fa fa-undo"></i></button>
     </div>
 </td>
