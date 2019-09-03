@@ -156,7 +156,7 @@ class Domanda {
         } else {
             print_error(500, $con ->error);
         }
-        return $domanda;
+        return $obj;
     }
 
     function is_domanda_aperta() {
