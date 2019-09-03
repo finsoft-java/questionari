@@ -48,7 +48,6 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 </div>
 
 
-Questo bottone deve comparire solo se il questionario è tutto compilato, per tutte le sezioni e per tutti gli utenti valutati:
-<button *ngIf="questionarioCompilato.stato == '0'" class="btn btn-danger" (click)="convalida()" >Convalida il questionario</button>
+<button *ngIf="questionarioCompilato.stato == '0' && questionarioCompilato.is_compilato == '1'" class="btn btn-danger" (click)="convalida()" >Convalida il questionario</button>
 
 </div>

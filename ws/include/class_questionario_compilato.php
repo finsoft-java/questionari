@@ -22,12 +22,18 @@ class QuestionarioCompilato {
         return $this->_progetto;
     }
     
+    /**
+     * Prende gli utenti valutati dal progetto, *non* dalla tabella questionari compilati
+     * 
+     * @return lista di stringhe
+     */
     function get_utenti_valutati() {
         if (!isset($this->utenti_valutati)) {
             global $con;
             $arr = [];
-            $sql = "SELECT * FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
-                " `id_questionario`='$this->id_questionario' AND `funzione`=`gruppo_valutati` ";
+            $sql = "SELECT DISTINCT nome_utente FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
+                " `id_questionario`='$this->id_questionario' AND `funzione`=`gruppo_valutati` ".
+                " ORDER BY nome_utente";
             
             if($result = mysqli_query($con, $sql)) {
                 $cr = 0;
@@ -63,7 +69,7 @@ class QuestionarioCompilato {
             if($result = mysqli_query($con, $sql)) {
                 while($row = mysqli_fetch_assoc($result))
                 {
-                    $obj = new QuestionarioCompilatoRisposta();
+                    $obj = new QuestionarioCompilatoRisposta($this, null);
                     $obj->progressivo_quest_comp    = $row['progressivo_quest_comp'];
                     $obj->progressivo_sezione       = $row['progressivo_sezione'];
                     $obj->progressivo_domanda       = $row['progressivo_domanda'];
@@ -81,36 +87,25 @@ class QuestionarioCompilato {
         return $this->_tutte_le_risposte;
     }
     
-    /**
-     * Cerco la prima domanda ancora non compilata
-     * $nome_utente_valutato può essere null (questionari generici)
-     */
-    function get_progr_sezione_corrente($nome_utente_valutato) {
+    function get_progr_ultima_sezione() {
         global $con;
-        $sql = "SELECT MIN(progressivo_sezione) AS progressivo_sezione FROM risposte_quest_compilati WHERE " .
-                "progressivo_quest_comp = $this->progressivo_quest_comp " . 
-                "AND progressivo_risposta IS NULL AND risposta_aperta IS NULL AND note IS NULL";
-        if ($nome_utente_valutato) {
-            $sql .= " AND nome_utente_valutato = '$nome_utente_valutato' ";
-        }
+        $sql = "SELECT MAX(s.progressivo_sezione) AS progressivo_sezione FROM questionari_compilati q " .
+                "JOIN sezioni s ON s.id_questionario=q.id_questionario ".
+                "WHERE q.progressivo_quest_comp = $this->progressivo_quest_comp";
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result)) {
-                $progressivo_sezione = $row['progressivo_sezione'];
-                if (!is_null($progressivo_sezione)) {
-                    return $progressivo_sezione;
-                }
+                return $row['progressivo_sezione'];
             }
         } else {
             print_error(500, $con ->error);
         }
-        // Se arrivo qui, tutte le domande sono state compilate
-        return $this->get_progr_ultima_sezione();
     }
     
-    function get_progr_ultima_sezione() {
+    function get_progr_prima_sezione() {
         global $con;
-        $sql = "SELECT MAX(progressivo_sezione) AS progressivo_sezione FROM risposte_quest_compilati " .
-                "WHERE progressivo_quest_comp = $this->progressivo_quest_comp";
+        $sql = "SELECT MIN(s.progressivo_sezione) AS progressivo_sezione FROM questionari_compilati q " .
+                "JOIN sezioni s ON s.id_questionario=q.id_questionario ".
+                "WHERE q.progressivo_quest_comp = $this->progressivo_quest_comp";
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result)) {
                 return $row['progressivo_sezione'];
@@ -123,60 +118,81 @@ class QuestionarioCompilato {
     function is_compilabile() {
         return ($this->stato < '2') and ($this->get_progetto()->stato == '1') and ($this->get_questionario()->stato == '1');
     }
+
+    function get_is_completo_fino_all_ultima_sezione() {
+        global $questionariCompilatiManager;
+        if (!isset($this->is_completo_fino_all_ultima_sezione)) {
+            $ultimo_utente = end($this->get_utenti_valutati());
+            $ultima_sezione = $this->get_progr_ultima_sezione();
+            if ($this->utente_valutato_corrente == $ultimo_utente and $this->progr_sezione_corrente == $ultima_sezione) {
+                $this->is_completo_fino_all_ultima_sezione = '0';
+            } else {
+                $this->is_completo_fino_all_ultima_sezione = '1';
+            }
+        }
+        return $this->is_completo_fino_all_ultima_sezione;
+    }
 }
 
+#####################################################################################
+
 class QuestionarioCompilatoRisposta {
-    private $questionario_compilato;
-    private $sezione;
-    private $domanda;
-    private $risposta;
+    private $_questionario_compilato;
+    private $_domanda;
+    private $_risposta;
     
+    function __construct($questionario_compilato, $domanda) {
+        $this->_questionario_compilato = $questionario_compilato;
+        $this->_domanda = $domanda;
+    }
+
     function get_questionario_compilato() {
         global $questionariCompilatiManager;
-        if (!$this->questionario_compilato) {
-            $this->questionario_compilato = $questionariCompilatiManager->get_questionario_compilato($this->progressivo_quest_comp);
+        if (!$this->_questionario_compilato) {
+            $this->_questionario_compilato = $questionariCompilatiManager->get_questionario_compilato($this->progressivo_quest_comp);
         }
-        return $this->questionario_compilato;
+        return $this->_questionario_compilato;
     }
 
     function get_sezione() {
-        if (!$this->sezione) {
-            $this->sezione = $this->get_questionario_compilato()->get_questionario()->get_sezione($this->progressivo_sezione);
-        }
-        return $this->sezione;
+        return $this->get_domanda()->get_sezione();
     }
 
     function get_domanda() {
-        if (!$this->domanda) {
-            $this->domanda = $this->get_sezione()->get_domanda($this->progressivo_domanda);
+        global $sezioniManager;
+        if (!$this->_domanda) {
+            $id_questionario = $this->get_questionario_compilato()->id_questionario;
+            $this->_domanda = $sezioniManager->get_domanda($id_questionario, $this->progressivo_sezione, $this->progressivo_domanda);
         }
-        return $this->domanda;
+        return $this->_domanda;
     }
 
-    function get_risposta() {
-        if (!$this->risposta and $this->progressivo_risposta) {
-            $this->risposta = $this->get_domanda()->get_risposta($this->progressivo_risposta);
+    function get_risposta_ammessa() {
+        if (!$this->_risposta and $this->progressivo_risposta) {
+            $this->_risposta = $this->get_domanda()->get_risposta_ammessa($this->progressivo_risposta);
         }
-        return $this->risposta;
+        return $this->_risposta;
     }
     
-    function get_num_o_note() {
-        if ($this->note) {
-            return note;
+    function get_desc_risposta() {
+        if ($this->risposta_aperta) {
+            return risposta_aperta;
+        } elseif ($this->progressivo_risposta) {
+            return $this->get_risposta_ammessa()->descrizione;
         }
-        if ($this->progressivo_risposta) {
-            return $this->get_risposta()->descrizione;
-        }
+        return null;
     }
     
-    function get_valore() {
+    function get_punteggio() {
         if ($this->progressivo_risposta) {
-            return $this->get_risposta()->valore;
+            return $this->get_risposta_ammessa()->valore;
         } else {
             return 0;
         }
     }
 }
+
+#############################################################################################################
 
 class VistaQuestionariCompilabili {
     private $questionario;
@@ -241,9 +257,11 @@ class VistaQuestionariCompilabili {
     }
 }
 
+#############################################################################################################
+
 class QuestionariCompilatiManager {
     
-    function get_questionario_compilato($progressivo_quest_comp, $utente_valutato_or_null = null, $sezione_corrente_or_null = null) {
+    function get_questionario_compilato($progressivo_quest_comp) {
         global $con, $STATO_QUEST_COMP;
         $obj = new QuestionarioCompilato();
         $sql = "SELECT * FROM questionari_compilati WHERE progressivo_quest_comp = '$progressivo_quest_comp'";
@@ -253,15 +271,17 @@ class QuestionariCompilatiManager {
                 $obj->id_progetto               = $row['id_progetto'];
                 $obj->id_questionario           = $row['id_questionario'];
                 $obj->stato                     = $row['stato'];
-                $obj->stato_dec                 = $STATO_QUEST_COMP[$row['stato']];
+                $obj->stato_dec                 = ($row['stato'] != null) ? $STATO_QUEST_COMP[$row['stato']] : null;
                 $obj->utente_compilazione       = $row['utente_compilazione'];
                 $obj->data_compilazione         = $row['data_compilazione'];
+                $obj->utente_valutato_corrente  = $row['utente_valutato_corrente'];
+                $obj->progr_sezione_corrente    = $row['progr_sezione_corrente'];
                 $obj->compilabile               = $obj->is_compilabile();
                 $obj->sezioni                   = $obj->get_questionario()->get_sezioni(); // solo la lista, non esplosa
                 $obj->utenti_valutati           = $obj->get_utenti_valutati();
                 $obj->progetto                  = $obj->get_progetto();
                 $obj->questionario              = $obj->get_questionario();
-                
+                // $obj->is_compilato              = $obj->get_is_compilato(); ...
             } else {
                 return null;
             }
@@ -276,7 +296,7 @@ class QuestionariCompilatiManager {
      * $progressivo_sezione potrebbe essere null (scaricamento xlsx)
      * $nome_utente_valutato potrebbe essere null (questionari generici o scaricamento xlsx)
      */
-    function get_risposte($progressivo_quest_comp, $progressivo_sezione, $nome_utente_valutato) {
+    function get_risposte($progressivo_quest_comp, $progressivo_sezione = null, $nome_utente_valutato = null) {
         global $con;
         $arr = [];
         
@@ -292,7 +312,7 @@ class QuestionariCompilatiManager {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
             {
-                $obj = new VistaQuestionariCompilabili();
+                $obj = new QuestionarioCompilatoRisposta(null, null);
                 $obj->progressivo_quest_comp    = $row['progressivo_quest_comp'];
                 $obj->progressivo_sezione       = $row['progressivo_sezione'];
                 $obj->progressivo_domanda       = $row['progressivo_domanda'];
@@ -324,7 +344,7 @@ class QuestionariCompilatiManager {
         }
         if (!$progressivo_sezione) {
             $progressivo_sezione = $q->get_progr_sezione_corrente($utente_valutato);
-            //se non ce ne sono, bisogna lanciare un errore
+            //se non ce ne sono, bisogna lanciare un errore... non dovrebbe succedere...
         }
 
         $sezione = $q->get_questionario()->get_sezione($progressivo_sezione);

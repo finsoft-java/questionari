@@ -69,7 +69,9 @@ class XLSXManager {
         } else {
             //devo comporre le righe con i nomi utenti e poi le risposte
             foreach ($questionatiCompilati as $qc) {
+
                 $tutte_le_risposte = $qc->get_tutte_le_risposte_divise_per_utente();
+
                 foreach($tutte_le_risposte as $utente_valutato => $risposte) {
                     $this->crea_riga_sheet($writer, $titoloSheet, $qc->utente_compilazione, $utente_valutato, $risposte);
                 }
@@ -83,7 +85,7 @@ class XLSXManager {
      * 
      */
     function crea_riga_sheet($writer, $titoloSheet, $utente_compilazione, $utente_valutato, $risposte) {
-        $row = array_map(function($x){return $x->get_num_o_note();}, $risposte);
+        $row = array_map(function($x){return $x->get_desc_risposta();}, $risposte);
         $row = array_merge([$utente_compilazione, $utente_valutato], $row);
         $row = array_map(function($x){return $x ? $x : "-";}, $row);
         $writer->writeSheetRow($titoloSheet, $row);

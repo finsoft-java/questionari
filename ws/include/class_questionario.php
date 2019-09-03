@@ -27,7 +27,7 @@ class Questionario {
                 $cr = 0;
                 while($row = mysqli_fetch_assoc($result))
                 {
-                    $obj = new Sezione();
+                    $obj = new Sezione($this);
                     $obj->id_questionario        = $row['id_questionario'];
                     $obj->progressivo_sezione    = $row['progressivo_sezione'];
                     $obj->titolo                 = $row['titolo'];
@@ -45,7 +45,7 @@ class Questionario {
     
     function get_sezione($progressivo_sezione, $explode = true) {
         global $con;
-        $obj = new Sezione();
+        $obj = new Sezione($this);
         $sql = "SELECT * FROM sezioni WHERE id_questionario = '$this->id_questionario' AND progressivo_sezione = '$progressivo_sezione'";
         
         if($result = mysqli_query($con, $sql)) {
@@ -83,7 +83,7 @@ class Questionario {
     
     function get_domande_appiattite($explode = true) {
         if (!$this->domande_appiattite) {
-            global $con;
+            global $con, $BOOLEAN, $HTML_TYPE;
             $arr = [];
             $sql = "SELECT * FROM domande WHERE id_questionario = '$this->id_questionario' ORDER BY progressivo_sezione, progressivo_domanda";
 
@@ -91,24 +91,24 @@ class Questionario {
                 $cr = 0;
                 while($row = mysqli_fetch_assoc($result))
                 {
-                    $obj = new Domanda();
+                    $obj = new Domanda(null);
                     $obj->id_questionario       = $row['id_questionario'];
                     $obj->progressivo_sezione   = $row['progressivo_sezione'];
                     $obj->progressivo_domanda   = $row['progressivo_domanda'];
                     $obj->descrizione           = $row['descrizione'];
                     $obj->obbligatorieta        = $row['obbligatorieta'];
-                    $obj->obbligatorieta_dec    = $BOOLEAN[$row['obbligatorieta']];
+                    $obj->obbligatorieta_dec    = $row['obbligatorieta'] ? $BOOLEAN[$row['obbligatorieta']] : null;
                     $obj->rimescola             = $row['rimescola'];
-                    $obj->rimescola_dec         = $BOOLEAN[$row['rimescola']];
+                    $obj->rimescola_dec         = $row['rimescola'] ? $BOOLEAN[$row['rimescola']] : null;
                     $obj->coeff_valutazione     = $row['coeff_valutazione'];
                     $obj->html_type             = $row['html_type'];
-                    $obj->html_type_dec         = $HTML_TYPE[$row['html_type']];
+                    $obj->html_type_dec         = $row['html_type'] ? $HTML_TYPE[$row['html_type']] : null;
                     $obj->html_pattern          = $row['html_pattern'];
                     $obj->html_min              = $row['html_min'];
                     $obj->html_max              = $row['html_max'];
-                    $obj->html_maxlenght        = $row['html_maxlenght'];
+                    $obj->html_maxlength        = $row['html_maxlength'];
                     if ($explode) {
-                        $obj->risposte          = $obj->get_risposte();
+                        $obj->risposte          = $obj->get_risposte_ammesse();
                     }
                     $arr[$cr++] = $obj;
                 }
@@ -120,6 +120,8 @@ class Questionario {
         return $this->domande_appiattite;
     }
 }
+
+###############################################################################################
 
 class QuestionariManager {
     
@@ -136,11 +138,11 @@ class QuestionariManager {
                 $questionario->id_questionario        = $row['id_questionario'];
                 $questionario->titolo                 = $row['titolo'];
                 $questionario->stato                  = $row['stato'];
-                $questionario->stato_dec              = $STATO_QUESTIONARIO[$row['stato']];
+                $questionario->stato_dec              = ($row['stato'] != null) ? $STATO_QUESTIONARIO[$row['stato']] : null;
                 $questionario->gia_compilato          = $row['gia_compilato'];
-                $questionario->gia_compilato_dec      = $BOOLEAN[$row['gia_compilato']];
+                $questionario->gia_compilato_dec      = ($row['gia_compilato'] != null) ? $BOOLEAN[$row['gia_compilato']] : null;
                 $questionario->flag_comune            = $row['flag_comune'];
-                $questionario->flag_comune_dec        = $BOOLEAN[$row['flag_comune']];
+                $questionario->flag_comune_dec        = ($row['flag_comune'] != null) ? $BOOLEAN[$row['flag_comune']] : null;
                 $questionario->utente_creazione       = $row['utente_creazione'];
                 $questionario->data_creazione         = $row['data_creazione'];
                 $arr[$cr++] = $questionario;
@@ -162,11 +164,11 @@ class QuestionariManager {
                 $questionario->id_questionario        = $row['id_questionario'];
                 $questionario->titolo                 = $row['titolo'];
                 $questionario->stato                  = $row['stato'];
-                $questionario->stato_dec              = $STATO_QUESTIONARIO[$row['stato']];
+                $questionario->stato_dec              = ($row['stato'] != null) ? $STATO_QUESTIONARIO[$row['stato']] : null;
                 $questionario->gia_compilato          = $row['gia_compilato'];
-                $questionario->gia_compilato_dec      = $BOOLEAN[$row['gia_compilato']];
+                $questionario->gia_compilato_dec      = ($row['gia_compilato'] != null) ? $BOOLEAN[$row['gia_compilato']] : null;
                 $questionario->flag_comune            = $row['flag_comune'];
-                $questionario->flag_comune_dec        = $BOOLEAN[$row['flag_comune']];
+                $questionario->flag_comune_dec        = ($row['flag_comune'] != null) ? $BOOLEAN[$row['flag_comune']] : null;
                 $questionario->utente_creazione       = $row['utente_creazione'];
                 $questionario->data_creazione         = $row['data_creazione'];
                 $questionario->sezioni                = $questionario->get_sezioni();    // solo la lista, non esplosa
