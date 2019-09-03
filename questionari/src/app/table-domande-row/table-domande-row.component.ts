@@ -15,12 +15,13 @@ export class TableDomandeRowComponent implements OnInit {
   @Input() public domanda: Domanda;
   //usato per rimuovere la riga appena creata
   @Input() public indexDomanda: number;
-  @Output() public itemRemoved = new EventEmitter<number>();
   currentUser: User;
   currentUserSubscription: Subscription;
   domanda_in_modifica: Domanda;
   elenco_questionari: Questionario;
   utenti: User;
+  
+  @Output() public itemRemoved = new EventEmitter<number>();
   //html_type_array = ["text","number","date","button","checkbox","color","datetime-local","month","range","tel","time","week"];
   html_type_array = ["text","number"];
   rimescola_array = ["NO","SI"];
@@ -58,6 +59,7 @@ export class TableDomandeRowComponent implements OnInit {
    */
   returnFromEdit() {
     if(this.domanda.creating == true) {
+      console.log(this.indexDomanda);
       this.itemRemoved.emit(this.indexDomanda);
     } else {
       this.domanda.creating = false;
@@ -71,7 +73,7 @@ export class TableDomandeRowComponent implements OnInit {
    */
   delete() {
     this.progettiService.deleteProgettoQuestionario(this.questionario).subscribe(resp => {
-          this.itemRemoved.emit(this.indexDomanda);
+          //this.itemRemoved.emit(this.indexDomanda);
     },
     error => {
       this.alertService.error(error);

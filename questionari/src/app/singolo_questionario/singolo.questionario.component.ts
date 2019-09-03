@@ -54,12 +54,13 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.indice_sezione_corrente = indice;
                 this.sezione_corrente = response["value"];
-                console.log(this.sezione_corrente);
-                console.log(this.questionario.sezioni.length);
             },
             error => {
                 this.alertService.error(error);
             });
+    }
+    removeItem(i: number) {
+        this.sezione_corrente.domande.splice(i, 1);
     }
     getQuestionario(): void {
     
@@ -159,7 +160,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             console.log("Duplico la sezione null?!? questo non dovrebbe succedere");
             return;
         }
-        this.questionariService.duplicaSezione(this.sezione_corrente.id_questionario, this.sezione_corrente.progressivo_sezione)
+        console.log(this.sezione_corrente);
+        this.questionariService.duplicaSezione(this.sezione_corrente)
           .subscribe(response => {
                 let nuova_sezione = response["value"];
                 this.questionario.sezioni.push(nuova_sezione);

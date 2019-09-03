@@ -73,7 +73,7 @@
             </thead>    
             <tbody>
                 <tr table-domande-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" [questionario]="this.questionario"  [domanda]="domanda_row"
-                    [indexDomanda]="i"></tr>
+                    [indexDomanda]="i" (itemRemoved)="removeItem(i)"></tr>
             </tbody>
         </table>
     </div>

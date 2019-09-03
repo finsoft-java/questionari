@@ -34,9 +34,9 @@ export class QuestionariService {
     creaSezione(s: Sezione) {
         return this.http.put(`${config.apiUrl}/Sezioni.php`, s);
     }
-    duplicaSezione(id_questionario: number, progressivo_sezione: number) {
+    duplicaSezione(s: Sezione) {
         // FIXME verificare come passare i parametri
-        return this.http.post(`${config.apiUrl}/CopySezione.php?id_questionario=${id_questionario}&progressivo_sezione=${progressivo_sezione}`, '');
+        return this.http.post(`${config.apiUrl}/CopySezione.php`,s);
     }
     
 }
