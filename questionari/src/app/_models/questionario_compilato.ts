@@ -13,6 +13,7 @@ export class QuestionarioCompilato {
     questionario: Questionario;
     sezioni?: Sezione[];
     utenti_valutati?: string[];
+    is_compilato: string;
 }
 
 export class RispostaQuestionarioCompilato {

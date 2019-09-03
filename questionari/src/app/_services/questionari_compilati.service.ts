@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { VistaQuestionariCompilabili, QuestionarioCompilato, Sezione } from '@/_models';
+import { VistaQuestionariCompilabili, QuestionarioCompilato, Sezione, RispostaQuestionarioCompilato } from '@/_models';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionariCompilatiService {
@@ -40,11 +40,7 @@ export class QuestionariCompilatiService {
     convalida(progressivo_quest_comp: number) {
         return this.http.post(`${config.apiUrl}/ConvalidaQuestionarioCompilato.php?progressivo_quest_comp=${progressivo_quest_comp}`, "");
     }
-    /*
-    insert(q: Questionario) {
-        return this.http.put(`${config.apiUrl}/QuestionariCompilati.php`, q);
+    salvaRisposte(progressivo_quest_comp: number, risposte: RispostaQuestionarioCompilato[]) {
+        return this.http.post(`${config.apiUrl}/SalvaRisposteUtente.php?progressivo_quest_comp=${progressivo_quest_comp}`, risposte);
     }
-    update(q: Questionario) {
-        return this.http.post(`${config.apiUrl}/QuestionariCompilati.php`, q);
-    }*/
 }

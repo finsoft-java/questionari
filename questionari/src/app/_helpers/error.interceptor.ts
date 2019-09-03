@@ -18,6 +18,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                 location.reload(true);
             }
             
+            console.log(err);
+
             // Il messaggio può essere in molti punti diversi, dipende dal browser
             //  Per Firefox è in err.error.error.value
             let msg  = (err.error.error && err.error.error.value) || err.error.message || err.message || err.statusText;
@@ -26,6 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if (!msg) {
                 msg = "Errore sconosciuto";
             } else if (msg.toLowerCase().includes("http failure response") && (!err.status)) {
+                // N.B. lo stesso errore avviene se c'è un errore CORS
                 msg = "Impossibile connettersi al server PHP";
             }
             
