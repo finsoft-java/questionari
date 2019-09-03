@@ -11,9 +11,11 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 <div *ngIf="questionarioCompilato.utenti_valutati">
         Quale utente stai valutando?
         <select [(ngModel)]="utente_valutato_corrente" >
-                <option *ngFor="let utente of questionarioCompilato.utenti_valutati"value="{{utente.username}}">{{ utente.nome }} {{ utente.cognome }}</option>
+                <option *ngFor="let utente of questionarioCompilato.utenti_valutati"
+                        value="{{utente.username}}"
+                        [disabled]="utente.username > questionarioCompilato.utente_valutato_corrente"
+                        >{{ utente.nome }} {{ utente.cognome }}</option>
         </select>
-        TODO: disabilitare tutti gli utenti "successivi a quello corrente"
 </div>
 
 <br/>
@@ -40,7 +42,13 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
         <button class="btn" (click)="sezPrecedente()" [disabled]="!esiste_prec">Sez. precedente</button>
         <button class="btn btn-success" (click)="salvaSezione()"
                 [disabled]="!is_sezione_compilata"
-                [title]="(this.is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Salva</button>
+                [title]="(this.is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Salva sezione</button>
+        <button *ngIf="questionarioCompilato.stato == '0'"
+                [disabled]="questionarioCompilato.is_compilato != '1'" 
+                class="btn btn-danger"
+                (click)="convalida()" 
+                [title]="questionarioCompilato.is_compilato != '1' ? 'Occorre compilare tutte le sezioni, per tutti gli utenti' : ''">
+                Convalida il questionario</button>
         <button class="btn" (click)="sezSuccessiva()"
                 [disabled]="!is_sezione_compilata"
                 [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'" [disabled]="!esiste_succ">Sez. successiva</button>
@@ -49,6 +57,5 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 </div>
 
 
-<button *ngIf="questionarioCompilato.stato == '0' && questionarioCompilato.is_compilato == '1'" class="btn btn-danger" (click)="convalida()" >Convalida il questionario</button>
 
 </div>
