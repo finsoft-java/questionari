@@ -32,8 +32,10 @@ module.exports = {
         new webpack.DefinePlugin({
             // global app config object
             config: JSON.stringify({
-                //apiUrl: 'http://192.168.99.100/ws'                     //luca
-                apiUrl: 'http://127.0.0.1/questionari/ws'        // ale
+                //apiUrl: 'http://192.168.99.100/ws',                                   //luca
+                apiUrl: 'http://127.0.0.1/questionari/ws',                              // ale
+                //websocketUrl: 'ws://localhost/ws/include/websockets.php'              //luca
+                websocketUrl: 'ws://127.0.0.1/questionari/ws/include/websockets.php'    //ale
             })
         })
     ],
