@@ -35,9 +35,9 @@ module.exports = {
                 //apiUrl: 'http://192.168.99.100/ws',                                   //luca docker
                 //apiUrl: 'http://localhost/ws',                                        //luca
                 apiUrl: 'http://127.0.0.1/questionari/ws',                              // ale
-                //websocketUrl: 'ws://192.168.99.100/ws/include/websockets.php'         //luca docker
-                //websocketUrl: 'ws://localhost/ws/include/websockets.php'              //luca
-                websocketUrl: 'ws://127.0.0.1/questionari/ws/include/websockets.php'    //ale
+                //websocketUrl: 'ws://192.168.99.100/ws/WebsocketChat.php'              //luca docker
+                //websocketUrl: 'ws://localhost/ws/WebsocketChat.php'                   //luca
+                websocketUrl: 'ws://127.0.0.1/questionari/ws/WebsocketChat.php'         //ale
             })
         })
     ],
