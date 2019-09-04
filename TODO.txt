@@ -17,3 +17,6 @@ Quando si annulla un questionario compilato, bisognerebbe anche ricalcolare i fl
 jwtinterceptor: rinominare "username" in "token" ....
 
 tutti i vari "style" sarebbe bello spostarli dentro file css...
+
+verificare se i vari Service di angular sono definiti bene: vengono
+creati una volta sola, o vengono ricreati per ogni component?
