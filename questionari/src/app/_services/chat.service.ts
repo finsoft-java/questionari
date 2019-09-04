@@ -10,10 +10,6 @@ export interface Message {
 
 /**
  * Questo servizio gestisce l'invio/ricezione di messaggi a/da un WebSocket dato
- * 
- * Sostanzialmente, traduce i MessageEvent in Message e viceversa
- * 
- * Per 
  */
 @Injectable({ providedIn: 'root' })
 export class ChatService {
