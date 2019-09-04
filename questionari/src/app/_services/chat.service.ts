@@ -3,8 +3,9 @@ import { Subject, ObjectUnsubscribedError } from "rxjs";
 import { WebsocketService } from "./websocket.service";
 
 export interface Message {
-  author: string;
-  message: string;
+  what_has_changed: 'questionari'|'progetti'|'utenti'|'questionariCompilati';
+  key: string | number;
+  note: string;
 }
 
 /**
@@ -17,16 +18,18 @@ export interface Message {
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   public messages = new Subject<Message>();
-  private messageEvents = new Subject<MessageEvent>();
+  private _messages = new Subject<Object>();
 
   constructor(wsService: WebsocketService) {
-    this.messageEvents = wsService.connect(config.websocketUrl);
-    this.messageEvents.subscribe(
+    this._messages = wsService.connect(config.websocketUrl);
+    this._messages.subscribe(
       response => {
-        let data = JSON.parse(response.data);
+        // L'oggetto response e' un MessageEvent, i dati stanno nel campo data
+        let data = JSON.parse(response["data"]);
         let msg = {
-          author: data.author,
-          message: data.message
+          what_has_changed: data.what_has_changed,
+          key: data.key,
+          note: data.note
         };
         this.messages.next(msg);
       },
@@ -39,9 +42,6 @@ export class ChatService {
 
   sendMsg(message : Message) {
     console.log("new message from client to websocket: ", message);
-    let msgEvt = new MessageEvent('aa', {});
-    Object.assign(msgEvt, message); // Di fatto, la classe Message può essere qualsiasi
-    console.log("Going to send:", msgEvt);
-    this.messageEvents.next(msgEvt);
+    this._messages.next(message);
   }
 }

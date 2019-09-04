@@ -2,7 +2,8 @@
 
 # Questo è un websocket semplicissimo, non fa nient'altro che diramare messaggi in brodcast
 # NON si collega al database.
-# in Linux questo file è eseguibile (altrimenti lanciarlo con python 3)
+# in Linux questo file è eseguibile
+# in Windows lanciarlo con py server.py
 # fermarlo con Ctrl+C oppure kill
 # a regime, questo server deve essere in esecuzione automatica con la macchina
 
@@ -31,5 +32,7 @@ start_server = websockets.serve(main, WEBSOCKET_SERVER, WEBSOCKET_PORT)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 
-print("Server started.")
+print("Websocket server started.")
 asyncio.get_event_loop().run_forever()
+
+# FIXME se questo server viene buttato giù, occorrerebbe avvisare tutti i client
