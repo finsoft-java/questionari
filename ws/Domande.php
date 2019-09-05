@@ -99,13 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         print_error(404, 'Not found');
     }
     $domanda = $sezione->get_domanda($json_data->progressivo_domanda);
-    $sezioniManager->aggiornaDomandaERisposte($domanda, $json_data);
+    $domanda = $sezioniManager->aggiornaDomandaERisposte($domanda, $json_data);
 
     header('Content-Type: application/json');
-    echo json_encode(['value' => $sezione]);
+    echo json_encode(['value' => $domanda]);
     
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     //==========================================================
+    $id_questionario =$_GET['id_questionario'];
+    $progressivo_sezione =$_GET['progressivo_sezione'];
+    $progressivo_domanda =$_GET['progressivo_domanda'];
+    
     if (!$id_questionario) {
         print_error(404, 'Missing id_questionario');
     }
@@ -115,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$progressivo_domanda) {
         print_error(400, 'Missing progressivo_domanda');
     }
-    $questionario = $questionariManager->get_questionario($json_data->id_questionario);
+    $questionario = $questionariManager->get_questionario($id_questionario);
     if (!$questionario) {
         print_error(404, 'Not found');
     }

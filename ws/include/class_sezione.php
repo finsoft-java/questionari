@@ -60,6 +60,17 @@ class Sezione {
         }
         return $this->domande;
     }
+    function get_prossima_domanda() {
+        global $con;
+        $sql = "SELECT max(progressivo_domanda) AS next FROM domande WHERE id_questionario = '$this->id_questionario' and progressivo_sezione = '$this->progressivo_sezione'";
+        if($result = mysqli_query($con, $sql)) {
+            if($row = mysqli_fetch_assoc($result)) {
+                return $row['next']+1;
+            }
+        } else {
+            print_error(500, $con ->error);
+        }
+    }
 }
 
 ################################################################################################
@@ -325,9 +336,10 @@ class SezioniManager {
 
     function creaDomandaERisposte($sezione, $json_data) {
         global $con, $sezioniManager;
-        $sql = insert("domande", ["id_questionario" => $sezione->id_questionario,
-                                    "progressivo_sezione" => $sezione->progressivo_sezione,
-                                    "progressivo_domanda" => $json_data->progressivo_domanda,
+        $progressivo_domanda = $sezione->get_prossima_domanda();
+        $sql = insert("domande", ["id_questionario" => $json_data->id_questionario,
+                                    "progressivo_sezione" => $json_data->progressivo_sezione,
+                                    "progressivo_domanda" => $progressivo_domanda,
                                     "descrizione" => $json_data->descrizione,
                                     "obbligatorieta" => $json_data->obbligatorieta,
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
@@ -342,21 +354,24 @@ class SezioniManager {
             print_error(500, $con ->error);
         }
         $this->_insert_risposte($json_data->risposte);
-        return $sezioniManager->get_domanda($sezione->id_questionario, $json_data->progressivo_sezione, $json_data->progressivo_domanda);
+        return $sezioniManager->get_domanda($sezione->id_questionario, $json_data->progressivo_sezione, $progressivo_domanda);
     }
     function _insert_risposte($risposte) {
-        foreach ($risposte as $r) {
-            $sql = insert("risposte_ammesse", ["id_questionario" => $r->id_questionario,
-                                                "progressivo_sezione" => $r->progressivo_sezione,
-                                                "progressivo_domanda" => $r->progressivo_domanda,
-                                                "progressivo_risposta" => $r->progressivo_risposta,
-                                                "descrizione" => $r->descrizione,
-                                                "valore" => $r->valore]);
-            mysqli_query($con, $sql);
-            if ($con ->error) {
-                print_error(500, $con ->error);
+        if(isset($risposte) && $risposte != null){
+            foreach ($risposte as $r) {
+                $sql = insert("risposte_ammesse", ["id_questionario" => $r->id_questionario,
+                                                    "progressivo_sezione" => $r->progressivo_sezione,
+                                                    "progressivo_domanda" => $r->progressivo_domanda,
+                                                    "progressivo_risposta" => $r->progressivo_risposta,
+                                                    "descrizione" => $r->descrizione,
+                                                    "valore" => $r->valore]);
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
             }
         }
+        
     }
     function aggiornaDomandaERisposte($domanda, $json_data) {
         global $con, $sezioniManager;

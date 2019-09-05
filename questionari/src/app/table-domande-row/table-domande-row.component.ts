@@ -63,7 +63,6 @@ export class TableDomandeRowComponent implements OnInit {
    */
   returnFromEdit() {
     if(this.domanda.creating == true) {
-      console.log(this.indexDomanda);
       this.itemRemoved.emit(this.indexDomanda);
     } else {
       this.domanda.creating = false;
@@ -76,8 +75,8 @@ export class TableDomandeRowComponent implements OnInit {
    * Richiamato dopo che l'utente ha premuto il tasto Elimina
    */
   delete() {
-    this.progettiService.deleteProgettoQuestionario(this.questionario).subscribe(resp => {
-          //this.itemRemoved.emit(this.indexDomanda);
+    this.domandeService.eliminaDomandaConRisposte(this.domanda.id_questionario, this.domanda.progressivo_sezione, this.domanda.progressivo_domanda).subscribe(resp => {
+          this.itemRemoved.emit(this.indexDomanda);
     },
     error => {
       this.alertService.error(error);
@@ -100,12 +99,14 @@ export class TableDomandeRowComponent implements OnInit {
   }
   save() {
     //if(this.controlloDatiImmessi()){
-
+      if(this.domanda_in_modifica.obbligatorieta == ""){
+        this.domanda_in_modifica.obbligatorieta = "0";
+      }
     //se il flg creating è settato sarà una insert altrimenti update
       if(this.domanda_in_modifica.creating == true) {
+
         this.domandeService.creaDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) { 
-
             this.domanda_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
@@ -114,6 +115,7 @@ export class TableDomandeRowComponent implements OnInit {
         },
         error => {
           this.alertService.error(error);
+          this.scrollToTop();
         });
       } else {
         this.domandeService.updateDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {

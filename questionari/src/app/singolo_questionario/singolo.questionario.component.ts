@@ -41,7 +41,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
          });
-         console.log(this);
     }
     
 
@@ -166,7 +165,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             console.log("Duplico la sezione null?!? questo non dovrebbe succedere");
             return;
         }
-        console.log(this.sezione_corrente);
         this.questionariService.duplicaSezione(this.sezione_corrente)
           .subscribe(response => {
                 let nuova_sezione = response["value"];
@@ -180,23 +178,23 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
     creaDomanda() {
         this.nuova_domanda = {
-            coeff_valutazione:null,
-            descrizione:null,
+            coeff_valutazione:1,
+            descrizione:"",
             html_max:null,
             html_min:null,
-            html_maxlength:0,
+            html_maxlength:null,
             html_pattern:null,
-            html_type:null,
-            html_type_dec:null,
+            html_type:"0",
+            html_type_dec:"Text",
             id_questionario: this.id_questionario,
-            obbligatorieta: null,
-            obbligatorieta_dec: null,
-            rimescola_dec:null,
+            obbligatorieta: "0",
+            obbligatorieta_dec: "NO",
             progressivo_domanda: null,
-            progressivo_sezione: null,
-            rimescola:null,
-            risposte:null,
-            risposta: null,
+            progressivo_sezione: this.sezione_corrente.progressivo_sezione,
+            rimescola:"0",
+            rimescola_dec:"NO",
+            risposte:[],//risposteAmmesse
+            risposta:null,
             creating:true
         };
         this.sezione_corrente.domande.push(this.nuova_domanda);
@@ -229,8 +227,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         }, 16);
       }
       setRispostaCreata(){
-        console.log(this);
-        //this.domandaCorrente = this.simpleClone(this);
         this.guardaRisposte = true;   
       }
       simpleClone(obj: any) {

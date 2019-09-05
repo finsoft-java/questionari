@@ -4,7 +4,9 @@
                 <input class="form-control" type="text" [(ngModel)]="domanda_in_modifica.descrizione" style="max-width: 110px;"/>
             </div>
             <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.descrizione }}&nbsp;</div>
+                <div tabindex="0" style="outline: none !important; line-height: 38px;max-width:110px;text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;" title="">{{ domanda.descrizione }}&nbsp;</div>
             </div>        
         </td>
         <td>
@@ -22,7 +24,7 @@
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="number" style="width: auto;max-width: 70px;"
                     [(ngModel)]="domanda_in_modifica.coeff_valutazione"
-                    title="" min="0" max="300"/>      
+                    title="" min="1" max="300"/>      
             </div>
             <div *ngIf="!domanda.editing">
                 <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.coeff_valutazione }}&nbsp;</div>
@@ -31,7 +33,6 @@
         <td>
             <div *ngIf="domanda.editing">
                 <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda_in_modifica.rimescola">
-                    <option></option>
                     <option *ngFor="let option of rimescola_array; index as i" value="{{i}}">
                         {{ option }}
                     </option>   
@@ -44,7 +45,6 @@
         <td>
             <div *ngIf="domanda.editing">
                 <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda_in_modifica.html_type">
-                    <option></option>
                     <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
                         {{ option }}
                     </option>   
@@ -98,11 +98,11 @@
         <td>
             <div>
                 
-                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
-                <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete()"><i class="fa fa-trash-alt"></i></button>
-                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
-                <button style="min-width: calc((100% / 2) - 10px);" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()"><i class="fa fa-undo"></i></button>
-                <button style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Risposte" title="Risposte" (click)="newRisposta()">Risposte</button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)"><i class="fa fa-trash-alt"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()"><i class="fa fa-undo"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Risposte" title="Risposte" (click)="newRisposta()">Risposte</button>
                 
             </div>
         </td>
