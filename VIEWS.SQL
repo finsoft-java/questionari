@@ -13,11 +13,13 @@ CREATE OR REPLACE VIEW v_progetti_questionari_utenti AS
 select p.id_progetto,p.titolo AS titolo_progetto,p.stato AS stato_progetto,p.utente_creazione AS ut_creaz_progetto,p.data_creazione AS data_creaz_progetto,
     q.id_questionario,q.titolo AS titolo_questionario,q.stato AS stato_questionario,q.flag_comune AS flag_comune,q.utente_creazione AS ut_creaz_questionario,q.data_creazione AS data_creaz_questionario,
     x.tipo_questionario,x.gruppo_compilanti,x.gruppo_valutati,x.autovalutazione,
-    u.nome_utente,u.funzione
+    u.nome_utente,u.funzione,
+    ux.nome, ux.cognome
 from progetti p 
 join progetti_questionari x on x.id_progetto = p.id_progetto
 join progetti_utenti u on u.id_progetto = p.id_progetto
-join questionari q on q.id_questionario = x.id_questionario;
+join questionari q on q.id_questionario = x.id_questionario
+join utenti ux on ux.username=u.nome_utente;
 
 
 

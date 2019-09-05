@@ -1,6 +1,7 @@
 <?php
 
 $questionariCompilatiManager = new QuestionariCompilatiManager();
+
 class QuestionarioCompilato {
     private $_progetto;
     private $_questionario;
@@ -25,13 +26,13 @@ class QuestionarioCompilato {
     /**
      * Prende gli utenti valutati dal progetto, *non* dalla tabella questionari compilati
      * 
-     * @return lista di stringhe
+     * @return lista di oggetti Utente
      */
     function get_utenti_valutati() {
         if (!isset($this->utenti_valutati)) {
             global $con;
             $arr = [];
-            $sql = "SELECT DISTINCT nome_utente FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
+            $sql = "SELECT DISTINCT nome_utente, nome, cognome FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
                 " `id_questionario`='$this->id_questionario' AND `funzione`=`gruppo_valutati` ".
                 " ORDER BY nome_utente";
             
@@ -39,7 +40,11 @@ class QuestionarioCompilato {
                 $cr = 0;
                 while($row = mysqli_fetch_assoc($result))
                 {
-                    $arr[$cr++] = $row["nome_utente"];
+                    $obj = new Utente();
+                    $obj->username      = $row['nome_utente'];
+                    $obj->nome          = $row['nome'];
+                    $obj->cognome       = $row['cognome'];
+                    $arr[$cr++] = $obj;
                 }
             } else {
                 print_error(500, $con ->error);
@@ -62,7 +67,7 @@ class QuestionarioCompilato {
             global $con;
             $arr = [];
             foreach ($this->get_utenti_valutati() as $u) {
-                $arr[$u] = [];
+                $arr[$u->username] = [];
             }
             
             $sql = "SELECT * FROM risposte_quest_compilati WHERE progressivo_quest_comp = '$this->progressivo_quest_comp' ";
@@ -117,20 +122,6 @@ class QuestionarioCompilato {
     
     function is_compilabile() {
         return ($this->stato < '2') and ($this->get_progetto()->stato == '1') and ($this->get_questionario()->stato == '1');
-    }
-
-    function get_is_completo_fino_all_ultima_sezione() {
-        global $questionariCompilatiManager;
-        if (!isset($this->is_completo_fino_all_ultima_sezione)) {
-            $ultimo_utente = end($this->get_utenti_valutati());
-            $ultima_sezione = $this->get_progr_ultima_sezione();
-            if ($this->utente_valutato_corrente == $ultimo_utente and $this->progr_sezione_corrente == $ultima_sezione) {
-                $this->is_completo_fino_all_ultima_sezione = '0';
-            } else {
-                $this->is_completo_fino_all_ultima_sezione = '1';
-            }
-        }
-        return $this->is_completo_fino_all_ultima_sezione;
     }
 }
 
@@ -241,20 +232,6 @@ class VistaQuestionariCompilabili {
         }
         return $this->utenti_valutati;
     }
-
-    /**
-     * @return un QuestionarioCompilato, oppure null
-     */
-    function get_ultimo_questionario_compilato() {
-        global $questionariCompilatiManager;
-        if (!$this->progressivo_quest_comp) {
-            return null;
-        }
-        if (!$this->ultimo_quest_comp) {
-            $this->ultimo_quest_comp = $questionariCompilatiManager->get_questionario_compilato($this->progressivo_quest_comp);
-        } 
-        return $ultimo_quest_comp;
-    }
 }
 
 #############################################################################################################
@@ -281,7 +258,7 @@ class QuestionariCompilatiManager {
                 $obj->utenti_valutati           = $obj->get_utenti_valutati();
                 $obj->progetto                  = $obj->get_progetto();
                 $obj->questionario              = $obj->get_questionario();
-                // $obj->is_compilato              = $obj->get_is_compilato(); ...
+                $obj->is_compilato              = $this->is_questionario_compilato($obj);
             } else {
                 return null;
             }
@@ -337,8 +314,8 @@ class QuestionariCompilatiManager {
         $q = $this->get_questionario_compilato($progressivo_quest_comp);
 
         if (!$utente_valutato) {
-            if ($obj->get_utenti_valutati()) {
-                $utente_valutato = $obj->get_utenti_valutati()[0];
+            if ($q->get_utenti_valutati()) {
+                $utente_valutato = $q->get_utenti_valutati()[0];
                 // Altrimenti, è un questionario generico, non prevede utenti da valutare
             }
         }
@@ -534,7 +511,7 @@ class QuestionariCompilatiManager {
         $utenti_valutati = $questionarioCompilabile->get_utenti_valutati();
         foreach($utenti_valutati as $utente_valutato) {
             $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
-                    "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato' ".
+                    "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato->username' ".
                     "FROM v_questionari_domande " .
                     "WHERE id_questionario = '$questionarioCompilabile->id_questionario' ";
             mysqli_query($con, $sql);
@@ -546,12 +523,19 @@ class QuestionariCompilatiManager {
         return $this->get_questionario_compilato($progressivo_quest_comp);
     }
     
-    function update_risposte($json_data_array) {
+    function update_risposte_sezione($json_data_array, $questionario_compilato, $progressivo_sezione, $nome_utente_valutato) {
         // Mi aspetto che il frontend salvi in una botta sola tutte le risposte della sezione corrente
         // e che le passi in un array
+        $completo = false;
+
+        $sezione = $this->get_sezione_questionario_compilato($questionario_compilato->progressivo_quest_comp, $progressivo_sezione, $nome_utente_valutato);
+
+
         foreach ($json_data_array as $json_data) {
             $this->update_singola_risposta($json_data);
         }
+
+        $this->aggiorna_sezione_e_utente_correnti($questionario_compilato, $progressivo_sezione, $nome_utente_valutato);
     }
     
     function update_singola_risposta($json_data) {
@@ -569,6 +553,76 @@ class QuestionariCompilatiManager {
         }
     }
 
+    /**
+     * Corrente = l'ultimo utente / sezione che sia stato compilato completamente
+     */
+    function aggiorna_sezione_e_utente_correnti($questionario_compilato, $progressivo_sezione, $utente_valutato) {
+        global $con;
+        $old_progressivo_sezione = $questionario_compilato->progr_sezione_corrente;
+        $old_utente_valutato = $questionario_compilato->utente_valutato_corrente;
+
+
+        // posso aggiornare solo la sezione immediatamente successiva a quella presente su db
+        $indice_old = -1;
+        if ($old_progressivo_sezione) {
+            $indice_old = $this->get_indice_sezione_utente($questionario_compilato, $old_progressivo_sezione, $old_utente_valutato);
+        }
+        $indice_new = $this->get_indice_sezione_utente($questionario_compilato, $progressivo_sezione, $utente_valutato);
+        if ($indice_new > $indice_old+1) {
+            print_error(500, "Qualcosa è andato storto. Stai salvando la sezione sbagliata. Prova a risalvarle tutte dalla prima all'ultima.");
+        }
+        if ($indice_new < $indice_old+1) {
+            return;
+            // l'utente sta risalvando una vecchia sezione, salvataggio ok ma non aggiorno i progressivi
+        }
+
+        // e la posso aggiornare solo se davvero è stata completata
+        $sezione = $this->get_sezione_questionario_compilato($questionario_compilato->progressivo_quest_comp, $progressivo_sezione, $utente_valutato);
+        foreach ($sezione->domande as $d) {
+            if ($d->obbligatorieta == '1') {
+                if (!$d->risposta || ($d->risposta->risposta_aperta == null && $d->risposta->progressivo_risposta == null)) {
+                    print_error(403, "La sezione non è completa");
+                }
+            }
+        }
+
+        // ok, procedo ad aggiornarla
+        $sql = "UPDATE questionari_compilati SET progr_sezione_corrente='$progressivo_sezione' ";
+        if ($utente_valutato && $questionario_compilato->get_utenti_valutati()) {
+            $sql .= ", utente_valutato_corrente='$utente_valutato' ";
+        }
+        $sql .= "WHERE progressivo_quest_comp = '$questionario_compilato->progressivo_quest_comp'";
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            print_error(500, $con ->error);
+        }
+    }
+
+    /**
+     * Restituisce un indice univoco per identificare sezione+utente
+     */
+    function get_indice_sezione_utente($questionario_compilato, $progressivo_sezione, $utente_valutato) {
+        $utenti = $questionario_compilato->get_utenti_valutati();
+        $j = 0;
+        if ($utenti) {
+            foreach ($utenti as $u) {
+                if ($u->username == $utente_valutato) {
+                    break;
+                }
+                ++$j;
+            }
+        }
+        $sezioni = $questionario_compilato->get_questionario()->get_sezioni();
+        $i = 0;
+        foreach ($sezioni as $s) {
+            if ($s->progressivo_sezione == $progressivo_sezione) {
+                break;
+            }
+            ++$i;
+        }
+        return $j * count($sezioni) + $i;
+}
+
     function cambia_stato($questionario_compilato, $nuovo_stato) {
         global $con;
         $sql = "UPDATE questionari_compilati SET stato='$nuovo_stato' WHERE progressivo_quest_comp = '$questionario_compilato->progressivo_quest_comp'";
@@ -578,6 +632,22 @@ class QuestionariCompilatiManager {
         }
         $questionario_compilato->stato = $nuovo_stato;
         return $questionario_compilato;
+    }
+
+    /**
+     * Mi dice se il questionario è stato completato o meno, 
+     * basandosi sui campi utente_valutato_corrente e progr_sezione_corrente
+     */
+    function is_questionario_compilato($questionario_compilato) {
+        global $questionariCompilatiManager;
+
+        if (!$questionario_compilato->progr_sezione_corrente) {
+            return false;
+        }
+        $utenti_valutati = $questionario_compilato->get_utenti_valutati();
+        $ultimo_utente = $utenti_valutati ? end($utenti_valutati)->username : null;
+        $ultima_sezione = $questionario_compilato->get_progr_ultima_sezione();
+        return ("$questionario_compilato->utente_valutato_corrente" == "$ultimo_utente" and $questionario_compilato->progr_sezione_corrente == $ultima_sezione);
     }
     
 }

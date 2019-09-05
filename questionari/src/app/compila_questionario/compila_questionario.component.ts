@@ -18,6 +18,8 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     sezione_corrente: Sezione;
     is_sezione_compilata: boolean;
     loading = true;
+    esiste_prec = false;
+    esiste_succ = false;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -49,12 +51,23 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
       this.questCompService.getById(this.progressivo_quest_comp)
         .subscribe(response => {
             this.questionarioCompilato = response["value"];
-            this.utente_valutato_corrente = null;
-            if(this.questionarioCompilato.utenti_valutati) {
-                // l'utente è null per i questionari generici
-                this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[0];
+
+            let utente_da_caricare = null;
+            let indice_sezione_da_caricare = 0;
+
+            if (this.questionarioCompilato.progressivo_sezione_corrente != null) {
+                // Una parte del questionario è già stata compilata, vado all'ultima sezione compilata
+                utente_da_caricare = this.questionarioCompilato.utente_valutato_corrente;
+                indice_sezione_da_caricare = this.questionarioCompilato.sezioni.findIndex(s =>
+                        s.progressivo_sezione == this.questionarioCompilato.progressivo_sezione_corrente);
+            } else {
+                if(this.questionarioCompilato.utenti_valutati) {
+                    // l'utente è null per i questionari generici
+                    utente_da_caricare = this.questionarioCompilato.utenti_valutati[0].username;
+                }
             }
-            this.caricaSezione(this.utente_valutato_corrente, 0);
+            this.utente_valutato_corrente = utente_da_caricare;
+            this.caricaSezione(utente_da_caricare, indice_sezione_da_caricare);
         },
         error => {
           this.alertService.error(error);
@@ -88,6 +101,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                 this.indice_sezione_corrente = indice;
                 this.rimescola();
                 this.calc_is_sezione_compilata();
+                this.calc_esiste_prec_succ();
                 this.loading = false;
             },
             error => {
@@ -108,20 +122,22 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         }
     }
     salvaSezione() {
-        console.log("QUA");
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        console.log("QUA 2");
         let risposte : RispostaQuestionarioCompilato[] = [];
         this.sezione_corrente.domande.forEach(domanda => {
             risposte.push(domanda.risposta);
         });
-        console.log(risposte);
         this.loading = true;
         this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
             .subscribe(response => {
+                this.alertService.success("Salvataggio effettuato.");
                 this.loading = false;
+                if (!this.esiste_succ) {
+                    // ultima sezione: abilito il bottone 'Convalida'
+                    this.questionarioCompilato.is_compilato = '1';
+                }
             },
             error => {
                 this.alertService.error(error);
@@ -132,15 +148,35 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        this.salvaSezione();
-        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente+1);
+        if (this.questionarioCompilato.stato == '0') {
+            this.salvaSezione();
+        }
+        if (this.indice_sezione_corrente < this.questionarioCompilato.sezioni.length) {
+            ++this.indice_sezione_corrente;
+        } else {
+            //devo cambiare utente
+            let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
+            this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[indice_utente_corrente+1].username;
+            this.indice_sezione_corrente = 0;
+        }
+        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
     }
     sezPrecedente() {
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        this.salvaSezione();
-        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente-1);
+        if (this.questionarioCompilato.stato == '0') {
+            this.salvaSezione();
+        }
+        if (this.indice_sezione_corrente > 0) {
+            --this.indice_sezione_corrente;
+        } else {
+            //devo cambiare utente
+            let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
+            this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[indice_utente_corrente-1].username;
+            this.indice_sezione_corrente = this.questionarioCompilato.sezioni.length-1;
+        }
+        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
     }
     shuffle(array: any[]) {
         //see https://stackoverflow.com/questions/2450954
@@ -168,5 +204,34 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             }
         });
         this.is_sezione_compilata = success;
+    }
+    calc_esiste_prec_succ() {
+        let esiste_prec = true;
+        if (this.indice_sezione_corrente == 0) {
+            // Devo verificare se siamo alla prima sezione del primo utente esistente
+            if (!this.questionarioCompilato.utenti_valutati) {
+                // questionario generico
+                esiste_prec = false;
+            } else if(this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente) == 0) {
+                // questionario reale
+                esiste_prec = false;
+            }
+        }
+        this.esiste_prec = esiste_prec;
+
+        let esiste_succ = true;
+        if (this.indice_sezione_corrente == this.questionarioCompilato.sezioni.length-1) {
+            // Devo verificare se siamo all'ultima sezione dell'ultimo utente esistente
+
+            if (!this.questionarioCompilato.utenti_valutati) {
+                // questionario generico
+                esiste_succ = false;
+            } else if(this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente)
+                                                                            == this.questionarioCompilato.utenti_valutati.length-1) {
+                // questionario reale
+                esiste_succ = false;
+            }
+        }
+        this.esiste_succ = esiste_succ;
     }
 }

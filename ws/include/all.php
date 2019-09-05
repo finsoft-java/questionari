@@ -10,7 +10,6 @@ include("costanti.php");
 #third-party libraries
 include("JWT.php");
 include("xlsxwriter.class.php");
-include("websockets.php");
 #functions and classes
 include("functions.php");
 include("class_utente.php");

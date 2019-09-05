@@ -2,16 +2,6 @@
 per tutte le tabelline, l'utente deve capire che i dati si stanno caricando (rotellina che gira..)
 -> metterei un attributo "loading" in ogni component
 
-ELiminare il menu "Modifica dati" dell'utente, in alto a sinistra
-
-Pagina progetti: se il il progetto e' "già modificato", il bottone "Apri" diventa "Apri (read only)" e il progetto non 
-è modificabile in alcun modo (CHECK AFU)
-
-Pagina questionari: se il il questionario e' "già modificato", il bottone "Apri" diventa "Apri (read only)" e il questionario non 
-è modificabile in alcun modo (CHECK AFU)
-
-C'è il problema degli errori "OK", vedi ad esempio "Il server ha dato una risposta non attesa, si consiglia di aggiornare la pagina"
-
 Ci sarebbero da rinominare alcuni component...
   table-ruoli-row => table-progetti-utenti-row
   table questionari-row => table-progetti-questionari-row
@@ -20,11 +10,13 @@ Pagina Progetto, tabellina questionari:
     -> c'è qualcosa che non va nel menu a tendina del questionario, viene mostrata una opzione "Seleziona un questionario"
     -> i controlli di validazione fatti così bruttini... Si riesce a colorare di rosso la casellina anzichè dare il messaggio?
 
+Quando si annulla un questionario compilato, bisognerebbe anche ricalcolare i flag "gia_compilato" su questionario e progetto
+
 *** WISHLIST *********************************************************************************
 
 jwtinterceptor: rinominare "username" in "token" ....
 
 tutti i vari "style" sarebbe bello spostarli dentro file css...
 
-a fine lavori, mi piacerebbe riempire l'applicativo di tooltip, per spiegare all'utente ogni campo a che cosa serve, in particolare nella pagina compilazione questionario
-
+verificare se i vari Service di angular sono definiti bene: vengono
+creati una volta sola, o vengono ricreati per ogni component?
