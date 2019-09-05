@@ -1,43 +1,56 @@
 import { Injectable } from "@angular/core";
 import { Subject, Observer, Observable } from "rxjs";
-import { Message } from "@angular/compiler/src/i18n/i18n_ast";
+
+export interface Message {
+  what_has_changed: 'questionari'|'progetti'|'utenti'|'questionariCompilati';
+  key: string | number;
+  note: string;
+}
 
 /**
- * Questo servizio banalmente crea e mantiene internamente un WebSocket
+ * Questo servizio crea e mantiene internamente un WebSocket
  * 
  * Il websocket è configurato per inviare Object di qualsiasi tipo
  * (ma non Blob e Arraybuffer, perchè esegue uno stringify)
  */
 @Injectable({ providedIn: 'root' })
 export class WebsocketService {
-  constructor() {}
 
-  private subject: Subject<Object>;
+  public messages: Subject<Message>;
 
-  public connect(url : string): Subject<Object> {
-    if (!this.subject) {
-      this.subject = this.create(url);
-      console.log("Successfully connected: " + url);
-    }
-    return this.subject;
+  constructor() {
+    this.messages = this.create(config.websocketUrl);
   }
 
-  private create(url: string): Subject<Object> {
+
+  public create(url: string): Subject<Message> {
     let ws = new WebSocket(url);
 
-    let observable = Observable.create((obs: Observer<Object>) => {
-      ws.onmessage = obs.next.bind(obs);
+    let observable = Observable.create((obs: Observer<Message>) => {
+      ws.onmessage = function(evt : MessageEvent) {
+        // Quando spedisco, spedisco l'oggetto Message
+        // Quando ricevo, ricevo un MessageEvent, che contiene un attributo data : Message
+        let msg : Message = JSON.parse(evt.data);
+        obs.next(msg);
+      };
       ws.onerror = obs.error.bind(obs);
       ws.onclose = obs.complete.bind(obs);
       return ws.close.bind(ws);
     });
     let observer = {
-      next: (data: Object) => {
+      next: (msg: Message) => {
         if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
+          ws.send(JSON.stringify(msg));
         }
       }
     };
-    return Subject.create(observer, observable);
+    let subject = Subject.create(observer, observable);
+    console.log("Successfully connected: " + url);
+    return subject;
+  }
+
+  sendMsg(message : Message) {
+    console.log("new message from client to websocket: ", message);
+    this.messages.next(message);
   }
 }

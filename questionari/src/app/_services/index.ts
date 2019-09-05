@@ -6,4 +6,3 @@ export * from './questionari.service';
 export * from './questionari_compilati.service';
 export * from './domande.service';
 export * from './websocket.service';
-export * from './chat.service';
