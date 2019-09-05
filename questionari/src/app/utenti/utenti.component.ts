@@ -1,12 +1,13 @@
 ﻿import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '@/_models';
-import { UserService, AuthenticationService, AlertService } from '@/_services';
+import { UserService, AuthenticationService, AlertService, WebsocketService, Message } from '@/_services';
 
 @Component({templateUrl: 'utenti.component.html'})
 export class UtentiComponent implements OnInit, OnDestroy {
     currentUser: User;
     currentUserSubscription: Subscription;
+    websocketsSubscription: Subscription;
     utenti : User[];
     editing : boolean = false;
     message : string;
@@ -17,11 +18,13 @@ export class UtentiComponent implements OnInit, OnDestroy {
     constructor(
         private authenticationService: AuthenticationService,
         private userService: UserService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private websocketsService: WebsocketService
     ) {
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
             this.currentUser = user;
         });
+        this.websocketsSubscription = websocketsService.messages.subscribe(msg => { this.onWebsocketMessage(msg); });
         
     }
     ngOnInit() {
@@ -29,6 +32,7 @@ export class UtentiComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         // unsubscribe to ensure no memory leaks
+        this.websocketsSubscription.unsubscribe();
         this.currentUserSubscription.unsubscribe();
     }
     newUser() {
@@ -77,6 +81,7 @@ export class UtentiComponent implements OnInit, OnDestroy {
         let index = this.utenti.findIndex(user => user.username == username);
         this.utenti.splice(index, 1);
         this.calcola_utenti_visibili();
+        this.sendMsgUtenti(username, 'L\'utente è appena stato eliminato');
     }
     refresh() {
         this.getUsers();
@@ -87,11 +92,34 @@ export class UtentiComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.alertService.success(response["msg"]);
                 this.getUsers();
+                this.sendMsgUtenti(null, 'E\' appena stato eseguito un Sync con il server LDAP');
             },
             error => {
                 this.alertService.error(error);
                 this.loading = false;
             });
+    }
+    sendMsgUtenti(username : string, message : string) {
+        let msg : Message = {
+            what_has_changed: 'utenti',
+            key: username,
+            note: message
+          }
+      this.websocketsService.sendMsg(msg);
+    }
+    onWebsocketMessage(msg : Message) {
+        if (msg.what_has_changed == "utenti") {
+            let username = msg.key;
+            if (username) {
+                let utente = this.utenti.find(u => u.username == username);
+                if (utente) {
+                    if (utente.editing === true) {
+                        this.alertService.error(`Attenzione! La riga ${username} è appena stata modificata da un altro utente.`);
+                        utente.editing = false;
+                    }
+                }
+            }
+        }
     }
 
 }
