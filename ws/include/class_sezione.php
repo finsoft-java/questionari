@@ -19,10 +19,13 @@ class Sezione {
     function get_domanda($progressivo_domanda, $explode = true) {
         global $con, $BOOLEAN, $HTML_TYPE;
         $domanda = new Domanda($this);
+
         $sql = "SELECT * FROM domande WHERE id_questionario = '$this->id_questionario' AND progressivo_sezione = '$this->progressivo_sezione' " .
                 "AND progressivo_domanda = '$progressivo_domanda'";
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result)) {
+                $domanda->id_questionario       = $row['id_questionario'];
+                $domanda->progressivo_sezione   = $row['progressivo_sezione'];
                 $domanda->progressivo_domanda   = $row['progressivo_domanda'];
                 $domanda->descrizione           = $row['descrizione'];
                 $domanda->obbligatorieta        = $row['obbligatorieta'];
@@ -111,10 +114,11 @@ class Domanda {
     }
 
     function get_risposte_ammesse() {
-        if (!isset($this->risposte)) {
+        if (!isset($this->risposte_ammesse)) {
             global $con;
             $arr = [];
-            $sql = "SELECT * FROM risposte_ammesse WHERE id_questionario = '$this->id_questionario' AND progressivo_sezione = '$this->progressivo_sezione' " .
+            $id_questionario = $this->id_questionario;
+            $sql = "SELECT * FROM risposte_ammesse WHERE id_questionario = '".$this->id_questionario."' AND progressivo_sezione = '$this->progressivo_sezione' " .
                     " AND progressivo_domanda = '$this->progressivo_domanda' ORDER BY progressivo_risposta";
             if($result = mysqli_query($con, $sql)) {
                 $cr = 0;
@@ -132,9 +136,9 @@ class Domanda {
             } else {
                 print_error(500, $con ->error);
             }
-            $this->risposte = $arr;
+            $this->risposte_ammesse = $arr;
         }
-        return $this->risposte;
+        return $this->risposte_ammesse;
     }
 
     function get_risposta_ammessa($progressivo_risposta) {
@@ -386,7 +390,7 @@ class SezioniManager {
     }
     function aggiornaDomandaERisposte($domanda, $json_data) {
         global $con, $sezioniManager;
-        $sql = insert("domande", [ "descrizione" => $json_data->descrizione,
+        $sql = update("domande", [ "descrizione" => $json_data->descrizione,
                                     "obbligatorieta" => $json_data->obbligatorieta,
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,
@@ -410,7 +414,7 @@ class SezioniManager {
             print_error(500, $con ->error);
         }
         $this->_insert_risposte($json_data->risposte);
-        return $sezioniManager->get_domanda($sezione->id_questionario, $json_data->progressivo_sezione, $json_data->progressivo_domanda);
+        return $sezioniManager->get_domanda($json_data->id_questionario, $json_data->progressivo_sezione, $json_data->progressivo_domanda);
     }
     
     function eliminaDomandaERisposte($id_questionario, $progressivo_sezione, $progressivo_domanda) {
@@ -428,6 +432,7 @@ class SezioniManager {
         $domanda = new Domanda(null);
         $sql = "SELECT * FROM domande WHERE id_questionario = '$id_questionario' AND progressivo_sezione = '$progressivo_sezione' " .
                 "AND progressivo_domanda = '$progressivo_domanda'";
+
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result)) {
                 $domanda->id_questionario       = $row['id_questionario'];

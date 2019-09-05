@@ -1,7 +1,7 @@
 
         <td>
             <div *ngIf="domanda.editing">
-                <input class="form-control" type="text" [(ngModel)]="domanda.descrizione" style="max-width: 110px;"/>
+                <input class="form-control" type="text" [(ngModel)]="domanda_in_modifica.descrizione" style="max-width: 110px;"/>
             </div>
             <div *ngIf="!domanda.editing">
                 <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.descrizione }}&nbsp;</div>
@@ -10,7 +10,7 @@
         <td>
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="checkbox" style="width: auto;max-width: 70px;"
-                    [(ngModel)]="domanda.obbligatorieta"
+                    [(ngModel)]="domanda_in_modifica.obbligatorieta"
                     [checked]="domanda.obbligatorieta"
                     title=""/>      
             </div>
@@ -21,7 +21,7 @@
         <td>
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="number" style="width: auto;max-width: 70px;"
-                    [(ngModel)]="domanda.coeff_valutazione"
+                    [(ngModel)]="domanda_in_modifica.coeff_valutazione"
                     title="" min="0" max="300"/>      
             </div>
             <div *ngIf="!domanda.editing">
@@ -30,7 +30,7 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda.rimescola">
+                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda_in_modifica.rimescola">
                     <option></option>
                     <option *ngFor="let option of rimescola_array; index as i" value="{{i}}">
                         {{ option }}
@@ -43,7 +43,7 @@
         </td>
         <td>
             <div *ngIf="domanda.editing">
-                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda.html_type">
+                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda_in_modifica.html_type">
                     <option></option>
                     <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
                         {{ option }}
@@ -58,7 +58,7 @@
         <td>
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="number" style="width: auto;max-width: 70px;"
-                    [(ngModel)]="domanda.html_maxlength"
+                    [(ngModel)]="domanda_in_modifica.html_maxlength"
                     title=""/>      
             </div>
             <div *ngIf="!domanda.editing">
@@ -68,7 +68,7 @@
         <td>
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="text" style="width: auto;max-width: 70px;"
-                    [(ngModel)]="domanda.html_pattern"
+                    [(ngModel)]="domanda_in_modifica.html_pattern"
                     title=""/>      
             </div>
             <div *ngIf="!domanda.editing">
@@ -78,7 +78,7 @@
         <td>
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="number" style="width: auto;max-width: 70px;"
-                    [(ngModel)]="domanda.html_min"
+                    [(ngModel)]="domanda_in_modifica.html_min"
                     title=""/>      
             </div>
             <div *ngIf="!domanda.editing">
@@ -88,7 +88,7 @@
         <td>
             <div *ngIf="domanda.editing">
                     <input class="form-control" type="number" style="width: auto;max-width: 70px;"
-                    [(ngModel)]="domanda.html_max"
+                    [(ngModel)]="domanda_in_modifica.html_max"
                     title=""/>      
             </div>
             <div *ngIf="!domanda.editing">

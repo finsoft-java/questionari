@@ -95,7 +95,7 @@ export class TableRisposteRowComponent implements OnInit {
     risposta_nuova.progressivo_domanda= this.risposta.progressivo_domanda;
     risposta_nuova.progressivo_risposta = 0;
     risposta_nuova.valore = 1;
-    this.domanda.risposte.push(risposta_nuova);
+    this.domandaPerRisposta.risposte.push(risposta_nuova);
     this.guardaRisposte = true;
     this.rispostaCreata.emit(this.guardaRisposte);
   }
