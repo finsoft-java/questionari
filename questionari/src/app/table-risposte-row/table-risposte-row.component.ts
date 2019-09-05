@@ -5,23 +5,24 @@ import { Subscription } from 'rxjs';
 import { DomandeService } from '@/_services/domande.service';
 
 @Component({
-  selector: '[table-domande-row]',
-  templateUrl: './table-domande-row.component.html',
-  styleUrls: ['./table-domande-row.component.css']
+  selector: '[table-risposte-row]',
+  templateUrl: './table-risposte-row.component.html',
+  styleUrls: ['./table-risposte-row.component.css']
 })
-export class TableDomandeRowComponent implements OnInit {
+export class TableRisposteRowComponent implements OnInit {
 
+  @Input() public domandaPerRisposta: Domanda;
   @Input() public questionario: ProgettoQuestionari; 
-  @Input() public domanda: Domanda;
+  @Input() public risposta: RispostaAmmessa;
   //usato per rimuovere la riga appena creata
-  @Input() public indexDomanda: number;
+  @Input() public indexRisposta: number;
 
   @Output()
   public rispostaCreata: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   currentUser: User;
   currentUserSubscription: Subscription;
-  domanda_in_modifica: Domanda;
+  risposta_in_modifica: RispostaAmmessa;
   elenco_questionari: Questionario;
   utenti: User;
   risposta_nuova: RispostaAmmessa;
@@ -46,7 +47,7 @@ export class TableDomandeRowComponent implements OnInit {
   ngOnInit() {
     
     this.getQuestionari();
-    if (this.domanda.creating) 
+    if (this.risposta.creating) 
       this.goToEdit();
   }
 
@@ -54,21 +55,21 @@ export class TableDomandeRowComponent implements OnInit {
    * Attiva tutti i campi INPUT sulla riga corrente
    */
   goToEdit() {
-    this.domanda.editing = true;
-    this.domanda_in_modifica = this.simpleClone(this.domanda);
+    this.risposta.editing = true;
+    this.risposta_in_modifica = this.simpleClone(this.risposta);
   }
 
   /**
    * Disattiva tutti i campi INPUT sulla riga corrente, annulla tutte le modifiche effettuate
    */
   returnFromEdit() {
-    if(this.domanda.creating == true) {
-      console.log(this.indexDomanda);
-      this.itemRemoved.emit(this.indexDomanda);
+    if(this.risposta.creating == true) {
+      console.log(this.indexRisposta);
+      this.itemRemoved.emit(this.indexRisposta);
     } else {
-      this.domanda.creating = false;
-      this.domanda.editing = false;    
-      this.domanda_in_modifica = null;
+      this.risposta.creating = false;
+      this.risposta.editing = false;    
+      this.risposta_in_modifica = null;
     }
   }
 
@@ -91,7 +92,7 @@ export class TableDomandeRowComponent implements OnInit {
     let risposta_nuova = new RispostaAmmessa();
     risposta_nuova.id_questionario = this.questionario.id_questionario;
     risposta_nuova.descrizione = '';
-    risposta_nuova.progressivo_domanda= this.domanda.progressivo_domanda;
+    risposta_nuova.progressivo_domanda= this.risposta.progressivo_domanda;
     risposta_nuova.progressivo_risposta = 0;
     risposta_nuova.valore = 1;
     this.domanda.risposte.push(risposta_nuova);
@@ -102,11 +103,12 @@ export class TableDomandeRowComponent implements OnInit {
     //if(this.controlloDatiImmessi()){
 
     //se il flg creating è settato sarà una insert altrimenti update
-      if(this.domanda_in_modifica.creating == true) {
-        this.domandeService.creaDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
+/*
+      if(this.risposta_in_modifica.creating == true) {
+        this.domandeService.creaDomandaConRisposte(this.risposta_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) { 
 
-            this.domanda_in_modifica = null;
+            this.risposta_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
             this.domanda.creating = false;
@@ -116,14 +118,15 @@ export class TableDomandeRowComponent implements OnInit {
           this.alertService.error(error);
         });
       } else {
-        this.domandeService.updateDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
+        this.domandeService.updateDomandaConRisposte(this.risposta_in_modifica).subscribe(resp => {
           if (this.authenticationService.currentUserValue) {
-            this.domanda_in_modifica = null;
+            this.risposta_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
           }
         });
       } 
+      */
     }   
   //}
 
@@ -171,6 +174,7 @@ export class TableDomandeRowComponent implements OnInit {
         }
     }, 16);
   }
+
   truncate(value: string, limit = 25, completeWords = false, ellipsis = '...') {
 
     if (value.length < limit)
@@ -182,7 +186,7 @@ export class TableDomandeRowComponent implements OnInit {
     return `${value.substr(0, limit)}${ellipsis}`;
  }
 
- getQuestionari(): void {
+  getQuestionari(): void {
   this.questionari_loaded = false;
   this.questionariService.getAll()
     .subscribe(response => {
@@ -193,15 +197,17 @@ export class TableDomandeRowComponent implements OnInit {
       this.alertService.error(error);
       this.questionari_loaded = true;
     });
-}
-getUsers(): void {
-  this.userService.getAll()
-    .subscribe(response => {
-        this.utenti = response["data"];
-    });
-}
-  simpleClone(obj: any) {
-    return Object.assign({}, obj);
   }
 
+  getUsers(): void {
+    this.userService.getAll().subscribe(
+      response => {
+        this.utenti = response["data"];
+      }
+    );
+  }
+
+  simpleClone(obj: any) {
+  return Object.assign({}, obj);
+}
 }

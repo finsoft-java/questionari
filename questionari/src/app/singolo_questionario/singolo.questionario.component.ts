@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, Input } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestionarioCompilato } from '@/_models';
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
@@ -20,6 +20,10 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     nuova_sezione: Sezione;
     is_nuova_sezione: boolean;
     nuova_domanda: Domanda;
+    domandaCorrente: Domanda;
+
+    @Input() guardaRisposte:boolean;
+
     constructor(
         private authenticationService: AuthenticationService,
         private questionariService: QuestionariService,
@@ -37,7 +41,9 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
          });
+         console.log(this);
     }
+    
 
     ngOnDestroy() {
         // unsubscribe to ensure no memory leaks
@@ -120,7 +126,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         }
         return nuovo_progr_sezione;
     }
-    salvaSezione(nuova_sezione){            
+    salvaSezione (nuova_sezione){            
         this.questionariService.creaSezione(nuova_sezione)
           .subscribe(response => {
                 let nuova_sezione = response["value"];
@@ -143,7 +149,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             this.alertService.error(error);
           });
     }
-    modificaSezione(nuova_sezione){
+    modificaSezione (nuova_sezione){
         this.questionariService.updateSezione(nuova_sezione).subscribe(response => {
             this.indice_sezione_corrente = this.nuova_sezione.progressivo_sezione;
             this.sezione_corrente = nuova_sezione;
@@ -221,5 +227,13 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 window.clearInterval(scrollToTop);
             }
         }, 16);
+      }
+      setRispostaCreata(){
+        console.log(this);
+        //this.domandaCorrente = this.simpleClone(this);
+        this.guardaRisposte = true;   
+      }
+      simpleClone(obj: any) {
+        return Object.assign({}, obj);
       }
 }

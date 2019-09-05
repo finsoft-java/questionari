@@ -53,5 +53,7 @@ export class RispostaAmmessa {
     progressivo_risposta: number;
     descrizione: string;
     valore: number;
+    editing?: boolean;
+    creating?: boolean;
 }
 

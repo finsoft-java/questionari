@@ -28,6 +28,7 @@ import { FormSezioniComponent } from './form-sezioni';
 import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
+import { TableRisposteRowComponent } from './table-risposte-row';
 
 
 
@@ -55,6 +56,7 @@ import { CompilaQuestionarioDomandaComponent } from './compila-questionario-doma
         TableQuestionariRowComponent,
         TableRuoliRowComponent,
         TableDomandeRowComponent,
+        TableRisposteRowComponent,
         FormSezioniComponent,
         LoginComponent,
         SearchComponent,
