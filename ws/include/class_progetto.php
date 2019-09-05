@@ -4,23 +4,23 @@ $progettiManager = new ProgettiManager();
 $progettiQuestionariManager = new ProgettiQuestionariManager();
 
 class Progetto {
-    private $progetto_utenti;
-    private $progetto_questionari;
+    private $_progetto_utenti;
+    private $_progetto_questionari;
     
     function get_progetto_utenti() {
         global $progettiManager;
-        if (!$this->progetto_utenti) {
-            $this->progetto_utenti = $progettiManager->get_progetto_utenti($this->id_progetto);
+        if (!$this->_progetto_utenti) {
+            $this->_progetto_utenti = $progettiManager->get_progetto_utenti($this->id_progetto);
         }
-        return $this->progetto_utenti;
+        return $this->_progetto_utenti;
     }
     
     function get_progetto_questionari() {
         global $progettiManager;
-        if (!$this->progetto_questionari) {
-            $this->progetto_questionari = $progettiManager->get_progetto_questionari($this->id_progetto);
+        if (!$this->_progetto_questionari) {
+            $this->_progetto_questionari = $progettiManager->get_progetto_questionari($this->id_progetto);
         }
-        return $this->progetto_questionari;
+        return $this->_progetto_questionari;
     }
     
     function is_gia_compilato() {
@@ -47,23 +47,23 @@ class Progetto {
 }
 
 class ProgettoUtenti {
-    private $utente;
-    private $progetto;
+    private $_utente;
+    private $_progetto;
 
     function get_progetto() {
         global $progettiManager;
-        if (!$this->progetto) {
-            $this->progetto = $progettiManager->get_progetto($this->id_progetto);
+        if (!$this->_progetto) {
+            $this->_progetto = $progettiManager->get_progetto($this->id_progetto);
         }
-        return $this->progetto;
+        return $this->_progetto;
     }
     
     function get_utente() {
         global $utentiManager;
-        if (!$this->utente) {
-            $this->utente = $utentiManager->get_utente($this->nome_utente);
+        if (!$this->_utente) {
+            $this->_utente = $utentiManager->get_utente($this->nome_utente);
         }
-        return $this->utente;
+        return $this->_utente;
     }
 }
 
@@ -166,23 +166,6 @@ class ProgettiManager {
         if ($con ->error) {
             print_error(500, $con ->error);
         }
-        
-        /* Per i progetti/utenti faccio delete e poi insert
-        $sql = "DELETE FROM progetti_utenti WHERE id_progetto = '$progetto->id_progetto'";
-        mysqli_query($con, $sql);
-        if ($con ->error) {
-            print_error(500, $con ->error);
-        }
-        
-        foreach ($json_data->utenti as $row) {
-            $sql = "INSERT INTO progetti_utenti (id_progetto, nome_utente, funzione) " +
-                " VALUES($row->id_progetto, $row->nome_utente, $row->funzione)";
-            mysqli_query($con, $sql);
-            if ($con ->error) {
-                print_error(500, $con ->error);
-            }
-        }
-        */
     }
     
     function cambia_stato($progetto, $nuovo_stato) {

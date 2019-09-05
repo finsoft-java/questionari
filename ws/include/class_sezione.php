@@ -17,38 +17,8 @@ class Sezione {
     }
     
     function get_domanda($progressivo_domanda, $explode = true) {
-        global $con, $BOOLEAN, $HTML_TYPE;
-        $domanda = new Domanda($this);
-
-        $sql = "SELECT * FROM domande WHERE id_questionario = '$this->id_questionario' AND progressivo_sezione = '$this->progressivo_sezione' " .
-                "AND progressivo_domanda = '$progressivo_domanda'";
-        if($result = mysqli_query($con, $sql)) {
-            if($row = mysqli_fetch_assoc($result)) {
-                $domanda->id_questionario       = $row['id_questionario'];
-                $domanda->progressivo_sezione   = $row['progressivo_sezione'];
-                $domanda->progressivo_domanda   = $row['progressivo_domanda'];
-                $domanda->descrizione           = $row['descrizione'];
-                $domanda->obbligatorieta        = $row['obbligatorieta'];
-                $domanda->obbligatorieta_dec    = ($row['obbligatorieta'] != null) ? $BOOLEAN[$row['obbligatorieta']] : null;
-                $domanda->rimescola             = $row['rimescola'];
-                $domanda->rimescola_dec         = ($row['rimescola'] != null) ? $BOOLEAN[$row['rimescola']] : null;
-                $domanda->coeff_valutazione     = $row['coeff_valutazione'];
-                $domanda->html_type             = $row['html_type'];
-                $domanda->html_type_dec         = ($row['html_type'] != null) ? $HTML_TYPE[$row['html_type']] : null;
-                $domanda->html_pattern          = $row['html_pattern'];
-                $domanda->html_min              = $row['html_min'];
-                $domanda->html_max              = $row['html_max'];
-                $domanda->html_maxlength        = $row['html_maxlength'];
-                if ($explode) {
-                    $domanda->risposte_ammesse  = $domanda->get_risposte_ammesse();
-                }
-            } else {
-                return null;
-            }
-        } else {
-            print_error(500, $con ->error);
-        }
-        return $domanda;
+        global $sezioniManager;
+        return $sezioniManager->get_domanda($this->id_questionario, $this->progressivo_sezione, $progressivo_domanda, $explode);
     }
 
     function get_domande($explode = true) {
