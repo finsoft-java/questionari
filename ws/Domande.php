@@ -98,7 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$sezione) {
         print_error(404, 'Not found');
     }
-    $sezioniManager->aggiorna($sezione, $json_data);
+    $domanda = $sezione->get_domanda($json_data->progressivo_domanda);
+    $sezioniManager->aggiornaDomandaERisposte($domanda, $json_data);
 
     header('Content-Type: application/json');
     echo json_encode(['value' => $sezione]);
