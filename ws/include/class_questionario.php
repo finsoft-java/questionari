@@ -282,7 +282,7 @@ class QuestionariManager {
 
     function _duplica_domande($questionario, $nuovo_id_questionario) {
         global $con;
-        $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlenght", "rimescola"],
+        $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlength", "rimescola"],
                                         ["id_questionario" => $nuovo_id_questionario],
                                         ["id_questionario" => $questionario->id_questionario]
                                         );

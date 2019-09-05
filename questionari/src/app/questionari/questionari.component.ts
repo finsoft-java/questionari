@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { User, Questionario } from '@/_models';
-import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
+import { AuthenticationService, QuestionariService, AlertService, WebsocketService, Message } from '@/_services';
 import { Router } from '@angular/router';
 
 @Component({templateUrl: 'questionari.component.html'})
 export class QuestionariComponent implements OnInit, OnDestroy {
     
     currentUserSubscription: Subscription;
+    websocketsSubscription: Subscription;
     currentUser: User;
     questionari : Questionario[];
     searchString : string;
@@ -18,11 +19,13 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private questionariService: QuestionariService,
         private alertService: AlertService,
+        private websocketsService: WebsocketService,
         private router: Router
     ) {
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
             this.currentUser = user;
         });
+        this.websocketsSubscription = websocketsService.messages.subscribe(msg => { this.onWebsocketMessage(msg); });
         
     } 
 
@@ -33,6 +36,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         // unsubscribe to ensure no memory leaks
         this.currentUserSubscription.unsubscribe();
+        this.websocketsSubscription.unsubscribe();
     }
     crea() {
         let newQuest = new Questionario();
@@ -45,6 +49,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         this.questionariService.insert(newQuest)
             .subscribe(response => {
                 let id_questionario = response["value"].id_questionario;
+                this.sendMsgQuestionarioCreato(id_questionario);
                 this.router.navigate(['/questionari', id_questionario]);
             },
             error => {
@@ -71,6 +76,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                     let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
                     this.questionari.splice(index, 1);
                     this.calcola_questionari_visibili();
+                    this.sendMsgQuestionarioEliminato(id_questionario);
                 },
                 error => {
                     this.alertService.error(error);
@@ -80,8 +86,10 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     duplica(id_questionario: number) {
         this.questionariService.duplica(id_questionario)
             .subscribe(response => {
-                this.questionari.push(response["value"]);
+                let q : Questionario = response["value"];
+                this.questionari.push(q);
                 this.calcola_questionari_visibili();
+                this.sendMsgQuestionarioCreato(q.id_questionario);
             },
             error => {
                 this.alertService.error(error);
@@ -104,6 +112,35 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 (q.utente_creazione != null && q.utente_creazione.toLowerCase().includes(s)) ||
                 (q.stato_dec != null && q.stato_dec.toLowerCase().includes(s))
             );
+        }
+    }
+    sendMsgQuestionarioCreato(id_questionario : number) {
+        let msg : Message = {
+            what_has_changed: 'questionari',
+            key: id_questionario,
+            note: 'Creato nuovo questionario'
+          }
+      this.websocketsService.sendMsg(msg);
+    }
+    sendMsgQuestionarioSalvato(id_questionario : number) {
+        let msg : Message = {
+            what_has_changed: 'questionari',
+            key: id_questionario,
+            note: 'Il questionario è appena stato modificato'
+          }
+      this.websocketsService.sendMsg(msg);
+    }
+    sendMsgQuestionarioEliminato(id_questionario : number) {
+        let msg : Message = {
+            what_has_changed: 'questionari',
+            key: id_questionario,
+            note: 'Il questionario è appena stato eliminato'
+          }
+      this.websocketsService.sendMsg(msg);
+    }
+    onWebsocketMessage(msg : Message) {
+        if (msg.what_has_changed == "questionari") {
+            this.refresh();
         }
     }
 }
