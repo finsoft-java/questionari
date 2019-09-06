@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Sezione, RispostaAmmessa, RispostaQuestionarioCompilato } from '@/_models';
-import { UserService, AuthenticationService, QuestionariCompilatiService, AlertService } from '@/_services';
+import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Sezione, RispostaAmmessa, RispostaQuestionarioCompilato, Progetto, Questionario } from '@/_models';
+import { UserService, AuthenticationService, QuestionariCompilatiService, AlertService, WebsocketService, Message } from '@/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({templateUrl: 'compila_questionario.component.html'})
@@ -9,6 +9,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     
     currentUserSubscription: Subscription;
     questSubscription: Subscription;
+    websocketsSubscription: Subscription;
     currentUser: User;
     questionarioCompilato: QuestionarioCompilato;
     progressivo_quest_comp: number;
@@ -25,12 +26,14 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private questCompService: QuestionariCompilatiService,
         private alertService: AlertService,
+        private websocketsService: WebsocketService,
         private route: ActivatedRoute,
         private router: Router
     ) {
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
             this.currentUser = user;
         });
+        this.websocketsSubscription = websocketsService.messages.subscribe(msg => { this.onWebsocketMessage(msg); });
         
     } 
 
@@ -45,6 +48,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         // unsubscribe to ensure no memory leaks
         this.currentUserSubscription.unsubscribe();
         this.questSubscription.unsubscribe();
+        this.websocketsSubscription.unsubscribe();
     }
     getQuestionarioCompilato(): void {
       this.loading = true;
@@ -77,6 +81,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     convalida() {
         this.questCompService.convalida(this.progressivo_quest_comp)
             .subscribe(response => {
+                this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione convalidata');
                 this.router.navigate(['/questionari_compilati']);
             },
             error => {
@@ -133,6 +138,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
             .subscribe(response => {
                 this.alertService.success("Salvataggio effettuato.");
+                this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione salvata');
                 this.loading = false;
                 if (!this.esiste_succ) {
                     // ultima sezione: abilito il bottone 'Convalida'
@@ -233,5 +239,38 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             }
         }
         this.esiste_succ = esiste_succ;
+    }
+    sendMsgQuestComp(q : QuestionarioCompilato | VistaQuestionariCompilabili, note : string) {
+        let msg : Message = {
+            what_has_changed: 'questionariCompilati',
+            obj: q,
+            note: note
+          }
+      this.websocketsService.sendMsg(msg);
+    }
+    onWebsocketMessage(msg : Message) {
+        if (msg.what_has_changed == "progetti") {
+            let p : Progetto  = msg.obj;
+            if (p.id_progetto == this.questionarioCompilato.id_progetto) {
+                if (p.stato == '2') {
+                    this.alertService.error("Attenzione! Il Progetto è appena stato annullato! Aggiornare la pagina");
+                } else if (p.stato == '3') {
+                    this.alertService.error("Attenzione! Il Progetto è appena stato completato! Aggiornare la pagina");
+                }
+            }
+        } else if (msg.what_has_changed == "questionari") {
+            let q : Questionario  = msg.obj;
+            if (q.id_questionario == this.questionarioCompilato.id_questionario) {
+                if (q.stato == '2') {
+                    this.alertService.error("Attenzione! Il Questionaro è appena stato annullato! Aggiornare la pagina");
+                }
+            }
+        } else if (msg.what_has_changed == "questionariCompilati") {
+            let q : QuestionarioCompilato  = msg.obj;
+            if (q.progressivo_quest_comp == this.questionarioCompilato.progressivo_quest_comp) {
+                this.alertService.error("Attenzione! Questo questionario è appena stato modificato da un altro utente! Aggiornare la pagina");
+                this.questionarioCompilato.stato = '2'; // annullato... hack per evitare che sia modificabile
+            }
+        }
     }
 }
