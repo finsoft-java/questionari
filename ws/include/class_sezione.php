@@ -357,6 +357,7 @@ class SezioniManager {
         return $sezioniManager->get_domanda($sezione->id_questionario, $json_data->progressivo_sezione, $progressivo_domanda);
     }
     function _insert_risposte($risposte) {
+        global $con, $sezioniManager;
         if(isset($risposte) && $risposte != null){
             foreach ($risposte as $r) {
                 $sql = insert("risposte_ammesse", ["id_questionario" => $r->id_questionario,
@@ -375,7 +376,7 @@ class SezioniManager {
     }
     function aggiornaDomandaERisposte($domanda, $json_data) {
         global $con, $sezioniManager;
-        $sql = update("domande", [ "descrizione" => $json_data->descrizione,
+        $sql = update("domande", [ "descrizione" => $this->CleanString($json_data->descrizione),
                                     "obbligatorieta" => $json_data->obbligatorieta,
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,
@@ -445,6 +446,9 @@ class SezioniManager {
             print_error(500, $con ->error);
         }
         return $domanda;
+    }
+    function CleanString($s){
+        return str_replace("'","''",$s);
     }
 }
 

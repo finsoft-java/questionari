@@ -17,15 +17,16 @@ export class TableDomandeRowComponent implements OnInit {
   @Input() public indexDomanda: number;
 
   @Output()
-  public rispostaCreata: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public mostraRisposte = new EventEmitter<Domanda>();
 
+  @Output() 
+  public itemRemoved = new EventEmitter<number>();
   currentUser: User;
   currentUserSubscription: Subscription;
   domanda_in_modifica: Domanda;
   elenco_questionari: Questionario;
   utenti: User;
   risposta_nuova: RispostaAmmessa;
-  @Output() public itemRemoved = new EventEmitter<number>();
   //html_type_array = ["text","number","date","button","checkbox","color","datetime-local","month","range","tel","time","week"];
   html_type_array = ["text","number"];
   rimescola_array = ["NO","SI"];
@@ -95,7 +96,7 @@ export class TableDomandeRowComponent implements OnInit {
     risposta_nuova.valore = 1;
     this.domanda.risposte.push(risposta_nuova);
     this.guardaRisposte = true;
-    this.rispostaCreata.emit(this.guardaRisposte);
+    this.mostraRisposte.emit(this.domanda);
   }
   save() {
     //if(this.controlloDatiImmessi()){
@@ -204,6 +205,12 @@ getUsers(): void {
 }
   simpleClone(obj: any) {
     return Object.assign({}, obj);
+  }
+
+
+  getRisposta(){
+    this.mostraRisposte.emit(this.domanda);
+    console.log(this.domanda);
   }
 
 }
