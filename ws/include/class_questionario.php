@@ -12,10 +12,7 @@ class Questionario {
     
     function utente_puo_modificarlo() {
         global $logged_user;
-        if ($logged_user->ruolo == '2') {
-            return true;
-        }
-        return $this->flag_comune == '1' or $this->utente_creazione == $logged_user->nome_utente;
+        return utente_admin() or $this->flag_comune == '1' or $this->utente_creazione == $logged_user->nome_utente;
     }
     
     function get_sezioni() {
@@ -126,9 +123,12 @@ class Questionario {
 class QuestionariManager {
     
     function get_questionari() {
-        global $con, $STATO_QUESTIONARIO, $BOOLEAN;
+        global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
-        $sql = "SELECT * FROM questionari";
+        $sql = "SELECT * FROM questionari ";
+        if (!utente_admin()) {
+            $sql .= " WHERE utente_creazione='$logged_user->nome_utente' OR flag_comune='1' ";
+        }
         
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
