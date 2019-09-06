@@ -48,9 +48,9 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         newQuest.data_creazione = new Date();
         this.questionariService.insert(newQuest)
             .subscribe(response => {
-                let id_questionario = response["value"].id_questionario;
-                this.sendMsgQuestionarioCreato(id_questionario);
-                this.router.navigate(['/questionari', id_questionario]);
+                let q : Questionario = response["value"]; 
+                this.sendMsgQuestionario(q, 'Creato nuovo questionario');
+                this.router.navigate(['/questionari', q.id_questionario]);
             },
             error => {
                 this.alertService.error(error);
@@ -74,9 +74,10 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             this.questionariService.delete(id_questionario)
                 .subscribe(response => {
                     let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
+                    let oldQuest = this.questionari[index];
                     this.questionari.splice(index, 1);
                     this.calcola_questionari_visibili();
-                    this.sendMsgQuestionarioEliminato(id_questionario);
+                    this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
                 },
                 error => {
                     this.alertService.error(error);
@@ -89,7 +90,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 let q : Questionario = response["value"];
                 this.questionari.push(q);
                 this.calcola_questionari_visibili();
-                this.sendMsgQuestionarioCreato(q.id_questionario);
+                this.sendMsgQuestionario(q, 'Creato nuovo questionario');
             },
             error => {
                 this.alertService.error(error);
@@ -114,27 +115,11 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             );
         }
     }
-    sendMsgQuestionarioCreato(id_questionario : number) {
+    sendMsgQuestionario(q : Questionario, note : string) {
         let msg : Message = {
             what_has_changed: 'questionari',
-            key: id_questionario,
-            note: 'Creato nuovo questionario'
-          }
-      this.websocketsService.sendMsg(msg);
-    }
-    sendMsgQuestionarioSalvato(id_questionario : number) {
-        let msg : Message = {
-            what_has_changed: 'questionari',
-            key: id_questionario,
-            note: 'Il questionario è appena stato modificato'
-          }
-      this.websocketsService.sendMsg(msg);
-    }
-    sendMsgQuestionarioEliminato(id_questionario : number) {
-        let msg : Message = {
-            what_has_changed: 'questionari',
-            key: id_questionario,
-            note: 'Il questionario è appena stato eliminato'
+            obj: q,
+            note: note
           }
       this.websocketsService.sendMsg(msg);
     }

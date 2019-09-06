@@ -4,7 +4,7 @@ import { AlertService } from ".";
 
 export interface Message {
   what_has_changed: 'questionari'|'progetti'|'utenti'|'questionariCompilati';
-  key: string | number;
+  obj: any;
   note: string;
 }
 

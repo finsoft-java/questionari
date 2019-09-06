@@ -49,9 +49,9 @@ export class ProgettiComponent implements OnInit, OnDestroy {
         
         this.progettiService.insert(newProject)
             .subscribe(response => {
-                let id_progetto = response["value"].id_progetto;
-                this.sendMsgProgettoCreato(id_progetto);
-                this.router.navigate(['/progetti', id_progetto]);
+                let p : Progetto = response["value"]; 
+                this.sendMsgProgetto(p, 'Creato nuovo progetto');
+                this.router.navigate(['/progetti', p.id_progetto]);
             },
             error => {
                 this.alertService.error(error);
@@ -74,9 +74,10 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             this.progettiService.delete(id_progetto)
                 .subscribe(response => {
                     let index = this.progetti.findIndex(p => p.id_progetto == id_progetto);
+                    let progettoOld = this.progetti[index];
                     this.progetti.splice(index, 1);
                     this.calcola_progetti_visibili();
-                    this.sendMsgProgettoEliminato(id_progetto);
+                    this.sendMsgProgetto(progettoOld, 'Il progetto è appena stato eliminato');
                 },
                 error => {
                 this.alertService.error(error);
@@ -89,7 +90,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                 let p : Progetto = response["value"];
                 this.progetti.push(p);
                 this.calcola_progetti_visibili();
-                this.sendMsgProgettoCreato(p.id_progetto);
+                this.sendMsgProgetto(p, 'Creato nuovo progetto');
             },
             error => {
                 this.alertService.error(error);
@@ -114,27 +115,11 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             );
         }
     }
-    sendMsgProgettoCreato(id_progetto : number) {
+    sendMsgProgetto(p : Progetto, note : string) {
         let msg : Message = {
             what_has_changed: 'progetti',
-            key: id_progetto,
-            note: 'Creato nuovo progetto'
-          }
-      this.websocketsService.sendMsg(msg);
-    }
-    sendMsgProgettoSalvato(id_progetto : number) {
-        let msg : Message = {
-            what_has_changed: 'progetti',
-            key: id_progetto,
-            note: 'Il progetto è appena stato modificato'
-          }
-      this.websocketsService.sendMsg(msg);
-    }
-    sendMsgProgettoEliminato(id_progetto : number) {
-        let msg : Message = {
-            what_has_changed: 'progetti',
-            key: id_progetto,
-            note: 'Il progetto è appena stato eliminato'
+            obj: p,
+            note: note
           }
       this.websocketsService.sendMsg(msg);
     }

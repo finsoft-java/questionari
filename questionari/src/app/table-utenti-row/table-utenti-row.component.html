@@ -24,7 +24,7 @@
 </td>
 <td>
     <div *ngIf="utente.editing">
-        <input type="email" class="form-control" style="width: auto;max-width: 130px;" alt="{{utente.email}}"  [(ngModel)]="utente_in_modifica.email" required title="Email" />
+        <input type="email" class="form-control" style="width: auto;max-width: 130px;" alt="{{utente.email}}"  [(ngModel)]="utente_in_modifica.email" title="Email" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;" >{{utente.email}}&nbsp;</div>

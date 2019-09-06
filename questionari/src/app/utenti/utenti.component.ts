@@ -79,9 +79,10 @@ export class UtentiComponent implements OnInit, OnDestroy {
     }
     removeItem(username: string) {
         let index = this.utenti.findIndex(user => user.username == username);
+        let oldUtente = this.utenti[index];
         this.utenti.splice(index, 1);
         this.calcola_utenti_visibili();
-        this.sendMsgUtenti(username, 'L\'utente è appena stato eliminato');
+        this.sendMsgUtenti(oldUtente, 'L\'utente è appena stato eliminato');
     }
     refresh() {
         this.getUsers();
@@ -99,22 +100,24 @@ export class UtentiComponent implements OnInit, OnDestroy {
                 this.loading = false;
             });
     }
-    sendMsgUtenti(username : string, message : string) {
+    sendMsgUtenti(user : User, message : string) {
         let msg : Message = {
             what_has_changed: 'utenti',
-            key: username,
+            obj: user,
             note: message
           }
       this.websocketsService.sendMsg(msg);
     }
     onWebsocketMessage(msg : Message) {
         if (msg.what_has_changed == "utenti") {
-            let username = msg.key;
+            let utenteMod = <User>msg.obj;
+            let username = utenteMod.username;
             if (username) {
                 let utente = this.utenti.find(u => u.username == username);
                 if (utente) {
                     if (utente.editing === true) {
-                        this.alertService.error(`Attenzione! La riga ${username} è appena stata modificata da un altro utente.`);
+                        this.alertService.error(`Attenzione! La riga '${username}' è appena stata modificata da un altro utente.`);
+                        Object.assign(utente, utenteMod);
                         utente.editing = false;
                     }
                 }
