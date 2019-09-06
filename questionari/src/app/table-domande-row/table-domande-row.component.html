@@ -102,7 +102,7 @@
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)"><i class="fa fa-trash-alt"></i></button>
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()"><i class="fa fa-undo"></i></button>
-                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Risposte" title="Risposte" (click)="newRisposta()">Risposte</button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Risposte" title="Risposte" (click)="getRisposta(this.domanda)">Risposte</button>
                 
             </div>
         </td>

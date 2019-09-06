@@ -11,14 +11,12 @@ import { DomandeService } from '@/_services/domande.service';
 })
 export class TableRisposteRowComponent implements OnInit {
 
-  @Input() public domandaPerRisposta: Domanda;
+  @Input() public rispostaCorrente: RispostaAmmessa;
   @Input() public questionario: ProgettoQuestionari; 
-  @Input() public risposta: RispostaAmmessa;
-  //usato per rimuovere la riga appena creata
+  @Input() public domanda: Domanda;
   @Input() public indexRisposta: number;
-
-  @Output()
-  public rispostaCreata: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() public rispostaCreata: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() public itemRemoved = new EventEmitter<number>();
 
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -26,10 +24,6 @@ export class TableRisposteRowComponent implements OnInit {
   elenco_questionari: Questionario;
   utenti: User;
   risposta_nuova: RispostaAmmessa;
-  @Output() public itemRemoved = new EventEmitter<number>();
-  //html_type_array = ["text","number","date","button","checkbox","color","datetime-local","month","range","tel","time","week"];
-  html_type_array = ["text","number"];
-  rimescola_array = ["NO","SI"];
   questionari_loaded = false;
   guardaRisposte = false;
   constructor(private authenticationService: AuthenticationService,
@@ -45,9 +39,9 @@ export class TableRisposteRowComponent implements OnInit {
   }
  
   ngOnInit() {
-    
+    console.log(this.rispostaCorrente);
     this.getQuestionari();
-    if (this.risposta.creating) 
+    if (this.rispostaCorrente.creating) 
       this.goToEdit();
   }
 
@@ -55,20 +49,19 @@ export class TableRisposteRowComponent implements OnInit {
    * Attiva tutti i campi INPUT sulla riga corrente
    */
   goToEdit() {
-    this.risposta.editing = true;
-    this.risposta_in_modifica = this.simpleClone(this.risposta);
+    this.rispostaCorrente.editing = true;
+    this.risposta_in_modifica = this.simpleClone(this.rispostaCorrente);
   }
 
   /**
    * Disattiva tutti i campi INPUT sulla riga corrente, annulla tutte le modifiche effettuate
    */
   returnFromEdit() {
-    if(this.risposta.creating == true) {
-      console.log(this.indexRisposta);
+    if(this.rispostaCorrente.creating == true) {
       this.itemRemoved.emit(this.indexRisposta);
     } else {
-      this.risposta.creating = false;
-      this.risposta.editing = false;    
+      this.rispostaCorrente.creating = false;
+      this.rispostaCorrente.editing = false;    
       this.risposta_in_modifica = null;
     }
   }
@@ -77,8 +70,14 @@ export class TableRisposteRowComponent implements OnInit {
    * Richiamato dopo che l'utente ha premuto il tasto Elimina
    */
   delete() {
-    this.progettiService.deleteProgettoQuestionario(this.questionario).subscribe(resp => {
-          //this.itemRemoved.emit(this.indexDomanda);
+    
+    this.domanda.risposte.splice(this.indexRisposta,1);
+    this.domandeService.updateDomandaConRisposte(this.domanda).subscribe(resp => {
+      if (this.authenticationService.currentUserValue) {
+        this.risposta_in_modifica = null;
+        Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
+        this.rispostaCorrente.editing = false;
+      }
     },
     error => {
       this.alertService.error(error);
@@ -88,45 +87,18 @@ export class TableRisposteRowComponent implements OnInit {
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
-  newRisposta(){
-    let risposta_nuova = new RispostaAmmessa();
-    risposta_nuova.id_questionario = this.questionario.id_questionario;
-    risposta_nuova.descrizione = '';
-    risposta_nuova.progressivo_domanda= this.risposta.progressivo_domanda;
-    risposta_nuova.progressivo_risposta = 0;
-    risposta_nuova.valore = 1;
-    this.domandaPerRisposta.risposte.push(risposta_nuova);
-    this.guardaRisposte = true;
-    this.rispostaCreata.emit(this.guardaRisposte);
-  }
+ 
   save() {
     //if(this.controlloDatiImmessi()){
 
-    //se il flg creating è settato sarà una insert altrimenti update
-/*
-      if(this.risposta_in_modifica.creating == true) {
-        this.domandeService.creaDomandaConRisposte(this.risposta_in_modifica).subscribe(resp => {
-          if (this.authenticationService.currentUserValue) { 
-
-            this.risposta_in_modifica = null;
-            Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
-            this.domanda.editing = false;
-            this.domanda.creating = false;
-          }
-        },
-        error => {
-          this.alertService.error(error);
-        });
-      } else {
-        this.domandeService.updateDomandaConRisposte(this.risposta_in_modifica).subscribe(resp => {
+        this.domandeService.updateDomandaConRisposte(this.domanda).subscribe(resp => {
           if (this.authenticationService.currentUserValue) {
             this.risposta_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
-            this.domanda.editing = false;
+            this.rispostaCorrente.editing = false;
           }
         });
-      } 
-      */
+
     }   
   //}
 
@@ -208,6 +180,6 @@ export class TableRisposteRowComponent implements OnInit {
   }
 
   simpleClone(obj: any) {
-  return Object.assign({}, obj);
-}
+    return Object.assign({}, obj);
+  }
 }

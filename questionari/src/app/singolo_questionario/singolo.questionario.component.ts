@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, Input, EventEmitter } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestionarioCompilato } from '@/_models';
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
@@ -22,6 +22,9 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     nuova_domanda: Domanda;
     domandaCorrente: Domanda;
 
+    
+    @Output() public itemRemoved = new EventEmitter<RispostaAmmessa[]>();
+
     @Input() guardaRisposte:boolean;
 
     constructor(
@@ -40,7 +43,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
-         });
+        });
+        
     }
     
 
@@ -59,6 +63,9 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.indice_sezione_corrente = indice;
                 this.sezione_corrente = response["value"];
+                if(this.sezione_corrente.domande[0] != null){
+                    this.domandaCorrente = this.sezione_corrente.domande[0];
+                }
             },
             error => {
                 this.alertService.error(error);
@@ -207,7 +214,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.alertService.error("Non implementato");
     }
 
-    updQuestionario(questionario){
+    updQuestionario(questionario: Questionario){
         this.questionariService.update(questionario).subscribe(response => {
             let id_progetto = response["value"].id_progetto;
             //this.router.navigate(['/progetti', id_progetto]);
@@ -225,11 +232,32 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 window.clearInterval(scrollToTop);
             }
         }, 16);
-      }
-      setRispostaCreata(){
-        this.guardaRisposte = true;   
-      }
-      simpleClone(obj: any) {
+    }
+
+    simpleClone(obj: any) {
         return Object.assign({}, obj);
-      }
+    }
+
+    showRisposte(domanda: Domanda){
+        this.domandaCorrente = domanda;
+    }
+
+    creaRisposta(){
+        let risposta_nuova = new RispostaAmmessa();
+        let progressivo_risposta = 1;
+        this.domandaCorrente.risposte.forEach( r => {
+            if (r.progressivo_risposta >= progressivo_risposta) {
+                progressivo_risposta = 1 + parseInt(<any>r.progressivo_risposta);
+            }
+        });
+        
+        risposta_nuova.id_questionario = this.questionario.id_questionario;
+        risposta_nuova.descrizione = '';
+        risposta_nuova.progressivo_domanda= this.domandaCorrente.progressivo_domanda;
+        risposta_nuova.progressivo_risposta = progressivo_risposta;
+        risposta_nuova.progressivo_sezione= this.domandaCorrente.progressivo_sezione;
+        risposta_nuova.valore = 1;
+        risposta_nuova.creating = true;
+        this.domandaCorrente.risposte.push(risposta_nuova);
+    }
 }

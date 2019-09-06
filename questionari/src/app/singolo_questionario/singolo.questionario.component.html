@@ -74,25 +74,23 @@
                 <th>Azioni</th>       
             </thead>    
             <tbody>
-                <tr table-domande-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" [questionario]="this.questionario"  [domanda]="domanda_row"
-                    [indexDomanda]="i" (rispostaCreata)="setRispostaCreata()" (itemRemoved)="removeItem(i)"></tr>
+                <tr table-domande-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" (mostraRisposte)="showRisposte($event)"  [questionario]="this.questionario"  [domanda]="domanda_row"
+                    [indexDomanda]="i" (itemRemoved)="removeItem(i)"></tr>
             </tbody>
         </table>
 
 
+        <button (click)="creaRisposta()" class="btn btn-success">Crea Nuova Risposta</button>
 
-        <table *ngIf="guardaRisposte" class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+        <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
                 <thead>
-                    <th alt="Progressivo" title="Progressivo">Progressivo</th>
                     <th alt="Descrizione" title="Descrizione">Descrizione</th>
                     <th alt="Valore Risposta" title="Valore Risposta">Valore Risposta</th>
                     <th>Azioni</th>       
                 </thead>    
                 <tbody>
-                    <!--
-                        <tr table-risposte-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" [questionario]="this.questionario"  [domandaPerRisposta]="domanda_row"
+                        <tr table-risposte-row *ngFor="let risposta_row of domandaCorrente.risposte; let i= index;" [questionario]="this.questionario" [domanda]="domandaCorrente" [rispostaCorrente]="risposta_row"
                         [indexRisposta]="i" (itemRemoved)="removeItem(i)"></tr>
-                        -->
                 </tbody>
             </table>
     </div>
