@@ -16,6 +16,7 @@
         <tr table-utenti-row *ngFor="let utente_row of utenti_visibili; let i= index;"  
             [utente]="utente_row"
             (itemRemoved)="removeItem($event)"
-            (suggestBroadcast)="sendMsgUtenti($event,'Utente modificato o creato')"></tr>
+            (itemModified)="sendMsgUtenti($event,'Utente modificato')"
+            (itemCreated)="sendMsgUtenti($event,'Utente creato')"></tr>
     </tbody>
 </table>

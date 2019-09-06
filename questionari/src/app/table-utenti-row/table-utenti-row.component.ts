@@ -14,7 +14,8 @@ export class TableUtentiRowComponent implements OnInit {
   @Input() public utente: User; 
 
   @Output() public itemRemoved = new EventEmitter<string>(); //emette lo username
-  @Output() public suggestBroadcast = new EventEmitter<string>(); //emette lo username
+  @Output() public itemModified = new EventEmitter<string>(); //emette lo username
+  @Output() public itemCreated = new EventEmitter<string>(); //emette lo username
   
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -85,7 +86,7 @@ export class TableUtentiRowComponent implements OnInit {
           Object.assign(this.utente, resp["value"]); // meglio evitare this.utente = ...
           this.utente.editing = false;
           this.utente.creating = false;
-          this.suggestBroadcast.emit(this.utente.username);
+          this.itemCreated.emit(this.utente.username);
         }
       },
       error => {
@@ -97,7 +98,7 @@ export class TableUtentiRowComponent implements OnInit {
           this.utente_in_modifica = null;
           Object.assign(this.utente, resp["value"]); // meglio evitare this.utente = ...
           this.utente.editing = false;
-          this.suggestBroadcast.emit(this.utente.username);
+          this.itemModified.emit(this.utente.username);
         }
       });
     }
