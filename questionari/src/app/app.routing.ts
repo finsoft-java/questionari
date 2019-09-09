@@ -10,6 +10,7 @@ import { SingoloProgettoComponent } from './singolo_progetto';
 import { SingoloQuestionarioComponent } from './singolo_questionario';
 import { CompilaQuestionarioComponent } from './compila_questionario';
 import { AboutComponent } from './about';
+import { SingoloQuestionariov2Component } from './singolo_questionario_v2';
 
 const appRoutes: Routes = [
     { path: 'questionari_da_compilare', component: QuestionariDaCompilareComponent, data: {storico: false}, canActivate: [AuthGuard] },
@@ -20,6 +21,7 @@ const appRoutes: Routes = [
     { path: 'progetti/:id_progetto', component: SingoloProgettoComponent, canActivate: [Role1Guard] },
     { path: 'questionari', component: QuestionariComponent, canActivate: [Role1Guard] },
     { path: 'questionari/:id_questionario', component: SingoloQuestionarioComponent, canActivate: [Role1Guard] },
+    { path: 'questionario/:id_questionario', component: SingoloQuestionariov2Component, canActivate: [Role1Guard] },
     { path: 'utenti', component: UtentiComponent, canActivate: [Role2Guard] },
     { path: 'login', component: LoginComponent },
     { path: 'about', component: AboutComponent },

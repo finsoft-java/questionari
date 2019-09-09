@@ -3,7 +3,7 @@
 </div>
 <div *ngIf="questionario != null">
 
-    <form style="margin-bottom:30px">
+    <form style="margin-bottom:30px;margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;">
         <h3>Questionario</h3> <br>
         <h5>Dati Generali</h5> <br>
         <div class="row">
@@ -56,11 +56,12 @@
 
 
     <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
-        <h5>Domande/Risposte Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
+        <h5>Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
         <button (click)="creaDomanda()" class="btn btn-success">Crea Nuova Domanda</button>
        
        
-        <table *ngIf="!guardaRisposte" class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
+        <table *ngIf="!guardaRisposte" class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;" >
+            
             <thead>
                 <th alt="Descrizione" title="Descrizione">Descrizione</th>
                 <th alt="Obbligatoria" title="Obbligatoria">Obblig.</th>
@@ -80,6 +81,8 @@
         </table>
 
 
+        <h5>Risposte Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
+        <p>Qui sotto sono elencate le risposte possibili alla domanda : <strong>"{{domandaCorrente.descrizione}}"</strong></p>
         <button (click)="creaRisposta()" class="btn btn-success">Crea Nuova Risposta</button>
 
         <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
