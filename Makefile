@@ -1,5 +1,9 @@
 #!/usr/bin/make -f
 # make && sudo make install
+#
+# dipendenze: il make ha bisogno di npm
+# il make install ha bisogno di apache2 e di systemd
+
 prefix=/usr/local
 exec_prefix=$(prefix)
 bindir=$(exec_prefix)/bin
