@@ -127,6 +127,7 @@ export class SingoloQuestionariov2Component implements OnInit, OnDestroy {
             descrizione: "",
             domande: []
         };
+        this.questionario.sezioni.push(this.sezione_corrente);
     }
     getNuovoProgressivoSezione() {
         let nuovo_progr_sezione = 1;

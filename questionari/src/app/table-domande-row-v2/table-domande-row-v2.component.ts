@@ -51,7 +51,6 @@ export class TableDomandeRowV2Component implements OnInit {
     
     if (this.domanda.creating) 
       this.goToEdit();
-
     
   }
 

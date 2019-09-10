@@ -80,7 +80,7 @@
             </tbody>
         </table>
 
-
+<div  *ngIf="domandaCorrente">
         <h5>Risposte Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
         <p>Qui sotto sono elencate le risposte possibili alla domanda : <strong>"{{domandaCorrente.descrizione}}"</strong></p>
         <button (click)="creaRisposta()" class="btn btn-success">Crea Nuova Risposta</button>
@@ -96,6 +96,7 @@
                         [indexRisposta]="i" (itemRemoved)="removeItem(i)"></tr>
                 </tbody>
             </table>
+        </div>
     </div>
 
 
