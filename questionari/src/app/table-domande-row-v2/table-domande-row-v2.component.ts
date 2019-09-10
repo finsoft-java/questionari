@@ -64,6 +64,9 @@ export class TableDomandeRowV2Component implements OnInit {
     console.log(this);
   }
 
+  removeItem(i: number) {
+    this.domanda_in_modifica.risposte.splice(i, 1);
+}
   creaRisposta(){
     let risposta_nuova = new RispostaAmmessa();
     let progressivo_risposta = 1;
