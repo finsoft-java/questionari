@@ -62,9 +62,12 @@
 </td>
 <td>
     <div *ngIf="questionario.editing">
-        <input type="checkbox" [(ngModel)]="questionario_in_modifica.autovalutazione_bool"
+        <div class="checkbox-container green">
+            <input type="checkbox" [(ngModel)]="questionario_in_modifica.autovalutazione_bool"
             [disabled]="questionario_in_modifica.tipo_questionario == '1' ? true : false"
-            title="Il compilante dovrà anche valutare se stesso?" >
+            title="Il compilante dovrà anche valutare se stesso?" id="toggle1" />
+            <label for="toggle1"></label>
+        </div>
     </div>
     <div *ngIf="!questionario.editing">
         <div title="" tabindex="0" style="outline: none !important; line-height: 38px;" >{{ questionario.autovalutazione_dec }}</div>

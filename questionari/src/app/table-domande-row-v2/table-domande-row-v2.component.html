@@ -24,23 +24,20 @@
                 <div class="col">
                     <label>Obbligatorietà</label>
                     <div class="checkbox-container green">
-                        <input type="checkbox" checked id="toggle2" />
+                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.obbligatorieta"
+                        [checked]="domanda.obbligatorieta" id="toggle2" />
                         <label for="toggle2"></label>
                     </div>
-                    <!--
-                    <label>Obbligatorietà</label>
-                    <input class="form-control" type="checkbox" style="margin: 0px auto;max-width: 20px;"
-                    [(ngModel)]="domanda_in_modifica.obbligatorieta"
-                    [checked]="domanda.obbligatorieta"
-                    title=""/>       
-                    -->
                 </div>
                 <div class="col">
+                    
                     <label>Rimescola</label>
-                    <input class="form-control" type="checkbox" style="margin: 0px auto;max-width: 20px;"
-                    [(ngModel)]="domanda_in_modifica.rimescola"
-                    [checked]="domanda.rimescola" 
-                    title=""/>   
+                    <div class="checkbox-container green">
+                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
+                        [checked]="domanda.rimescola" id="toggle1" />
+                        <label for="toggle1"></label>
+                    </div>
+
                 </div>
                 <div class="col">
                     <label>Coefficiente di Valutazione</label>
