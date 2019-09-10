@@ -1,28 +1,10 @@
 ﻿const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+const merge = require('webpack-merge');
+const common = require('./webpack.common.js');
 
-module.exports = {
-    entry: './src/main.ts',
-    module: {
-        rules: [
-            {
-                test: /\.ts$/,
-                use: ['ts-loader', 'angular2-template-loader'],
-                exclude: /node_modules/
-            },
-            {
-                test: /\.(html|css)$/,
-                loader: 'raw-loader'
-            },
-        ]
-    },
-    resolve: {
-        extensions: ['.ts', '.js'],
-        alias: {
-            '@': path.resolve(__dirname, 'src/app/'),
-        }
-    },
+module.exports = merge(common, {
+    mode: 'development',
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
@@ -41,13 +23,8 @@ module.exports = {
             })
         })
     ],
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        },
-        runtimeChunk: true
-    },
+    devtool: 'inline-source-map',
     devServer: {
         historyApiFallback: true
     }
-};
+});

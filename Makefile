@@ -13,6 +13,7 @@ systemd_services=/lib/systemd/system
 systemd_links=/etc/systemd/system
 
 all:
+	echo "Verificare la configurazione in ./questionari/webpack.prod.js e ./ws/include/config.php"
 	cd questionari && npm run-script build
 
 clean:
@@ -34,5 +35,3 @@ install: mkdirs
 	# Now, activate services... usually this is not done here
 	# Assuming systemd
 	test "$(launchservices)" = "true" && systemctl enable --now websockets-server
-	# what about config?
-	echo "You have to configure $(DESTDIR)$(wwwdir)/ws/include/config.php and $(DESTDIR)$(wwwdir)/webpack.config.js"
