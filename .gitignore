@@ -87,3 +87,4 @@ ws/!.vscode/extensions.json
 
 #word backups
 ~*
+questionari/webpack.config.js

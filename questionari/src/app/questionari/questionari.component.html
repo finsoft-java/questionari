@@ -24,6 +24,10 @@
                     routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active"
                     [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''">
                     {{q.gia_compilato == '0' ? 'Apri' : 'Apri (read-only)'}}</button>
+                <button class="btn btn-success" style="min-width: calc((100% / 2) - 20px); margin-right: 5px;" 
+                    routerLink="/questionario/{{q.id_questionario}}" routerLinkActive="active"
+                    [title]="q.gia_compilato=='1' ? 'Questionario già compilato' : ''">
+                    {{q.gia_compilato == '0' ? 'Apri v2' : 'Apri (read-only) v2'}}</button>
                 <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" (click)="duplica(q.id_questionario)">Duplica</button>
                 <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
                     [disabled]="q.gia_compilato=='1'"

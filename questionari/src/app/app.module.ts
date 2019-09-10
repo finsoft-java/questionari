@@ -29,6 +29,7 @@ import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
+import { SingoloQuestionariov2Component } from './singolo_questionario_v2';
 
 
 
@@ -48,6 +49,7 @@ import { TableRisposteRowComponent } from './table-risposte-row';
         SingoloProgettoComponent,
         QuestionariComponent,
         SingoloQuestionarioComponent,
+        SingoloQuestionariov2Component,
         QuestionariDaCompilareComponent,
         CompilaQuestionarioComponent,
         CompilaQuestionarioDomandaComponent,
@@ -59,7 +61,7 @@ import { TableRisposteRowComponent } from './table-risposte-row';
         TableRisposteRowComponent,
         FormSezioniComponent,
         LoginComponent,
-        SearchComponent,
+        SearchComponent, 
         AboutComponent
     ],
     providers: [
