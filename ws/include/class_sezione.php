@@ -37,9 +37,9 @@ class Sezione {
                     $obj->progressivo_sezione   = $row['progressivo_sezione'];
                     $obj->progressivo_domanda   = $row['progressivo_domanda'];
                     $obj->descrizione           = $row['descrizione'];
-                    $obj->obbligatorieta        = $row['obbligatorieta'];
+                    $obj->obbligatorieta        = ($row['obbligatorieta'] == '1' ? true : false);
                     $obj->obbligatorieta_dec    = ($row['obbligatorieta'] != null) ? $BOOLEAN[$row['obbligatorieta']] : null;
-                    $obj->rimescola             = $row['rimescola'];
+                    $obj->rimescola             = ($row['rimescola'] == '1' ? true : false);
                     $obj->rimescola_dec         = ($row['rimescola'] != null) ? $BOOLEAN[$row['rimescola']] : null;
                     $obj->coeff_valutazione     = $row['coeff_valutazione'];
                     $obj->html_type             = $row['html_type'];
@@ -341,14 +341,14 @@ class SezioniManager {
                                     "progressivo_sezione" => $json_data->progressivo_sezione,
                                     "progressivo_domanda" => $progressivo_domanda,
                                     "descrizione" => $json_data->descrizione,
-                                    "obbligatorieta" => $json_data->obbligatorieta,
+                                    "obbligatorieta" => ($json_data->obbligatorieta == true ? '1' : '0'),
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,
                                     "html_pattern" => $json_data->html_pattern,
                                     "html_min" => $json_data->html_min,
                                     "html_max" => $json_data->html_max,
                                     "html_maxlength" => $json_data->html_maxlength,
-                                    "rimescola" => $json_data->rimescola]);
+                                    "rimescola" => ($json_data->rimescola == true ? '1' : '0')]);
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con ->error);
@@ -377,14 +377,14 @@ class SezioniManager {
     function aggiornaDomandaERisposte($domanda, $json_data) {
         global $con, $sezioniManager;
         $sql = update("domande", [ "descrizione" => $this->CleanString($json_data->descrizione),
-                                    "obbligatorieta" => $json_data->obbligatorieta,
+                                    "obbligatorieta" => ($json_data->obbligatorieta == true ? '1' : '0'),
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,
                                     "html_pattern" => $json_data->html_pattern,
                                     "html_min" => $json_data->html_min,
                                     "html_max" => $json_data->html_max,
                                     "html_maxlength" => $json_data->html_maxlength,
-                                    "rimescola" => $json_data->rimescola],
+                                    "rimescola" => ($json_data->rimescola == true ? '1' : '0')],
                                  [ "id_questionario" => $json_data->id_questionario,
                                  "progressivo_sezione" => $json_data->progressivo_sezione,
                                  "progressivo_domanda" => $json_data->progressivo_domanda]);
@@ -425,9 +425,9 @@ class SezioniManager {
                 $domanda->progressivo_sezione   = $row['progressivo_sezione'];
                 $domanda->progressivo_domanda   = $row['progressivo_domanda'];
                 $domanda->descrizione           = $row['descrizione'];
-                $domanda->obbligatorieta        = $row['obbligatorieta'];
+                $domanda->obbligatorieta        = ($row['obbligatorieta'] == '1' ? true : false);
                 $domanda->obbligatorieta_dec    = ($row['obbligatorieta'] != null) ? $BOOLEAN[$row['obbligatorieta']] : null;
-                $domanda->rimescola             = $row['rimescola'];
+                $domanda->rimescola             = ($row['rimescola'] == '1' ? true : false);
                 $domanda->rimescola_dec         = ($row['rimescola'] != null) ? $BOOLEAN[$row['rimescola']] : null;
                 $domanda->coeff_valutazione     = $row['coeff_valutazione'];
                 $domanda->html_type             = $row['html_type'];
