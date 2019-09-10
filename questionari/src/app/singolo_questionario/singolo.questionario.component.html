@@ -80,7 +80,7 @@
             </tbody>
         </table>
 
-<div  *ngIf="domandaCorrente">
+        <div  *ngIf="domandaCorrente">
         <h5>Risposte Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
         <p>Qui sotto sono elencate le risposte possibili alla domanda : <strong>"{{domandaCorrente.descrizione}}"</strong></p>
         <button (click)="creaRisposta()" class="btn btn-success">Crea Nuova Risposta</button>
@@ -98,23 +98,6 @@
             </table>
         </div>
     </div>
-
-
-<!--
-    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
-        SEZIONE N. {{sezione_corrente.progressivo_sezione}} <strong>{{sezione_corrente.titolo}} </strong><br>
-        <div *ngFor="let domanda of sezione_corrente.domande; let i= index;">
-            {{domanda.descrizione}}
-            <div *ngFor="let risposta of domanda.risposte">
-                    &gt;&gt; {{risposta.descrizione}}
-            </div>
-            <div>
-                    <button (click)="duplicaDomanda(i)">Duplica domanda</button>
-                    <button (click)="eliminaDomanda(i)">Elimina domanda</button>
-            </div>
-        </div> 
-    </div>           
--->
     <div class="col" style="padding:0px;" *ngIf="(questionario.sezioni.length > 1) && (sezione_corrente != null)">
         <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente"><i class="fa fa-step-backward"></i></button>
         <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva"><i class="fa fa-step-forward"></i></button>
