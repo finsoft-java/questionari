@@ -25,11 +25,12 @@ import { TableQuestionariRowComponent } from './table-questionari-row/table-ques
 import { TableRuoliRowComponent } from './table-ruoli-row';
 import { SearchComponent } from './search';
 import { FormSezioniComponent } from './form-sezioni';
-import { TableDomandeRowComponent } from './table-domande-row';
+import { TableDomandeRowComponent } from './table-domande-row'; 
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
 import { SingoloQuestionariov2Component } from './singolo_questionario_v2';
+import { TableDomandeRowV2Component } from './table-domande-row-v2';
 
 
 
@@ -58,6 +59,7 @@ import { SingoloQuestionariov2Component } from './singolo_questionario_v2';
         TableQuestionariRowComponent,
         TableRuoliRowComponent,
         TableDomandeRowComponent,
+        TableDomandeRowV2Component,
         TableRisposteRowComponent,
         FormSezioniComponent,
         LoginComponent,

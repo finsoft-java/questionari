@@ -1,0 +1,1 @@
+﻿export * from './table-domande-row-v2.component';
