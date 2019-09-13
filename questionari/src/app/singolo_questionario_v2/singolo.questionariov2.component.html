@@ -19,7 +19,7 @@
                     </option>   
                 </select>   
             </div>
-
+            
             <div class="col">
                 <label for="stato_progetto">Comune</label>
                 <select class="form-control" required  [(ngModel)]="questionario.flag_comune" [ngModelOptions]="{standalone: true}">
@@ -32,19 +32,25 @@
         <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Questionario</button></div>      
     </form>
     
-
-    <button (click)="creaSezione()" class="btn btn-success">Crea Nuova Sezione</button>
-    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)">
-        <form style="margin-top:30px;margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;"> 
+    <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente">Sez. precendente<!--<i class="fa fa-step-backward"></i>--></button>
+    <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva">Sez. successiva<!--<i class="fa fa-step-forward"></i>--></button>
+    <button (click)="creaSezione()" class="btn btn-success" style="margin: 0px auto;display: block;">Crea Nuova Sezione</button>
+    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)" style="border: 1px solid;float: left;width: calc(100% - 30px);padding: 15px;margin: 30px 15px 15px 15px">
+        <form style="margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 30px;border-bottom:1px solid"> 
             <h5>Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
-            <div class="row">
+            <div class="row" style="margin-bottom:30px;">
                 <div class=" col"> 
                     <label for="titolo_progetto">Titolo Sezione</label>
                     <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Questionario" [(ngModel)]="sezione_corrente.titolo" [ngModelOptions]="{standalone: true}">
                 </div>
+                
+            </div>
+            <div class="row" style="margin-bottom:30px;">
                 <div class="col">
                     <label for="stato_progetto">Descrizione</label>                
-                    <textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea>
+                    <!--<textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea>-->
+                    
+                    <textarea [froalaEditor]="config" [(froalaModel)]="sezione_corrente.descrizione"></textarea>
                 </div>
             </div>
             <div class="row"></div>
@@ -56,8 +62,8 @@
         <h5>Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
         <button (click)="creaDomanda()" class="btn btn-success">Crea Nuova Domanda</button>       
                
-        <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;" >
-            <thead>
+        <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 15px;" >
+            <thead *ngIf="!editMode">
                 <th alt="Descrizione" title="Descrizione">Descrizione</th>
                 <th alt="Obbligatoria" title="Obbligatoria">Obblig.</th>
                 <th alt="Coefficiente valutazione" title="Coefficiente valutazione">Coeff.</th>
@@ -71,13 +77,9 @@
             </thead>    
             <tbody>
                 <tr table-domande-row-v2 *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" (mostraRisposte)="showRisposte($event)"  [questionario]="this.questionario"  [domanda]="domanda_row"
-                    [indexDomanda]="i" (itemRemoved)="removeItem(i)" ></tr>
+                    [indexDomanda]="i"  [esisteDomandaEditing]="editMode"  (itemRemoved)="removeItem(i)" (changeEditMode)="changeEditMode($event)"></tr>
             </tbody>
         </table>
-    </div>
-    <div class="col" style="padding:0px;" *ngIf="(questionario.sezioni.length > 1) && (sezione_corrente != null)">
-        <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente"><i class="fa fa-step-backward"></i></button>
-        <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva"><i class="fa fa-step-forward"></i></button>
     </div>
     <div *ngIf="questionario.sezioni.length == 0">
             Questo questionario non ha ancora sezioni.

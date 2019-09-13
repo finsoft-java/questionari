@@ -32,6 +32,10 @@ export class TableDomandeRowV2Component implements OnInit {
   rimescola_array = ["NO","SI"];
   questionari_loaded = false;
   guardaRisposte = false;
+
+  @Input() esisteDomandaEditing:boolean;
+  @Output() public changeEditMode =  new EventEmitter<boolean>();
+
   constructor(private authenticationService: AuthenticationService,
               private progettiService: ProgettiService,
               private domandeService: DomandeService,
@@ -60,12 +64,14 @@ export class TableDomandeRowV2Component implements OnInit {
   goToEdit() {
     this.domanda.editing = true;
     this.domanda_in_modifica = this.simpleClone(this.domanda);
-    console.log(this);
+
+
+    this.changeEditMode.emit(true);
   }
 
   removeItem(i: number) {
     this.domanda_in_modifica.risposte.splice(i, 1);
-}
+  }
   creaRisposta(){
     let risposta_nuova = new RispostaAmmessa();
     let progressivo_risposta = 1;
@@ -95,6 +101,8 @@ export class TableDomandeRowV2Component implements OnInit {
       this.domanda.editing = false;    
       this.domanda_in_modifica = null;
     }
+    
+    this.changeEditMode.emit(false);
   }
 
   /**
@@ -137,6 +145,7 @@ export class TableDomandeRowV2Component implements OnInit {
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
             this.domanda.creating = false;
+            this.changeEditMode.emit(false);
           }
         },
         error => {
@@ -149,6 +158,7 @@ export class TableDomandeRowV2Component implements OnInit {
             this.domanda_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
+            this.changeEditMode.emit(false);
           }
         });
       } 
@@ -199,7 +209,7 @@ export class TableDomandeRowV2Component implements OnInit {
         }
     }, 16);
   }
-  truncate(value: string, limit = 25, completeWords = false, ellipsis = '...') {
+  truncate(value: string, limit =15, completeWords = false, ellipsis = '...') {
 
     if (value.length < limit)
       return `${value.substr(0, limit)}`;
@@ -238,4 +248,25 @@ getUsers(): void {
     console.log(this.domanda);
   }
 
+
+
+
+  onChange = (_) => {};
+  onTouched = () => {};
+
+  // Form model content changed.
+  writeValue(content: any): void {
+    this.model = content;
+    console.log(content.get());
+  }
+
+  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+  // End ControlValueAccesor methods.
+
+  model: any;
+
+  config: Object = {
+    charCounterCount: false
+  }
 }

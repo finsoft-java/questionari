@@ -21,10 +21,9 @@ export class SingoloQuestionariov2Component implements OnInit, OnDestroy {
     is_nuova_sezione: boolean;
     nuova_domanda: Domanda;
     domandaCorrente: Domanda;
-
-    
     @Output() public itemRemoved = new EventEmitter<RispostaAmmessa[]>();
-
+    htmlContent = '';
+    editMode:boolean;
     @Input() guardaRisposte:boolean;
 
     constructor(
@@ -43,6 +42,8 @@ export class SingoloQuestionariov2Component implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
+            
+        this.htmlContent = 'eko';
         });        
     }
     
@@ -63,12 +64,9 @@ export class SingoloQuestionariov2Component implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.indice_sezione_corrente = indice;
                 this.sezione_corrente = response["value"];
-                console.log(this.sezione_corrente.domande[0]);
                 if(this.sezione_corrente.domande[0] != null){
                     this.domandaCorrente = this.sezione_corrente.domande[0];
                 }
-                
-                console.log(this);
             },
             error => {
                 this.alertService.error(error);
@@ -76,6 +74,11 @@ export class SingoloQuestionariov2Component implements OnInit, OnDestroy {
     }
     removeItem(i: number) {
         this.sezione_corrente.domande.splice(i, 1);
+    }
+    changeEditMode(changeEditMode: boolean){
+        this.editMode = changeEditMode;
+        console.log("changeEditMode");
+        console.log(changeEditMode);
     }
     getQuestionario(): void {
     
@@ -264,4 +267,24 @@ export class SingoloQuestionariov2Component implements OnInit, OnDestroy {
         risposta_nuova.creating = true;
         this.domandaCorrente.risposte.push(risposta_nuova);
     }
+
+    
+  onChange = (_) => {};
+  onTouched = () => {};
+
+  // Form model content changed.
+  writeValue(content: any): void {
+    this.model = content;
+    console.log(content.get());
+  }
+
+  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+  // End ControlValueAccesor methods.
+
+  model: any;
+
+  config: Object = {
+    charCounterCount: false
+  }
 }

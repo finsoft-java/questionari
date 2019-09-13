@@ -2,13 +2,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule }    from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
 // used to create fake backend
 import { fakeBackendProvider } from './_helpers';
-
 import { AppComponent }  from './app.component';
 import { routing }        from './app.routing';
-
 import { AlertComponent } from './_components';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { LoginComponent } from './login';
@@ -31,8 +28,7 @@ import { CompilaQuestionarioDomandaComponent } from './compila-questionario-doma
 import { TableRisposteRowComponent } from './table-risposte-row';
 import { SingoloQuestionariov2Component } from './singolo_questionario_v2';
 import { TableDomandeRowV2Component } from './table-domande-row-v2';
-
-
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 @NgModule({
     imports: [
@@ -40,7 +36,9 @@ import { TableDomandeRowV2Component } from './table-domande-row-v2';
         ReactiveFormsModule,
         HttpClientModule,
         FormsModule,
-        routing
+        routing,
+        FroalaEditorModule.forRoot(), 
+        FroalaViewModule.forRoot()
     ],
     declarations: [
         AppComponent,
