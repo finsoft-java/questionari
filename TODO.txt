@@ -20,3 +20,6 @@ tutti i vari "style" sarebbe bello spostarli dentro file css...
 
 verificare se i vari Service di angular sono definiti bene: vengono
 creati una volta sola, o vengono ricreati per ogni component?
+
+found 151 high severity vulnerabilities in 9876 scanned packages
+  run `npm audit fix` to fix 151 of them.
