@@ -12,6 +12,8 @@ Pagina Progetto, tabellina questionari:
 
 Quando si annulla un questionario compilato, bisognerebbe anche ricalcolare i flag "gia_compilato" su questionario e progetto
 
+froala: cercherei di fare le import in stile javascript, non nell'index.html
+
 *** WISHLIST *********************************************************************************
 
 jwtinterceptor: rinominare "username" in "token" ....
