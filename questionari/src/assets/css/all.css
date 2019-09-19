@@ -4397,20 +4397,26 @@ readers do not read off random characters that represent icons */
 
 /*******************************************************************************/
 
-.notReadOnlyButton{
-  float: left;
-  width: calc((100% / 3) - 10px);
-}  
-.readOnlyButton{
-  float: left;
-  width: calc((100% / 3) - 10px);
-}
-
-.readOnlyButton button{ 
+.btn-readonly{ 
   background-color: #9c8e14;
   border-color: #9c8e14;
 }
-.readOnlyButton button:hover{ 
+.btn-readonly:hover{ 
   background-color: #807410;
   border-color: #807410;
+}
+
+.btn2 {
+  min-width: calc((100% / 2) - 10px);
+  margin-right: 5px;
+}
+
+.btn3 {
+  min-width: calc((100% / 3) - 10px);
+  margin-right: 5px;
+}
+
+.btn3 {
+  min-width: calc((100% / 3) - 10px);
+  margin-right: 5px;
 }

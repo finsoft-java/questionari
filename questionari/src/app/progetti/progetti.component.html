@@ -18,16 +18,14 @@
             <td>{{p.utente_creazione}}</td>
             <td>{{p.data_creazione}}</td>
             <td style="width:30%">
-                <div class="{{p.gia_compilato=='1' ? 'readOnlyButton' : 'notReadOnlyButton'}}">
-                <button class="btn btn-success" style="min-width: calc(100% - 5px); margin-right: 5px;"  
+                <button class="{{p.gia_compilato=='1' ? 'btn btn3 btn-readonly' : 'btn btn3 btn-success'}}"
                     routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active"
                     [title]="p.gia_compilato=='1' ? 'Apri (read-only perchè esistono compilazioni)' : 'Apri'">
                     <i class="fa fa-edit"></i></button>
-                </div>
-                <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
+                <button class="btn btn-dark btn3"
                     (click)="duplica(p.id_progetto)"
                     title="Duplica"><i class="fa fa-clone"></i></button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);"
+                <button class="btn btn-danger btn3"
                     [disabled]="p.gia_compilato=='1'" (click)="elimina(p.id_progetto)"
                     [title]="p.gia_compilato=='1' ? 'Impossibile eliminare perchè esistono compilazioni' : 'Elimina'"
                      ><i class="fa fa-trash-alt"></i></button>

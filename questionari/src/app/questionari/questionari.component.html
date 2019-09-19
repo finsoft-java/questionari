@@ -21,17 +21,15 @@
             <td>{{q.flag_comune_dec}}</td>
             <td style="width:30%">
 
-
-                <div class="{{q.gia_compilato=='1' ? 'readOnlyButton' : 'notReadOnlyButton'}}">
-                    <button class="btn btn-success" style="min-width: calc(100% - 5px); margin-right: 5px;"  
+                <button class="{{q.gia_compilato=='1' ? 'btn btn3 btn-readonly' : 'btn btn3 btn-success'}}"
                     routerLink="/questionario/{{q.id_questionario}}" routerLinkActive="active"
                     [title]="q.gia_compilato=='1' ? 'Apri (read-only perchè già compilato)' : 'Apri'">
                     <i class="fa fa-edit"></i></button>
-                </div>
 
-                <button class="btn btn-dark" style="min-width: calc((100% / 3) - 20px); margin-right: 5px;" title="Duplica" (click)="duplica(q.id_questionario)">
+                <button class="btn btn-dark btn3"
+                    title="Duplica" (click)="duplica(q.id_questionario)">
                     <i class="fa fa-clone"></i></button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 20px);"
+                <button class="btn btn-danger btn3"
                     [disabled]="q.gia_compilato=='1'"
                     [title]="q.gia_compilato=='1' ? 'Impossibile eliminare perchè già compilato' : 'Elimina'"
                     (click)="elimina(q.id_questionario)"><i class="fa fa-trash-alt"></i></button>
