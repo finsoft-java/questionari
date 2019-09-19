@@ -14,8 +14,8 @@ module.exports = merge(common, {
         new webpack.DefinePlugin({
             // global app config object
             config: JSON.stringify({
-                apiUrl: 'http://localhost/ws',
-                websocketUrl: 'ws://localhost:9000'
+                apiUrl: 'http://survey.osai.loc/ws',
+                websocketUrl: 'ws://survey.osai.loc:9000'
             })
         })
     ]
