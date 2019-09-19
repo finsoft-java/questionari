@@ -24,12 +24,17 @@
             class="btn btn-success" (click)="creaQuestionarioCompilato()"> Compila il questionario</button>
     </div>
     <div *ngIf="storico">
-        <button routerLink="/questionari_compilati/{{data.progressivo_quest_comp}}"
-            style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" 
-            class="btn btn-success" routerLinkActive="active">Apri (read-only)</button>
+        <div class="readOnlyButton">
+            <button routerLink="/questionari_compilati/{{data.progressivo_quest_comp}}"
+                style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" 
+                class="btn btn-success" routerLinkActive="active"
+                title="Apri (read-only)"><i class="fa fa-edit"></i>
+            </button>
+        </div>
         <button *ngIf="currentUser.ruolo == '2' && data.stato_quest_comp < '2'" 
             style="min-width: calc((100% / 2) - 10px); margin-right: 5px;" 
             class="btn btn-danger" (click)="invalida()"
-            title="L'utente dovrà ricompilare il questionario"> Invalida</button>
+            title="Invalida compilazione - L'utente dovrà ricompilare il questionario">
+            <i class="fa fa-trash-alt"></i></button>
     </div>
 </td>
