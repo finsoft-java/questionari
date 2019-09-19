@@ -25,6 +25,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     htmlContent = '';
     editMode:boolean;
     @Input() guardaRisposte:boolean;
+    esiste_prec = false;
+    esiste_succ = false;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -67,6 +69,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 if(this.sezione_corrente.domande[0] != null){
                     this.domandaCorrente = this.sezione_corrente.domande[0];
                 }
+                this.calc_esiste_prec_succ();
             },
             error => {
                 this.alertService.error(error);
@@ -266,6 +269,11 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         risposta_nuova.valore = 1;
         risposta_nuova.creating = true;
         this.domandaCorrente.risposte.push(risposta_nuova);
+    }
+
+    calc_esiste_prec_succ() {
+        this.esiste_prec = (this.questionario != null && this.indice_sezione_corrente > 0);
+        this.esiste_succ = (this.questionario != null && this.indice_sezione_corrente < this.questionario.sezioni.length-1);
     }
 
     
