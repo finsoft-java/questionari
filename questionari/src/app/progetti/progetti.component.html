@@ -18,16 +18,17 @@
             <td>{{p.utente_creazione}}</td>
             <td>{{p.data_creazione}}</td>
             <td style="width:30%">
-                <button class="btn btn-success" style="min-width: calc((100% / 2) - 20px); margin-right: 5px;"  
+                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;"  
                     routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active"
-                    [title]="p.gia_compilato=='1' ? 'Questionario già compilato' : ''">
-                    {{p.gia_compilato == '0' ? 'Apri' : 'Apri (read-only)'}}</button>
-                <button class="btn btn-dark" style="min-width: calc((100% / 4) - 20px); margin-right: 5px;" 
-                    (click)="duplica(p.id_progetto)">Duplica</button>
-                <button class="btn btn-danger" style="min-width: calc((100% / 4) - 20px);"
+                    [title]="p.gia_compilato=='1' ? 'Apri (read-only perchè esistono compilazioni)' : 'Apri'">
+                    <i class="fa fa-edit"></i></button>
+                <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
+                    (click)="duplica(p.id_progetto)"
+                    title="Duplica"><i class="fa fa-clone"></i></button>
+                <button class="btn btn-danger" style="min-width: calc((100% / 3) - 10px);"
                     [disabled]="p.gia_compilato=='1'" (click)="elimina(p.id_progetto)"
-                    [title]="p.gia_compilato=='1' ? 'Questionario già compilato' : ''"
-                     >Elimina</button>
+                    [title]="p.gia_compilato=='1' ? 'Impossibile eliminare perchè esistono compilazioni' : 'Elimina'"
+                     ><i class="fa fa-trash-alt"></i></button>
             </td>
         </tr>
     </tbody>
