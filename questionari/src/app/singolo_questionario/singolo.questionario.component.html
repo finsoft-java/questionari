@@ -29,12 +29,12 @@
                 </select>  
             </div>
         </div>
-        <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Questionario</button></div>      
+        <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)" [disabled]="questionario.gia_compilato=='1'">Salva Questionario</button></div>      
     </form>
     
     <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente">Sez. precendente<!--<i class="fa fa-step-backward"></i>--></button>
     <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva">Sez. successiva<!--<i class="fa fa-step-forward"></i>--></button>
-    <button (click)="creaSezione()" class="btn btn-success" style="margin: 0px auto;display: block;">Crea Nuova Sezione</button>
+    <button (click)="creaSezione()" class="btn btn-success" style="margin: 0px auto;display: block;" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Sezione</button>
     <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)" style="border: 1px solid;float: left;width: calc(100% - 30px);padding: 15px;margin: 30px 15px 15px 15px">
         <form style="margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 30px;border-bottom:1px solid"> 
             <h5>Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
@@ -54,13 +54,13 @@
                 </div>
             </div>
             <div class="row"></div>
-            <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)">Modifica Sezione</button>
-            <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)">Salva Sezione</button>      
-            <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()">Duplica sezione</button>
+            <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Modifica Sezione</button>
+            <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>      
+            <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
         </form>
 
         <h5>Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
-        <button (click)="creaDomanda()" class="btn btn-success">Crea Nuova Domanda</button>       
+        <button (click)="creaDomanda()" class="btn btn-success" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Domanda</button>       
                
         <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 15px;" >
             <thead *ngIf="!editMode">
