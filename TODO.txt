@@ -12,6 +12,8 @@ Pagina Progetto, tabellina questionari:
 
 Quando si annulla un questionario compilato, bisognerebbe anche ricalcolare i flag "gia_compilato" su questionario e progetto
 
+froala: cercherei di fare le import in stile javascript, non nell'index.html
+
 *** WISHLIST *********************************************************************************
 
 jwtinterceptor: rinominare "username" in "token" ....
@@ -20,3 +22,6 @@ tutti i vari "style" sarebbe bello spostarli dentro file css...
 
 verificare se i vari Service di angular sono definiti bene: vengono
 creati una volta sola, o vengono ricreati per ogni component?
+
+found 151 high severity vulnerabilities in 9876 scanned packages
+  run `npm audit fix` to fix 151 of them.
