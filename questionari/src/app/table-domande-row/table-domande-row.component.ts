@@ -11,7 +11,7 @@ import { DomandeService } from '@/_services/domande.service';
 })
 export class TableDomandeRowComponent implements OnInit {
 
-  @Input() public questionario: ProgettoQuestionari; 
+  @Input() public questionario: Questionario; 
   @Input() public domanda: Domanda;
   @Input() public indexDomanda: number;
 
@@ -24,6 +24,7 @@ export class TableDomandeRowComponent implements OnInit {
   currentUserSubscription: Subscription;
   domanda_in_modifica: Domanda;
   elenco_questionari: Questionario;
+  questionatioSelezionato: Questionario;
   utenti: User;
   risposta_nuova: RispostaAmmessa;
   html_type_array = ["text","number"];
@@ -48,6 +49,7 @@ export class TableDomandeRowComponent implements OnInit {
   ngOnInit() {
      
     this.getQuestionari();    
+    this.questionatioSelezionato = this.questionario;    
     this.domanda_in_modifica = this.simpleClone(this.domanda);
     
     if (this.domanda.creating) 
@@ -98,7 +100,6 @@ export class TableDomandeRowComponent implements OnInit {
       this.domanda.editing = false;    
       this.domanda_in_modifica = null;
     }
-    
     this.changeEditMode.emit(false);
   }
 
@@ -242,7 +243,6 @@ getUsers(): void {
 
   getRisposta(){
     this.mostraRisposte.emit(this.domanda);
-    console.log(this.domanda);
   }
 
 

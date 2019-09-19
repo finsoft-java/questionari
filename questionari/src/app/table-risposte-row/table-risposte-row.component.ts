@@ -12,7 +12,7 @@ import { DomandeService } from '@/_services/domande.service';
 export class TableRisposteRowComponent implements OnInit {
 
   @Input() public rispostaCorrente: RispostaAmmessa;
-  @Input() public questionario: ProgettoQuestionari; 
+  @Input() public questionario: Questionario; 
   @Input() public domanda: Domanda;
   @Input() public indexRisposta: number;
   @Output() public rispostaCreata: EventEmitter<boolean> = new EventEmitter<boolean>();
