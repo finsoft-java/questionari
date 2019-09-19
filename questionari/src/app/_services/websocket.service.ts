@@ -42,7 +42,7 @@ export class WebsocketService {
       }
       ws.onclose = function() {
         //that.alertService.error("Impossibile contattare il server WebSocket! Segnalare l'anomalia e/o ricaricare la pagina");
-        console.log("Impossibile contattare il server WebSocket! Segnalare l'anomalia e/o ricaricare la pagina");
+        console.error("Impossibile contattare il server WebSocket! Segnalare l'anomalia e/o ricaricare la pagina");
         obs.complete();
       }
     });
