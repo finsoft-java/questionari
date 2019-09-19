@@ -18,10 +18,12 @@
             <td>{{p.utente_creazione}}</td>
             <td>{{p.data_creazione}}</td>
             <td style="width:30%">
-                <button class="btn btn-success" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;"  
+                <div class="{{p.gia_compilato=='1' ? 'readOnlyButton' : 'notReadOnlyButton'}}">
+                <button class="btn btn-success" style="min-width: calc(100% - 5px); margin-right: 5px;"  
                     routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active"
                     [title]="p.gia_compilato=='1' ? 'Apri (read-only perchè esistono compilazioni)' : 'Apri'">
                     <i class="fa fa-edit"></i></button>
+                </div>
                 <button class="btn btn-dark" style="min-width: calc((100% / 3) - 10px); margin-right: 5px;" 
                     (click)="duplica(p.id_progetto)"
                     title="Duplica"><i class="fa fa-clone"></i></button>

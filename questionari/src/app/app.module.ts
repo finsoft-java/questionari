@@ -26,8 +26,6 @@ import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
-import { SingoloQuestionariov2Component } from './singolo_questionario_v2';
-import { TableDomandeRowV2Component } from './table-domande-row-v2';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 @NgModule({
@@ -48,7 +46,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
         SingoloProgettoComponent,
         QuestionariComponent,
         SingoloQuestionarioComponent,
-        SingoloQuestionariov2Component,
         QuestionariDaCompilareComponent,
         CompilaQuestionarioComponent,
         CompilaQuestionarioDomandaComponent,
@@ -57,7 +54,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
         TableQuestionariRowComponent,
         TableRuoliRowComponent,
         TableDomandeRowComponent,
-        TableDomandeRowV2Component,
         TableRisposteRowComponent,
         FormSezioniComponent,
         LoginComponent,

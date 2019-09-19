@@ -1,1 +1,0 @@
-export * from './singolo.questionariov2.component';

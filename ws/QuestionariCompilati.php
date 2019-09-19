@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     //do nothing, HTTP 200
     exit();
 }
-
 require_logged_user_JWT();
+
 $storico = '';
 $progressivo_quest_comp = '';
 $utente_valutato_corrente = '';

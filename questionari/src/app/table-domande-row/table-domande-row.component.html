@@ -1,110 +1,143 @@
 
-        <td>
-            <div *ngIf="domanda.editing">
-                <textarea class="form-control" type="text" [(ngModel)]="domanda_in_modifica.descrizione" style="max-width: 110px;">{{domanda_in_modifica.descrizione}}</textarea>
+        <td *ngIf="domanda.editing" colspan="11">
+            <div class="row" style="margin:10px 0px;">
+                <div class="col">
+                    <h5>Domanda N° {{domanda.progressivo_domanda}}</h5> 
+                </div>
             </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;max-width:110px;text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;" title="">{{ domanda.descrizione }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                <div class="checkbox-container green">
-                    <input type="checkbox" [(ngModel)]="domanda_in_modifica.obbligatorieta"
-                    [checked]="domanda.obbligatorieta" id="toggle2" />
-                    <label for="toggle2"></label>
-                </div>    
+            <div class="row" style="margin:10px 0px;">
+                <div class="col">
+                    <label>Descrizione</label>
+                    <!--<textarea class="form-control" type="text" [(ngModel)]="domanda_in_modifica.descrizione"></textarea>-->
+                    
+                     <textarea [froalaEditor]="config" [(froalaModel)]="domanda_in_modifica.descrizione"></textarea>
+                </div>
             </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.obbligatorieta_dec }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
+            <div class="row" style="margin:10px 0px;">
+                <div class="col">
+                    <label>Html Type</label>
+                    <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type">
+                        <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
+                            {{ option }}
+                        </option>   
+                    </select>     
+                </div>
+                <div class="col">
+                    <label>Obbligatorietà</label>
+                    <div class="checkbox-container green">
+                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.obbligatorieta"
+                        [checked]="domanda.obbligatorieta" id="toggle2" />
+                        <label for="toggle2"></label>
+                    </div>
+                </div>
+                <div class="col">                    
+                    <label>Rimescola</label>
+                    <div class="checkbox-container green">
+                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
+                        [checked]="domanda.rimescola" id="toggle1" />
+                        <label for="toggle1"></label>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Coefficiente di Valutazione</label>
+                    <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.coeff_valutazione"
-                    title="" min="1" max="300"/>      
+                    title="" min="1" max="300"/>                       
+                </div>  
             </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.coeff_valutazione }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                <div class="checkbox-container green">
-                    <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
-                    [checked]="domanda.rimescola" id="toggle1" />
-                    <label for="toggle1"></label>
-                </div>     
-            </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.rimescola_dec }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" [(ngModel)]="domanda_in_modifica.html_type">
-                    <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
-                        {{ option }}
-                    </option>   
-                </select>     
-            </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_type_dec }}&nbsp;</div>
-            </div>        
-        </td>
-        
-        <td>
-            <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
+            <div class="row" style="margin:10px 0px;">                
+                <div class="col">
+                    <label>Html Max Length</label>
+                    <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_maxlength"
                     title=""/>      
-            </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_maxlength }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                    <input class="form-control" type="text" style="width: auto;max-width: 70px;"
+                </div>
+                <div class="col">
+                    <label>Html Pattern</label>
+                    <input class="form-control" type="text"
                     [(ngModel)]="domanda_in_modifica.html_pattern"
                     title=""/>      
+                </div>            
             </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_pattern }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
+            <div class="row" style="margin:10px 0px;">
+                <div class="col">
+                    <label>Html Min</label>
+                    <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_min"
                     title=""/>      
-            </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_min }}&nbsp;</div>
-            </div>        
-        </td>
-        <td>
-            <div *ngIf="domanda.editing">
-                    <input class="form-control" type="number" style="width: auto;max-width: 70px;"
+                </div> 
+                <div class="col">
+                    <label>Html max</label>
+                    <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_max"
                     title=""/>      
+                </div>
             </div>
-            <div *ngIf="!domanda.editing">
-                <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_max }}&nbsp;</div>
-            </div>          
+            <div class="row" style="margin-top:15px;padding-bottom: 35px;">
+                <div class="col">
+                    <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
+                    <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)"><i class="fa fa-trash-alt"></i></button>
+                    <button style="margin-right: 5px;margin-left: 15px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()">Salva</button>
+                    <button style="margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Annulla</button>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:30px;padding-top: 30px;border-top:1px solid;" *ngIf="domanda_in_modifica">
+                <div class="col" style="padding:0px 30px;">
+                    <div style="float:left;width:100%">
+                        <h5 style="float:left">Risposte</h5>
+                        <button style="float:right" (click)="creaRisposta()" class="btn btn-success">Crea Nuova Risposta</button>
+                    </div>
+
+                    <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;float:left;width:100%">
+                        <thead>
+                            <th alt="Descrizione" title="Descrizione">Descrizione</th>
+                            <th alt="Valore Risposta" title="Valore Risposta">Valore Risposta</th>
+                            <th>Azioni</th>       
+                        </thead>    
+                        <tbody>
+                                <tr table-risposte-row *ngFor="let risposta_row of domanda_in_modifica.risposte; let i= index;" [questionario]="this.questionario" [domanda]="domanda_in_modifica" [rispostaCorrente]="risposta_row"
+                                [indexRisposta]="i" (itemRemoved)="removeItem(i)"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button style="margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Annulla</button>
         </td>
-        <td>
+        
+        
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;max-width:110px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;" title="" innerHTML="{{ truncate(domanda.descrizione) }}"></div>
+        </td>     
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.obbligatorieta_dec }}&nbsp;</div>
+        </td> 
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.coeff_valutazione }}&nbsp;</div>
+        </td>  
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.rimescola_dec }}&nbsp;</div>
+        </td> 
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_type_dec }}&nbsp;</div>
+        </td> 
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_maxlength }}&nbsp;</div>
+        </td>
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_pattern }}&nbsp;</div>
+        </td>
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_min }}&nbsp;</div>
+        </td>
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
+            <div tabindex="0" style="outline: none !important; line-height: 38px;" title="">{{ domanda.html_max }}&nbsp;</div>
+        </td>
+        <td *ngIf="!domanda.editing && !esisteDomandaEditing">
             <div>
-                
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)"><i class="fa fa-trash-alt"></i></button>
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()"><i class="fa fa-undo"></i></button>
-                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Risposte" title="Risposte" (click)="getRisposta(this.domanda)">Risposte</button>
-                
             </div>
         </td>
         

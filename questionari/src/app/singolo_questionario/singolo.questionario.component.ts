@@ -21,10 +21,9 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     is_nuova_sezione: boolean;
     nuova_domanda: Domanda;
     domandaCorrente: Domanda;
-
-    
     @Output() public itemRemoved = new EventEmitter<RispostaAmmessa[]>();
-
+    htmlContent = '';
+    editMode:boolean;
     @Input() guardaRisposte:boolean;
 
     constructor(
@@ -43,8 +42,9 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
-        });
-        
+            
+        this.htmlContent = 'eko';
+        });        
     }
     
 
@@ -54,6 +54,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription.unsubscribe();
     }
     private caricaSezione(indice: number) {
+       
         if (!this.questionario || !this.questionario.sezioni || indice >= this.questionario.sezioni.length || indice < 0) {
             console.log(`La sezione ${indice} non esiste`);
             return;
@@ -73,6 +74,11 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
     removeItem(i: number) {
         this.sezione_corrente.domande.splice(i, 1);
+    }
+    changeEditMode(changeEditMode: boolean){
+        this.editMode = changeEditMode;
+        console.log("changeEditMode");
+        console.log(changeEditMode);
     }
     getQuestionario(): void {
     
@@ -124,6 +130,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             descrizione: "",
             domande: []
         };
+        this.questionario.sezioni.push(this.sezione_corrente);
     }
     getNuovoProgressivoSezione() {
         let nuovo_progr_sezione = 1;
@@ -260,4 +267,24 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         risposta_nuova.creating = true;
         this.domandaCorrente.risposte.push(risposta_nuova);
     }
+
+    
+  onChange = (_) => {};
+  onTouched = () => {};
+
+  // Form model content changed.
+  writeValue(content: any): void {
+    this.model = content;
+    console.log(content.get());
+  }
+
+  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+  // End ControlValueAccesor methods.
+
+  model: any;
+
+  config: Object = {
+    charCounterCount: false
+  }
 }
