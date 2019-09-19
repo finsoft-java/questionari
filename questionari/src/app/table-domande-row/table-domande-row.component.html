@@ -8,26 +8,18 @@
             <div class="row" style="margin:10px 0px;">
                 <div class="col">
                     <label>Descrizione</label>
-                    <!--<textarea class="form-control" type="text" [(ngModel)]="domanda_in_modifica.descrizione"></textarea>-->
                     
                      <textarea [froalaEditor]="config" [(froalaModel)]="domanda_in_modifica.descrizione"></textarea>
                 </div>
             </div>
             <div class="row" style="margin:10px 0px;">
                 <div class="col">
-                    <label>Html Type</label>
-                    <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type">
-                        <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
-                            {{ option }}
-                        </option>   
-                    </select>     
-                </div>
-                <div class="col">
                     <label>Obbligatorietà</label>
                     <div class="checkbox-container green">
                         <input type="checkbox" [(ngModel)]="domanda_in_modifica.obbligatorieta"
                         [checked]="domanda.obbligatorieta" id="toggle2" />
-                        <label for="toggle2"></label>
+                        <label for="toggle2"
+                        title="Se selezionato, l'utente dovrà compilare obbligatoriamente la domanda per poter proseguire"></label>
                     </div>
                 </div>
                 <div class="col">                    
@@ -35,42 +27,52 @@
                     <div class="checkbox-container green">
                         <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
                         [checked]="domanda.rimescola" id="toggle1" />
-                        <label for="toggle1"></label>
+                        <label for="toggle1" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
                     </div>
                 </div>
                 <div class="col">
                     <label>Coefficiente di Valutazione</label>
                     <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.coeff_valutazione"
-                    title="" min="1" max="300"/>                       
+                    title="Quanto è importante la domanda?"
+                    min="1" max="300"/>                       
                 </div>  
             </div>
-            <div class="row" style="margin:10px 0px;">                
+            <div class="row" style="margin:10px 0px;">
                 <div class="col">
-                    <label>Html Max Length</label>
+                    <label>Tipo di input</label>
+                    <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type"
+                    title="HTML input type">
+                        <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
+                            {{ option }}
+                        </option>   
+                    </select>     
+                </div>             
+                <div class="col">
+                    <label>Lunghezza massima</label>
                     <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_maxlength"
-                    title=""/>      
+                    title="Max length (solo per campi testuali)"/>      
                 </div>
                 <div class="col">
-                    <label>Html Pattern</label>
+                    <label>Pattern</label>
                     <input class="form-control" type="text"
                     [(ngModel)]="domanda_in_modifica.html_pattern"
-                    title=""/>      
+                    title="Espressione regolare. Es. [A-Za-z]{3} (solo per campi testuali)"/>      
                 </div>            
             </div>
             <div class="row" style="margin:10px 0px;">
                 <div class="col">
-                    <label>Html Min</label>
+                    <label>Minimo</label>
                     <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_min"
-                    title=""/>      
+                    title="Minimo (solo per campi numerici)"/>      
                 </div> 
                 <div class="col">
-                    <label>Html max</label>
+                    <label>Massimo</label>
                     <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_max"
-                    title=""/>      
+                    title="Massimo (solo per campi numerici)"/>      
                 </div>
             </div>
             <div class="row" style="margin-top:15px;padding-bottom: 35px;">
