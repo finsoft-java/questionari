@@ -22,23 +22,6 @@
                         title="Se selezionato, l'utente dovrà compilare obbligatoriamente la domanda per poter proseguire"></label>
                     </div>
                 </div>
-                <div class="col">                    
-                    <label>Rimescola</label>
-                    <div class="checkbox-container green">
-                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
-                        [checked]="domanda.rimescola" id="toggle1" />
-                        <label for="toggle1" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
-                    </div>
-                </div>
-                <div class="col">
-                    <label>Coefficiente di Valutazione</label>
-                    <input class="form-control" type="number"
-                    [(ngModel)]="domanda_in_modifica.coeff_valutazione"
-                    title="Quanto è importante la domanda?"
-                    min="1" max="300"/>                       
-                </div>  
-            </div>
-            <div class="row" style="margin:10px 0px;">
                 <div class="col">
                     <label>Tipo di input</label>
                     <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type"
@@ -48,11 +31,13 @@
                         </option>   
                     </select>     
                 </div>             
+            </div>
+            <div class="row" style="margin:10px 0px;">
                 <div class="col">
                     <label>Lunghezza massima</label>
                     <input class="form-control" type="number"
                     [(ngModel)]="domanda_in_modifica.html_maxlength"
-                    title="Max length (solo per campi testuali)"/>      
+                    title="Lunghezza massima in caratteri (solo per campi testuali)"/>      
                 </div>
                 <div class="col">
                     <label>Pattern</label>
@@ -75,9 +60,26 @@
                     title="Massimo (solo per campi numerici)"/>      
                 </div>
             </div>
+            <div class="row" style="margin:10px 0px;">
+                <div class="col">                    
+                    <label>Rimescola</label>
+                    <div class="checkbox-container green">
+                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
+                        [checked]="domanda.rimescola" id="toggle1" />
+                        <label for="toggle1" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Coefficiente di Valutazione</label>
+                    <input class="form-control" type="number"
+                    [(ngModel)]="domanda_in_modifica.coeff_valutazione"
+                    title="Quanto è importante la domanda?"
+                    min="1" max="300"/>                       
+                </div>  
+            </div>
             <div class="row" style="margin-top:15px;padding-bottom: 35px;">
                 <div class="col">
-                    <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda" [disabled]="questionario.gia_compilato=='1'" (click)="goToEdit()"><i class="fa fa-edit"></i></button>
+                    <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda" (click)="goToEdit()"><i class="fa fa-edit"></i></button>
                     <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)" [disabled]="questionario.gia_compilato=='1'"><i class="fa fa-trash-alt"></i></button>
                     <button style="margin-right: 5px;margin-left: 15px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" title="Salva Domanda" (click)="save()">Salva</button>
                     <button style="margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Annulla</button>
@@ -136,10 +138,10 @@
         </td>
         <td *ngIf="!domanda.editing && !esisteDomandaEditing">
             <div>
-                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" [disabled]="questionario.gia_compilato=='1'" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
-                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)" [disabled]="questionario.gia_compilato=='1'"><i class="fa fa-trash-alt"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda"  (click)="goToEdit()"><i class="fa fa-edit"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)" [disabled]="questionario.gia_compilato=='1'" title="Elimina Domanda"><i class="fa fa-trash-alt"></i></button>
                 <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" [disabled]="questionario.gia_compilato=='1'" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
-                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()"><i class="fa fa-undo"></i></button>
+                <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()" title="Annulla"><i class="fa fa-undo"></i></button>
             </div>
         </td>
         
