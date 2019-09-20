@@ -64,6 +64,7 @@ export class TableDomandeRowComponent implements OnInit {
     this.domanda.editing = true;
     this.domanda_in_modifica = this.simpleClone(this.domanda);
     this.changeEditMode.emit(true);
+    console.log("EIMITTING TRUE");
   }
 
   removeItem(i: number) {
@@ -99,6 +100,7 @@ export class TableDomandeRowComponent implements OnInit {
       this.domanda_in_modifica = null;
     }
     this.changeEditMode.emit(false);
+    console.log("EIMITTING FALSE");
   }
 
   /**
@@ -142,6 +144,7 @@ export class TableDomandeRowComponent implements OnInit {
             this.domanda.editing = false;
             this.domanda.creating = false;
             this.changeEditMode.emit(false);
+            console.log("EIMITTING FALSE BIS");
           }
         },
         error => {
@@ -155,6 +158,7 @@ export class TableDomandeRowComponent implements OnInit {
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
             this.changeEditMode.emit(false);
+            console.log("EIMITTING FALSE TER");
           }
         });
       } 

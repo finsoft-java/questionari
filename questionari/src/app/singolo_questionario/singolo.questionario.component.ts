@@ -208,6 +208,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             risposta:null,
             creating:true
         };
+        this.editMode = true;
         this.sezione_corrente.domande.push(this.nuova_domanda);
     }
         
