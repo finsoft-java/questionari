@@ -3,6 +3,7 @@ import { User, UserRole, Questionario, ProgettoQuestionari, Progetto, Domanda, S
 import { AuthenticationService, UserService, AlertService, ProgettiService, QuestionariService } from '@/_services';
 import { Subscription } from 'rxjs';
 import { DomandeService } from '@/_services/domande.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: '[table-domande-row]',
@@ -31,6 +32,7 @@ export class TableDomandeRowComponent implements OnInit {
   questionari_loaded = false;
   guardaRisposte = false;
 
+  public Editor = ClassicEditor;
   @Input() esisteDomandaEditing:boolean;
   @Output() public changeEditMode =  new EventEmitter<boolean>();
 

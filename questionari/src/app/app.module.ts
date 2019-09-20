@@ -26,8 +26,7 @@ import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 @NgModule({
     imports: [
         BrowserModule,
@@ -35,8 +34,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
         HttpClientModule,
         FormsModule,
         routing,
-        FroalaEditorModule.forRoot(), 
-        FroalaViewModule.forRoot()
+        CKEditorModule
     ],
     declarations: [
         AppComponent,

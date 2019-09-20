@@ -10,7 +10,8 @@
                 <div class="col">
                     <label>Descrizione</label>
                     
-                     <textarea [froalaEditor]="config" [(froalaModel)]="domanda_in_modifica.descrizione"></textarea>
+                     <!--<textarea [(ngModel)]="domanda_in_modifica.descrizione">{{domanda_in_modifica.descrizione}}</textarea>-->
+                     <ckeditor [editor]="Editor" [(ngModel)]="domanda_in_modifica.descrizione" [ngModelOptions]="{standalone: true}" data="{{domanda_in_modifica.descrizione}}"></ckeditor>
                 </div>
             </div>
             <div class="row" style="margin:10px 0px;">

@@ -3,6 +3,7 @@ import { Subscription, Observable } from 'rxjs';
 import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestionarioCompilato } from '@/_models';
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
 import { ActivatedRoute } from '@angular/router';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({templateUrl: 'singolo.questionario.component.html'})
 export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
@@ -27,6 +28,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     esiste_prec = false;
     esiste_succ = false;
 
+    public Editor = ClassicEditor;
+    
     constructor(
         private authenticationService: AuthenticationService,
         private questionariService: QuestionariService,
