@@ -4405,7 +4405,9 @@ readers do not read off random characters that represent icons */
   background-color: #807410;
   border-color: #807410;
 }
-
+.btn-readonly i{
+  color:#fff;
+}
 .btn2 {
   min-width: calc((100% / 2) - 10px);
   margin-right: 5px;

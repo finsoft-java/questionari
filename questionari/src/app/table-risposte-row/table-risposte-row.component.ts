@@ -39,7 +39,6 @@ export class TableRisposteRowComponent implements OnInit {
   }
  
   ngOnInit() {
-    console.log(this.rispostaCorrente);
     this.getQuestionari();
     if (this.rispostaCorrente.creating) 
       this.goToEdit();

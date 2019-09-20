@@ -17,8 +17,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout();
                 location.reload(true);
             }
-            
-            console.log(err);
 
             // Il messaggio può essere in molti punti diversi, dipende dal browser
             //  Per Firefox è in err.error.error.value

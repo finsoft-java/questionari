@@ -21,12 +21,12 @@
             </div>
             
             <div class="col">
-                <label for="stato_progetto">Comune</label>
-                <select class="form-control" required  [(ngModel)]="questionario.flag_comune" [ngModelOptions]="{standalone: true}">
-                    <option *ngFor="let dati_flag_comune of flag_comune_select; index as i" value="{{i}}">
-                        {{ dati_flag_comune }}
-                    </option>   
-                </select>  
+                <label>Comune</label>
+                <div class="checkbox-container green">
+                    <input type="checkbox" [(ngModel)]="questionario.flag_comune"
+                    [checked]="questionario.flag_comune_dec" id="toggle1"  [ngModelOptions]="{standalone: true}"/>
+                    <label for="toggle1" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
+                </div>
             </div>
         </div>
         <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)" [disabled]="questionario.gia_compilato=='1'">Salva Questionario</button></div>      
@@ -60,7 +60,7 @@
         </form>
 
         <h5>Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
-        <button (click)="creaDomanda()" class="btn btn-success" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Domanda</button>       
+        <button *ngIf="!editMode" (click)="creaDomanda()" class="btn btn-success" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Domanda</button>       
                
         <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 15px;" >
             <thead *ngIf="!editMode">

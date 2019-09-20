@@ -141,7 +141,7 @@ class QuestionariManager {
                 $questionario->stato_dec              = ($row['stato'] != null) ? $STATO_QUESTIONARIO[$row['stato']] : null;
                 $questionario->gia_compilato          = $row['gia_compilato'];
                 $questionario->gia_compilato_dec      = ($row['gia_compilato'] != null) ? $BOOLEAN[$row['gia_compilato']] : null;
-                $questionario->flag_comune            = $row['flag_comune'];
+                $questionario->flag_comune            = ($row['flag_comune'] == '1' ? true : false);
                 $questionario->flag_comune_dec        = ($row['flag_comune'] != null) ? $BOOLEAN[$row['flag_comune']] : null;
                 $questionario->utente_creazione       = $row['utente_creazione'];
                 $questionario->data_creazione         = $row['data_creazione'];
@@ -167,7 +167,7 @@ class QuestionariManager {
                 $questionario->stato_dec              = ($row['stato'] != null) ? $STATO_QUESTIONARIO[$row['stato']] : null;
                 $questionario->gia_compilato          = $row['gia_compilato'];
                 $questionario->gia_compilato_dec      = ($row['gia_compilato'] != null) ? $BOOLEAN[$row['gia_compilato']] : null;
-                $questionario->flag_comune            = $row['flag_comune'];
+                $questionario->flag_comune            = ($row['flag_comune'] == '1' ? true : false);
                 $questionario->flag_comune_dec        = ($row['flag_comune'] != null) ? $BOOLEAN[$row['flag_comune']] : null;
                 $questionario->utente_creazione       = $row['utente_creazione'];
                 $questionario->data_creazione         = $row['data_creazione'];

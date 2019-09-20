@@ -51,7 +51,7 @@ export class TableDomandeRowComponent implements OnInit {
     this.getQuestionari();    
     this.questionatioSelezionato = this.questionario;    
     this.domanda_in_modifica = this.simpleClone(this.domanda);
-    
+    console.log(this);
     if (this.domanda.creating) 
       this.goToEdit();
     
@@ -63,8 +63,6 @@ export class TableDomandeRowComponent implements OnInit {
   goToEdit() {
     this.domanda.editing = true;
     this.domanda_in_modifica = this.simpleClone(this.domanda);
-
-
     this.changeEditMode.emit(true);
   }
 
@@ -254,7 +252,6 @@ getUsers(): void {
   // Form model content changed.
   writeValue(content: any): void {
     this.model = content;
-    console.log(content.get());
   }
 
   registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }

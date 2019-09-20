@@ -2,7 +2,8 @@
         <td *ngIf="domanda.editing" colspan="11">
             <div class="row" style="margin:10px 0px;">
                 <div class="col">
-                    <h5>Domanda N° {{domanda.progressivo_domanda}}</h5> 
+                    <h5 *ngIf="domanda.creating">Form Inserimento Domanda</h5>
+                    <h5 *ngIf="!domanda.creating">Form Modifica  Domanda</h5> 
                 </div>
             </div>
             <div class="row" style="margin:10px 0px;">
@@ -65,8 +66,8 @@
                     <label>Rimescola</label>
                     <div class="checkbox-container green">
                         <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
-                        [checked]="domanda.rimescola" id="toggle1" />
-                        <label for="toggle1" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
+                        [checked]="domanda.rimescola" id="togglerimescola" />
+                        <label for="togglerimescola" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
                     </div>
                 </div>
                 <div class="col">

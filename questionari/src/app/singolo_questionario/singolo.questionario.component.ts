@@ -16,7 +16,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     sezione_corrente: Sezione; //esplosa, con tutte le domande e risposte
     indice_sezione_corrente: number;
     stato_questionario = ["Bozza","Valido","Annullato"];
-    flag_comune_select = ["No","Si"];
     nuova_sezione: Sezione;
     is_nuova_sezione: boolean;
     nuova_domanda: Domanda;
@@ -44,14 +43,11 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.id_questionario = +params['id_questionario']; // (+) converts string 'id' to a number
             this.getQuestionario();
-            
-        this.htmlContent = 'eko';
         });        
     }
     
 
     ngOnDestroy() {
-        // unsubscribe to ensure no memory leaks
         this.currentUserSubscription.unsubscribe();
         this.questSubscription.unsubscribe();
     }
@@ -80,8 +76,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
     changeEditMode(changeEditMode: boolean){
         this.editMode = changeEditMode;
-        console.log("changeEditMode");
-        console.log(changeEditMode);
     }
     getQuestionario(): void {
     
@@ -208,7 +202,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             obbligatorieta_dec: "NO",
             progressivo_domanda: null,
             progressivo_sezione: this.sezione_corrente.progressivo_sezione,
-            rimescola:"0",
+            rimescola:false,
             rimescola_dec:"NO",
             risposte:[],//risposteAmmesse
             risposta:null,
@@ -283,7 +277,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
   // Form model content changed.
   writeValue(content: any): void {
     this.model = content;
-    console.log(content.get());
   }
 
   registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }

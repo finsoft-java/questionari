@@ -29,7 +29,7 @@ export class Domanda {
     descrizione: string;
     obbligatorieta: string;
     obbligatorieta_dec: string;
-    rimescola: string;
+    rimescola: boolean;
     rimescola_dec: string;
     coeff_valutazione: number;
     html_type: string;

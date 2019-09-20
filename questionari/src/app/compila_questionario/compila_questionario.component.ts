@@ -120,7 +120,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     rimescola() {
         if (this.sezione_corrente && this.sezione_corrente.domande) {
             this.sezione_corrente.domande.forEach(domanda => {
-                if (domanda.rimescola == '1' && domanda.risposte) {
+                if (domanda.rimescola == true && domanda.risposte) {
                     this.shuffle(domanda.risposte);
                 }
             });
