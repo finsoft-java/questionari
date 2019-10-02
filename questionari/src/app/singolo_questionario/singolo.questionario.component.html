@@ -13,7 +13,7 @@
             </div>
             <div class="col">
                 <label for="stato_progetto">Stato</label>                
-                <select class="form-control" required  [(ngModel)]="questionario.stato" [ngModelOptions]="{standalone: true}">
+                <select class="form-control" required  [(ngModel)]="questionario.stato" title="Solo i questionari Validi possono essere compilati" [ngModelOptions]="{standalone: true}">
                     <option *ngFor="let dati_stato_progetto of stato_questionario; index as i" value="{{i}}">
                         {{ dati_stato_progetto }}
                     </option>   
@@ -25,7 +25,7 @@
                 <div class="checkbox-container green">
                     <input type="checkbox" [(ngModel)]="questionario.flag_comune"
                     [checked]="questionario.flag_comune_dec" id="toggle1"  [ngModelOptions]="{standalone: true}"/>
-                    <label for="toggle1" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
+                    <label for="toggle1" title="Se selezionato, il questionario può essere modficato da altri utenti"></label>
                 </div>
             </div>
         </div>
