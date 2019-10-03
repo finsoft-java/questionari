@@ -10,7 +10,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     currentUserSubscription: Subscription;
     projectSubscription: Subscription;
     currentUser: User;
-    progettoUtenti: UserRuoli;
+    progettoUtenti: UserRuoli[];
     id_progetto: number;
     progetto: Progetto;
     utenti: User [];
@@ -19,6 +19,11 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     resp_secondo_livello: Array<String> = [];
     utenti_finali: Array<String> = [];
     @Input() stato_modifica: Object;
+
+    utentiSelect: number[];
+    l1: User []= [];
+    l2: User []= [];
+    uf: User []= [];
 
     stato_progetto = ["Bozza","Valido","Annullato","Completato"];
     constructor(
@@ -41,12 +46,12 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
             this.id_progetto = +params['id_progetto']; // (+) converts string 'id' to a number
             this.getProgetto();
             this.getUtentiRuoli();
+            console.log(this);
          },
          error => {
            this.alertService.error(error);
          });
     }
-
     ngOnDestroy() {
         // unsubscribe to ensure no memory leaks
         this.currentUserSubscription.unsubscribe();
@@ -173,5 +178,41 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     riapri(){
         this.progetto.stato = '1';
         this.updProgetto();
+    }
+    changeSelect(a){
+        console.log(a);
+    }
+    goToSelect(livello){
+        if(livello == 'l1'){
+            for(let i = 0; i < this.utentiSelect.length; i++){
+                this.progettoUtenti[this.utentiSelect[i]].responsabileL1 = true;
+            }
+        }else if(livello == 'l2'){
+            for(let i = 0; i < this.utentiSelect.length; i++){
+                this.progettoUtenti[this.utentiSelect[i]].responsabileL2 = true;
+            }
+        }else if(livello == 'uf'){
+            for(let i = 0; i < this.utentiSelect.length; i++){
+                this.progettoUtenti[this.utentiSelect[i]].utenteFinale = true;
+            }
+        }
+        this.save(this.progettoUtenti);
+
+    }
+    returnToSelect(livello){
+        if(livello == 'l1'){
+            for(let i = 0; i < this.utentiSelect.length; i++){
+                this.progettoUtenti[this.utentiSelect[i]].responsabileL1 = false;
+            }
+        }else if(livello == 'l2'){
+            for(let i = 0; i < this.utentiSelect.length; i++){
+                this.progettoUtenti[this.utentiSelect[i]].responsabileL2 = false;
+            }
+        }else if(livello == 'uf'){
+            for(let i = 0; i < this.utentiSelect.length; i++){
+                this.progettoUtenti[this.utentiSelect[i]].utenteFinale = false;
+            }
+        }
+        this.save(this.progettoUtenti);
     }
 }
