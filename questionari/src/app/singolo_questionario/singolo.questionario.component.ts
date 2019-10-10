@@ -4,6 +4,13 @@ import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestion
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
 import { ActivatedRoute } from '@angular/router';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 
 @Component({templateUrl: 'singolo.questionario.component.html'})
 export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
@@ -39,7 +46,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
             this.currentUser = user;
         });
-        
+       
     } 
 
     ngOnInit() {

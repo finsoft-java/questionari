@@ -220,8 +220,8 @@ class SezioniManager {
         global $con, $sezioniManager;
         $sql = insert("sezioni", ["id_questionario" => $json_data->id_questionario,
                                   "progressivo_sezione" => $json_data->progressivo_sezione,
-                                  "titolo" => $json_data->titolo,
-                                  "descrizione" => $json_data->descrizione]);
+                                  "titolo" => $con->escape_string($json_data->titolo),
+                                  "descrizione" => $con->escape_string($json_data->descrizione)]);
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con->error);
@@ -231,8 +231,8 @@ class SezioniManager {
     
     function aggiorna($sezione, $json_data) {
         global $con;
-        $sql = update("sezioni", ["titolo" => $json_data->titolo,
-                                  "descrizione" => $json_data->descrizione],
+        $sql = update("sezioni", ["titolo" => $con->escape_string($json_data->titolo),
+                                  "descrizione" => $con->escape_string($json_data->descrizione)],
                                  ["id_questionario" => $sezione->id_questionario,
                                   "progressivo_sezione" => $sezione->progressivo_sezione]);
         mysqli_query($con, $sql);
@@ -340,7 +340,7 @@ class SezioniManager {
         $sql = insert("domande", ["id_questionario" => $json_data->id_questionario,
                                     "progressivo_sezione" => $json_data->progressivo_sezione,
                                     "progressivo_domanda" => $progressivo_domanda,
-                                    "descrizione" => $json_data->descrizione,
+                                    "descrizione" => $con->escape_string($json_data->descrizione),
                                     "obbligatorieta" => ($json_data->obbligatorieta == true ? '1' : '0'),
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,
@@ -364,7 +364,7 @@ class SezioniManager {
                                                     "progressivo_sezione" => $r->progressivo_sezione,
                                                     "progressivo_domanda" => $r->progressivo_domanda,
                                                     "progressivo_risposta" => $r->progressivo_risposta,
-                                                    "descrizione" => $r->descrizione,
+                                                    "descrizione" => $con->escape_string($r->descrizione),
                                                     "valore" => $r->valore]);
                 mysqli_query($con, $sql);
                 if ($con ->error) {
@@ -376,7 +376,7 @@ class SezioniManager {
     }
     function aggiornaDomandaERisposte($domanda, $json_data) {
         global $con, $sezioniManager;
-        $sql = update("domande", [ "descrizione" => $this->CleanString($json_data->descrizione),
+        $sql = update("domande", [ "descrizione" => $this->CleanString($con->escape_string($json_data->descrizione)),
                                     "obbligatorieta" => ($json_data->obbligatorieta == true ? '1' : '0'),
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,

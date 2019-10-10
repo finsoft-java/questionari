@@ -52,6 +52,7 @@
     </table>
 
     <br/>
+    <!--
     <h5>Utenti per Progetto</h5>
     <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" [disabled]="progetto.gia_compilato=='1'"
         title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}"
@@ -71,6 +72,7 @@
             </tbody>
         </table>
     </div>
+-->
     <br>
     <button *ngIf="progetto.gia_compilato=='1'" class="btn btn-dark" (click)="download()">Scarica tutti i questionari compilati in formato Excel</button>
     <button *ngIf="progetto.gia_compilato=='1' && progetto.stato == '1'" 
@@ -81,19 +83,18 @@
 
 
 <br/>
-<h5>Utenti per Progetto V2</h5>
+<h5>Utenti per Progetto</h5>
 
 <div style="float:left; width:calc(50% - 60px) ;margin-right:10px;margin-top: 30px;">
     <label>Utenze disponibili</label>
     <select class="select2" [(ngModel)]="utentiSelect" style="width:100%;min-height: 500px;max-height: 500px;overflow-y: scroll;" id="all_user" multiple>
-            <ng-container *ngFor="let dati_stato_progetto of progettoUtenti; index as i">
-                <option *ngIf="!dati_stato_progetto.responsabileL1 && !dati_stato_progetto.responsabileL2 && !dati_stato_progetto.utenteFinale" 
-                    value="{{i}}">
-                    {{ dati_stato_progetto.nome_utente }} 
-                </option>   
-            </ng-container>
+        <ng-container *ngFor="let dati_stato_progetto of progettoUtenti; index as i">
+            <option *ngIf="!dati_stato_progetto.responsabileL1 && !dati_stato_progetto.responsabileL2 && !dati_stato_progetto.utenteFinale" 
+                value="{{i}}">
+                {{ dati_stato_progetto.nome_utente }} 
+            </option>   
+        </ng-container>
     </select>
-
 </div>
 
 <div style="float:left;width:calc(50% + 50px);margin-top: 40px;">

@@ -542,7 +542,7 @@ class QuestionariCompilatiManager {
         global $con;
         $sql = update("risposte_quest_compilati", ["progressivo_risposta" => $json_data->progressivo_risposta,
                                                    "risposta_aperta" => $json_data->risposta_aperta,
-                                                   "note" => $json_data->note],
+                                                   "note" => $con->escape_string($json_data->note)],
                                                   ["progressivo_quest_comp" => $json_data->progressivo_quest_comp,
                                                    "progressivo_sezione" => $json_data->progressivo_sezione,
                                                    "progressivo_domanda" => $json_data->progressivo_domanda,

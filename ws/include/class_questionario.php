@@ -184,7 +184,7 @@ class QuestionariManager {
     function crea($json_data) {
         global $con, $logged_user;
         $sql = insert("questionari", ["id_questionario" => null,
-                                  "titolo" => $json_data->titolo,
+                                  "titolo" => $con->escape_string($json_data->titolo),
                                   "stato" => ($json_data->stato ? $json_data->stato : '0'),
                                   "flag_comune" => ($json_data->flag_comune ? $json_data->flag_comune : '0'),
                                   "gia_compilato" => '0',
@@ -200,7 +200,7 @@ class QuestionariManager {
     function aggiorna($questionario, $json_data) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN;
         
-        $sql = update("questionari", ["titolo" => $json_data->titolo,
+        $sql = update("questionari", ["titolo" => $con->escape_string($json_data->titolo),
                                   "stato" => $json_data->stato,
                                   "flag_comune" => ($json_data->flag_comune ? $json_data->flag_comune : '0')],
                                  ["id_questionario" => $questionario->id_questionario]);

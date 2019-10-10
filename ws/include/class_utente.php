@@ -58,10 +58,10 @@ class UtenteManager {
     
     function crea($json_data) {
         global $con;
-        $sql = insert("utenti", ["username" => $json_data->username,
-                             "nome" => $json_data->nome,
-                             "cognome" => $json_data->cognome,
-                             "email" => $json_data->email,
+        $sql = insert("utenti", ["username" => $con->escape_string($json_data->username),
+                             "nome" => $con->escape_string($json_data->nome),
+                             "cognome" => $con->escape_string($json_data->cognome),
+                             "email" => $con->escape_string($json_data->email),
                              "ruolo" => $json_data->ruolo]);
         mysqli_query($con, $sql);
         if ($con ->error) {
@@ -72,11 +72,11 @@ class UtenteManager {
     
     function aggiorna($utente, $json_data) {
         global $con, $RUOLO;
-        $sql = update("utenti", ["nome" => $json_data->nome,
-                                 "cognome" => $json_data->cognome,
-                                 "email" => $json_data->email,
+        $sql = update("utenti", ["nome" => $con->escape_string($json_data->nome),
+                                 "cognome" => $con->escape_string($json_data->cognome),
+                                 "email" => $con->escape_string($json_data->email),
                                  "ruolo" => $json_data->ruolo],
-                                ["username" => $utente->username]);
+                                ["username" => $con->escape_string($utente->username)]);
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con ->error);

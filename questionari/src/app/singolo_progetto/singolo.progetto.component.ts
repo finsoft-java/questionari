@@ -43,10 +43,9 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         this.getUsers();
         this.progettoUtenti;
         this.projectSubscription = this.route.params.subscribe(params => {
-            this.id_progetto = +params['id_progetto']; // (+) converts string 'id' to a number
+            this.id_progetto = +params['id_progetto']; 
             this.getProgetto();
             this.getUtentiRuoli();
-            console.log(this);
          },
          error => {
            this.alertService.error(error);
@@ -84,7 +83,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     }
     save(utenti){
         this.progettiService.saveProgettiUtenti(utenti).subscribe(response => {
-            this.getUtentiRuoli();
+            
         },
         error => {
           this.alertService.error(error);

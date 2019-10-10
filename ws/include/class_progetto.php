@@ -147,7 +147,7 @@ class ProgettiManager {
     function crea($json_data) {
         global $con, $logged_user;
         $sql = insert("progetti", ["id_progetto" => null,
-                               "titolo" => $json_data->titolo,
+                               "titolo" => $con->escape_string($json_data->titolo),
                                "stato" => ($json_data->stato ? $json_data->stato : '0'),
                                "gia_compilato" => '0',
                                "utente_creazione" => $logged_user->nome_utente]);
@@ -161,7 +161,9 @@ class ProgettiManager {
     
     function aggiorna($progetto, $json_data) {
         global $con, $STATO_PROGETTO;
-        $sql = "UPDATE progetti SET titolo='$json_data->titolo', stato='$json_data->stato' WHERE id_progetto = '$progetto->id_progetto'";
+        $titolo = $con->escape_string($json_data->titolo);
+        $stato = $con->escape_string($json_data->stato);
+        $sql = "UPDATE progetti SET titolo='$titolo', stato='$stato' WHERE id_progetto = '$progetto->id_progetto'";
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con ->error);
