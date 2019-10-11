@@ -31,7 +31,8 @@ export class TableDomandeRowComponent implements OnInit {
   html_type_array = ["text","number"];
   questionari_loaded = false;
   guardaRisposte = false;
-
+  setDisableText = false;
+  setDisableNumber = false;
   public Editor = ClassicEditor;
   @Input() esisteDomandaEditing:boolean;
   @Output() public changeEditMode =  new EventEmitter<boolean>();
@@ -65,8 +66,18 @@ export class TableDomandeRowComponent implements OnInit {
     this.domanda.editing = true;
     this.domanda_in_modifica = this.simpleClone(this.domanda);
     this.changeEditMode.emit(true);
+    this.setValidInput();
   }
-
+  setValidInput(){
+    console.log(this.domanda_in_modifica.html_type);
+    if(this.domanda_in_modifica.html_type == "0"){
+      this.setDisableText = true; 
+      this.setDisableNumber = false; 
+    }else if(this.domanda_in_modifica.html_type == "1"){
+      this.setDisableText = false; 
+      this.setDisableNumber = true; 
+    }
+  }
   removeItem(i: number) {
     this.domanda_in_modifica.risposte.splice(i, 1);
   }

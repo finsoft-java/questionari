@@ -19,11 +19,11 @@ const appRoutes: Routes = [
     { path: 'progetti', component: ProgettiComponent, canActivate: [Role1Guard] },
     { path: 'progetti/:id_progetto', component: SingoloProgettoComponent, canActivate: [Role1Guard] },
     { path: 'questionari', component: QuestionariComponent, canActivate: [Role1Guard] },
-    { path: 'questionario/:id_questionario', component: SingoloQuestionarioComponent, canActivate: [Role1Guard] },
+    { path: 'questionari/:id_questionario', component: SingoloQuestionarioComponent, canActivate: [Role1Guard] },
     { path: 'utenti', component: UtentiComponent, canActivate: [Role2Guard] },
     { path: 'login', component: LoginComponent },
     { path: 'about', component: AboutComponent },
-    { path: '**', redirectTo: 'questionari_da_compilare' }
+    { path: '**', redirectTo: 'progetti' }/**     era : '**'        **/
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

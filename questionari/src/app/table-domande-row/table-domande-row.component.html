@@ -26,14 +26,14 @@
                 </div>
                 <div class="col">
                     <label>Tipo di input</label>
-                    <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type" title="HTML input type">
+                    <select class="form-control" (change)="setValidInput()" [(ngModel)]="domanda_in_modifica.html_type" title="HTML input type">
                         <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
                             {{ option }}
                         </option>   
                     </select>     
                 </div>             
             </div>
-            <div class="row" style="margin:10px 0px;">
+            <div class="row" style="margin:10px 0px;" *ngIf="setDisableText">
                 <div class="col">
                     <label>Lunghezza massima</label>
                     <input class="form-control" type="number"
@@ -47,7 +47,7 @@
                     title="Espressione regolare. Es. [A-Za-z]{3} (solo per campi testuali)"/>      
                 </div>            
             </div>
-            <div class="row" style="margin:10px 0px;">
+            <div class="row" style="margin:10px 0px;" *ngIf="setDisableNumber">
                 <div class="col">
                     <label>Minimo</label>
                     <input class="form-control" type="number"
