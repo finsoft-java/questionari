@@ -150,7 +150,7 @@ export class TableDomandeRowComponent implements OnInit {
       }, 16);
   }
   save() {
-    //if(this.controlloDatiImmessi()){
+    if(this.controlloDatiImmessi()){
       if(this.domanda_in_modifica.obbligatorieta == ""){
         this.domanda_in_modifica.obbligatorieta = "0";
       }
@@ -185,9 +185,15 @@ export class TableDomandeRowComponent implements OnInit {
         });
       } 
     }   
-  //}
+  }
 
   controlloDatiImmessi(){
+    if(this.domanda_in_modifica.html_min != '' &&  (this.domanda_in_modifica.html_min > this.domanda_in_modifica.html_max)){
+      this.alertService.error("Il Min non può superare il max");
+      this.scrollToTop();
+      return false;
+    }
+    
     /*
     if(!this.domanda_in_modifica.id_questionario){
       this.alertService.error("Seleziona un Questionario");
