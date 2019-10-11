@@ -68,7 +68,16 @@ export class TableUtentiRowComponent implements OnInit {
       this.alertService.error(error);
     });
   }
-
+  scrollToTop(){
+    let scrollToTop = window.setInterval(() => {
+        let pos = window.pageYOffset;
+        if (pos > 0) {
+            window.scrollTo(0, pos - 20); // how far to scroll on each step
+        } else {
+            window.clearInterval(scrollToTop);
+        }
+    }, 16);
+}
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
@@ -87,6 +96,8 @@ export class TableUtentiRowComponent implements OnInit {
           this.utente.editing = false;
           this.utente.creating = false;
           this.itemCreated.emit(this.utente);
+          this.alertService.success("Utente inserito con successo");
+          this.scrollToTop();
         }
       },
       error => {
@@ -98,7 +109,9 @@ export class TableUtentiRowComponent implements OnInit {
           this.utente_in_modifica = null;
           Object.assign(this.utente, resp["value"]); // meglio evitare this.utente = ...
           this.utente.editing = false;
-          this.itemModified.emit(this.utente);
+          this.itemModified.emit(this.utente);          
+          this.alertService.success("Utente modificato con successo");
+          this.scrollToTop();
         }
       });
     }

@@ -26,8 +26,7 @@
                 </div>
                 <div class="col">
                     <label>Tipo di input</label>
-                    <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type"
-                    title="HTML input type">
+                    <select class="form-control" [(ngModel)]="domanda_in_modifica.html_type" title="HTML input type">
                         <option *ngFor="let option of html_type_array; index as i" value="{{i}}">
                             {{ option }}
                         </option>   

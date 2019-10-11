@@ -163,7 +163,9 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                     descrizione: "",
                     domande: []
                 };
-                this.is_nuova_sezione = false;
+                this.is_nuova_sezione = false;                
+                this.alertService.success("Sezione modificata con successo");
+                this.scrollToTop();
           },
           error => {
             this.alertService.error(error);
@@ -192,6 +194,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 this.questionario.sezioni.push(nuova_sezione);
                 this.indice_sezione_corrente = this.questionario.sezioni.length-1;
                 this.sezione_corrente = nuova_sezione;
+                this.alertService.success("Sezione duplicata con successo");
+                this.scrollToTop();
           },
           error => {
             this.alertService.error(error);
@@ -232,6 +236,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     updQuestionario(questionario: Questionario){
         this.questionariService.update(questionario).subscribe(response => {
             let id_progetto = response["value"].id_progetto;
+            this.alertService.success("Questionario modificato con successo");
+            this.scrollToTop();
             //this.router.navigate(['/progetti', id_progetto]);
         },
         error => {

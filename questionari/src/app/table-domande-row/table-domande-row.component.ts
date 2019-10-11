@@ -128,6 +128,16 @@ export class TableDomandeRowComponent implements OnInit {
     this.guardaRisposte = true;
     this.mostraRisposte.emit(this.domanda);
   }
+  scrollToTop(){
+      let scrollToTop = window.setInterval(() => {
+          let pos = window.pageYOffset;
+          if (pos > 0) {
+              window.scrollTo(0, pos - 20); // how far to scroll on each step
+          } else {
+              window.clearInterval(scrollToTop);
+          }
+      }, 16);
+  }
   save() {
     //if(this.controlloDatiImmessi()){
       if(this.domanda_in_modifica.obbligatorieta == ""){
@@ -143,6 +153,8 @@ export class TableDomandeRowComponent implements OnInit {
             this.domanda.editing = false;
             this.domanda.creating = false;
             this.changeEditMode.emit(false);
+            this.alertService.success("Domanda inserita con successo");
+            this.scrollToTop();
           }
         },
         error => {
@@ -156,6 +168,8 @@ export class TableDomandeRowComponent implements OnInit {
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
             this.changeEditMode.emit(false);
+            this.alertService.success("Domanda modificata con successo");
+            this.scrollToTop();
           }
         });
       } 
@@ -194,17 +208,6 @@ export class TableDomandeRowComponent implements OnInit {
     }
     */
     return true;
-  }
-
-  scrollToTop(){
-    let scrollToTop = window.setInterval(() => {
-        let pos = window.pageYOffset;
-        if (pos > 0) {
-            window.scrollTo(0, pos - 20); // how far to scroll on each step
-        } else {
-            window.clearInterval(scrollToTop);
-        }
-    }, 16);
   }
   truncate(value: string, limit =15, completeWords = false, ellipsis = '...') {
 

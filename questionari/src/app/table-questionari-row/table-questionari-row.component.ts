@@ -76,6 +76,7 @@ export class TableQuestionariRowComponent implements OnInit {
     });
   }
 
+  
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
@@ -94,6 +95,8 @@ export class TableQuestionariRowComponent implements OnInit {
             Object.assign(this.questionario, resp["value"]); // meglio evitare this.utente = ...
             this.questionario.editing = false;
             this.questionario.creating = false;
+            this.alertService.success("Questionario inserito nel Progetto con successo");
+            this.scrollToTop();
           }
         },
         error => {
@@ -105,6 +108,8 @@ export class TableQuestionariRowComponent implements OnInit {
             this.questionario_in_modifica = null;
             Object.assign(this.questionario, resp["value"]); // meglio evitare this.utente = ...
             this.questionario.editing = false;
+            this.alertService.success("Questionario modificato con successo");
+            this.scrollToTop();
           }
         });
       } 

@@ -19,7 +19,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     resp_secondo_livello: Array<String> = [];
     utenti_finali: Array<String> = [];
     @Input() stato_modifica: Object;
-
+    success_mex:any ='';
     utentiSelect: number[];
     l1: User []= [];
     l2: User []= [];
@@ -81,18 +81,32 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
           this.alertService.error(error);
         });
     }
+    scrollToTop(){
+        let scrollToTop = window.setInterval(() => {
+            let pos = window.pageYOffset;
+            if (pos > 0) {
+                window.scrollTo(0, pos - 20); // how far to scroll on each step
+            } else {
+                window.clearInterval(scrollToTop);
+            }
+        }, 16);
+    }
     save(utenti){
         this.progettiService.saveProgettiUtenti(utenti).subscribe(response => {
             
+            this.success_mex = "Utenti Progetto modificati con successo";
         },
         error => {
+            this.success_mex = '';
           this.alertService.error(error);
         });
     }
     updProgetto(){        
         this.progettiService.update(this.progetto).subscribe(response => {
                 let id_progetto = response["value"].id_progetto;
-                this.router.navigate(['/progetti', id_progetto]);
+                //this.router.navigate(['/progetti', id_progetto]);
+                this.alertService.success("Progetto modificato con successo");
+                this.scrollToTop();
             },
             error => {
                 this.alertService.error(error);
