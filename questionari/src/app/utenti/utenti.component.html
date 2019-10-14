@@ -1,7 +1,7 @@
 ﻿<h3>Utenti:</h3>
-        <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="newUser()"><i class="fa fa-plus-square"></i> Nuovo utente</button>
-        <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="refresh()"><i class="fa fa-sync"></i> Refresh</button>
-        <button class="btn" style="margin-right:5px;margin-top:10px;" (click)="sync()"><i class="fa fa-retweet"></i> Sincronizza LDAP</button>
+        <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="newUser()"><i class="fa fa-plus-square"></i> Nuovo utente</button>
+        <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refresh()"><i class="fa fa-sync"></i> Refresh</button>
+        <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="sync()"><i class="fa fa-retweet"></i> Sincronizza LDAP</button>
         <search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
 <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
     <thead>
