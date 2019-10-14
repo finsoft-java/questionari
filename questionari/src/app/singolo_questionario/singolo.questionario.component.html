@@ -48,8 +48,7 @@
             <div class="row" style="margin-bottom:30px;">
                 <div class="col">
                     <label for="stato_progetto">Descrizione</label>                
-                    <!--<textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea>-->
-                    <ckeditor [config]="{ toolbar: [ 'underline','strikethrough' ] }" [editor]="Editor" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}" data="{{sezione_corrente.descrizione}}"></ckeditor>
+                    <textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea>
                 </div>
             </div>
             <div class="row"></div>

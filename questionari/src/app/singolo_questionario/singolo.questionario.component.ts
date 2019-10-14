@@ -3,18 +3,12 @@ import { Subscription, Observable } from 'rxjs';
 import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestionarioCompilato } from '@/_models';
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
 import { ActivatedRoute } from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
-import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
-import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
-import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
-import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
-import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
-import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 
 @Component({templateUrl: 'singolo.questionario.component.html'})
 export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     
+    @Input() public guardaRisposte: boolean;
+    @Output() public itemRemoved = new EventEmitter<RispostaAmmessa[]>();
     currentUserSubscription: Subscription;
     questSubscription: Subscription;
     currentUser: User;
@@ -28,14 +22,10 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     is_nuova_sezione: boolean;
     nuova_domanda: Domanda;
     domandaCorrente: Domanda;
-    @Output() public itemRemoved = new EventEmitter<RispostaAmmessa[]>();
     htmlContent = '';
     editMode:boolean;
-    @Input() guardaRisposte:boolean;
     esiste_prec = false;
     esiste_succ = false;
-
-    public Editor = ClassicEditor;
     
     constructor(
         private authenticationService: AuthenticationService,
@@ -286,23 +276,4 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.esiste_prec = (this.questionario != null && this.indice_sezione_corrente > 0);
         this.esiste_succ = (this.questionario != null && this.indice_sezione_corrente < this.questionario.sezioni.length-1);
     }
-
-    
-  onChange = (_) => {};
-  onTouched = () => {};
-
-  // Form model content changed.
-  writeValue(content: any): void {
-    this.model = content;
-  }
-
-  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
-  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-  // End ControlValueAccesor methods.
-
-  model: any;
-
-  config: Object = {
-    charCounterCount: false
-  }
 }
