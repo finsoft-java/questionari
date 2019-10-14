@@ -189,7 +189,7 @@ export class TableDomandeRowComponent implements OnInit {
 
   controlloDatiImmessi(){
     if(this.domanda_in_modifica.html_min != '' &&  (this.domanda_in_modifica.html_min > this.domanda_in_modifica.html_max)){
-      this.alertService.error("Il Min non può superare il max");
+      this.alertService.error("Il minimo non può superare il massimo");
       this.scrollToTop();
       return false;
     }

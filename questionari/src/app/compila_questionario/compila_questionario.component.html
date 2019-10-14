@@ -39,7 +39,7 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
         </table>
 
 <div>
-        <button class="btn" (click)="sezPrecedente()" [disabled]="!esiste_prec">Sez. precedente</button>
+        <button class="btn btn-dark" (click)="sezPrecedente()" [disabled]="!esiste_prec">Sez. precedente</button>
         <button class="btn btn-success" (click)="salvaSezione()"
                 [disabled]="!is_sezione_compilata"
                 [title]="(this.is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Salva sezione</button>
@@ -49,7 +49,7 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
                 (click)="convalida()" 
                 [title]="questionarioCompilato.is_compilato != '1' ? 'Occorre compilare tutte le sezioni, per tutti gli utenti' : ''">
                 Convalida il questionario</button>
-        <button class="btn" (click)="sezSuccessiva()"
+        <button class="btn btn-dark" (click)="sezSuccessiva()"
                 [disabled]="!is_sezione_compilata"
                 [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'" [disabled]="!esiste_succ">Sez. successiva</button>
 </div>
