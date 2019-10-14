@@ -26,7 +26,6 @@ import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import {A11yModule} from '@angular/cdk/a11y';
 import {BidiModule} from '@angular/cdk/bidi';
@@ -76,7 +75,6 @@ import {
         HttpClientModule,
         FormsModule,
         routing,
-        CKEditorModule,
         A11yModule,
         BidiModule,
         ObserversModule,

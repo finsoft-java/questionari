@@ -10,8 +10,7 @@
                 <div class="col">
                     <label>Descrizione</label>
                     
-                     <!--<textarea [(ngModel)]="domanda_in_modifica.descrizione">{{domanda_in_modifica.descrizione}}</textarea>-->
-                     <ckeditor [editor]="Editor" [(ngModel)]="domanda_in_modifica.descrizione" [ngModelOptions]="{standalone: true}" data="{{domanda_in_modifica.descrizione}}"></ckeditor>
+                     <textarea [(ngModel)]="domanda_in_modifica.descrizione">{{domanda_in_modifica.descrizione}}</textarea>
                 </div>
             </div>
             <div class="row" style="margin:10px 0px;">

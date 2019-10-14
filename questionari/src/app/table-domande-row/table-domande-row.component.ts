@@ -3,7 +3,6 @@ import { User, UserRole, Questionario, ProgettoQuestionari, Progetto, Domanda, S
 import { AuthenticationService, UserService, AlertService, ProgettiService, QuestionariService } from '@/_services';
 import { Subscription } from 'rxjs';
 import { DomandeService } from '@/_services/domande.service';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: '[table-domande-row]',
@@ -15,12 +14,11 @@ export class TableDomandeRowComponent implements OnInit {
   @Input() public questionario: Questionario; 
   @Input() public domanda: Domanda;
   @Input() public indexDomanda: number;
+  @Input() public esisteDomandaEditing: boolean;
+  @Output() public mostraRisposte = new EventEmitter<Domanda>();
+  @Output() public itemRemoved = new EventEmitter<number>();
+  @Output() public changeEditMode =  new EventEmitter<boolean>();
 
-  @Output()
-  public mostraRisposte = new EventEmitter<Domanda>();
-
-  @Output() 
-  public itemRemoved = new EventEmitter<number>();
   currentUser: User;
   currentUserSubscription: Subscription;
   domanda_in_modifica: Domanda;
@@ -33,10 +31,7 @@ export class TableDomandeRowComponent implements OnInit {
   guardaRisposte = false;
   setDisableText = false;
   setDisableNumber = false;
-  public Editor = ClassicEditor;
-  @Input() esisteDomandaEditing:boolean;
-  @Output() public changeEditMode =  new EventEmitter<boolean>();
-
+  
   constructor(private authenticationService: AuthenticationService,
               private progettiService: ProgettiService,
               private domandeService: DomandeService,
@@ -264,24 +259,4 @@ getUsers(): void {
     this.mostraRisposte.emit(this.domanda);
   }
 
-
-
-
-  onChange = (_) => {};
-  onTouched = () => {};
-
-  // Form model content changed.
-  writeValue(content: any): void {
-    this.model = content;
-  }
-
-  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
-  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-  // End ControlValueAccesor methods.
-
-  model: any;
-
-  config: Object = {
-    charCounterCount: false
-  }
 }
