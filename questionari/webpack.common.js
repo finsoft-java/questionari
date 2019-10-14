@@ -10,8 +10,16 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.(html|css)$/,
+                /* raw loader: file content is loaded as string in js */
+                test: /\.(html?|svg)$/,
                 loader: 'raw-loader'
+            },
+            {
+                /* Angular wants css loaded as strings 
+                we need css-loader to parse @import 
+                */
+                test: /\.css$/i,
+                use: ['to-string-loader', 'css-loader'],
             },
         ]
     },

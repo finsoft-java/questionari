@@ -37,6 +37,8 @@ import {ScrollDispatchModule} from '@angular/cdk/scrolling';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { QuillModule } from 'ngx-quill'
+
 import {
     MatAutocompleteModule,
     MatButtonModule,
@@ -85,6 +87,7 @@ import {
         CdkStepperModule,
         CdkTableModule,
         BrowserAnimationsModule,
+        QuillModule.forRoot(),  /* il .forroot() evita l'errore: No provider for InjectionToken config */
         
         // Material
         MatAutocompleteModule,

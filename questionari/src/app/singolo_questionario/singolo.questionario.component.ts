@@ -4,7 +4,9 @@ import { User, Questionario, Sezione, Domanda, RispostaAmmessa, RispostaQuestion
 import { AuthenticationService, QuestionariService, AlertService } from '@/_services';
 import { ActivatedRoute } from '@angular/router';
 
-@Component({templateUrl: 'singolo.questionario.component.html'})
+@Component({
+    templateUrl: 'singolo.questionario.component.html',
+    styleUrls: ['./singolo_questionario.css']})
 export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     
     @Input() public guardaRisposte: boolean;
