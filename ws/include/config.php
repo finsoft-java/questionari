@@ -14,11 +14,11 @@ define('DB_NAME', 'questionari');
 
 define('JWT_SECRET_KEY', 'my very very secret key');
 
-define('AD_SERVER', 'ldap://domaincontroller.mydomain.com');
-define('AD_DOMAIN', 'mydomain');
-define('AD_BASE_DN', "dc=MYDOMAIN,dc=COM");
+define('AD_SERVER', 'ldap://osai.loc');
+define('AD_DOMAIN', 'OSAI.LOC');
+define('AD_BASE_DN', "dc=OSAI,dc=LOC");
 define('AD_FILTER', '(&(objectCategory=person)(samaccountname=*))');
-define('AD_USERNAME', 'USER@DOMAIN.COM');
-define('AD_PASSWORD', 'password');
+define('AD_USERNAME', 'surveyosai@OSAI.LOC');
+define('AD_PASSWORD', 's0fu3Y2o19!');
 
 ?>
