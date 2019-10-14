@@ -4422,3 +4422,13 @@ readers do not read off random characters that represent icons */
   min-width: calc((100% / 3) - 10px);
   margin-right: 5px;
 }
+
+.ql-toolbar{
+  background-color: #d7d7d7 !important;
+}
+.ql-container{
+  background-color: #fff !important;
+}
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 5px !important;
+}

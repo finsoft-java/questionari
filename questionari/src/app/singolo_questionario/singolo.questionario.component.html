@@ -49,15 +49,17 @@
                 <div class="col">
                     <label for="stato_progetto">Descrizione</label>                
                     <!-- <textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea> -->
-
-                    <quill-editor  [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone:true}">
-                    </quill-editor>
+                    <div style="float: left;width:100%">
+                        <quill-editor [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone:true}"></quill-editor>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Modifica Sezione</button>
-                <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>      
-                <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
+                <div class=" col"> 
+                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Modifica Sezione</button>
+                    <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>      
+                    <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
+                </div>
             </div>
         </form>
 

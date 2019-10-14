@@ -9,8 +9,10 @@
             <div class="row" style="margin:10px 0px;">
                 <div class="col">
                     <label>Descrizione</label>
-                    
-                     <textarea [(ngModel)]="domanda_in_modifica.descrizione">{{domanda_in_modifica.descrizione}}</textarea>
+                    <div style="float:left;width:100%;">
+                        <quill-editor [(ngModel)]="domanda_in_modifica.descrizione" [ngModelOptions]="{standalone:true}"></quill-editor>
+                    </div>
+                    <!-- <textarea [(ngModel)]="domanda_in_modifica.descrizione">{{domanda_in_modifica.descrizione}}</textarea>-->
                 </div>
             </div>
             <div class="row" style="margin:10px 0px;">
