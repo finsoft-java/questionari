@@ -142,26 +142,29 @@ class UtenteManager {
         $attributes[] = 'samaccountname';
         $attributes[] = 'sn';
         $result = ldap_search($ldap_connection, $ldap_base_dn, $search_filter, $attributes);
+        
         if (FALSE !== $result){
             $entries = ldap_get_entries($ldap_connection, $result);
+            
             for ($x=0; $x < $entries['count']; $x++){
-                if (array_has_key($utenti_map, $entries['samaccountname'])) {
+                $entry = $entries[$x];
+                if (array_key_exists ($entry['samaccountname'][0], $utenti_su_db_map)) {
                     // UPDATE
-                    $u = $utenti_map[$entries['samaccountname']];
-                    $u->nome = $entries['givenname'];
-                    $u->cognome = $entries['givenname']; //?!? FIXME
-                    $u->email = $entries['mail'];
-                    $this->aggiorna($u, $u);
+                    $u = $utenti_map[$entry['samaccountname'][0]];
+                    $u->nome = $entry['givenname'][0];
+                    $u->cognome = $entry['sn'][0]; 
+                    $u->email = $entry['mail'][0];
+                    //$this->aggiorna($u, $u);
                     ++$utenti_aggiornati;
                 } else {
                     // INSERT
                     $u = new Utente();
-                    $u->username = $entries['samaccountname'];
-                    $u->nome = $entries['givenname'];
-                    $u->cognome = $entries['givenname']; //?!? FIXME
-                    $u->email = $entries['mail'];
+                    $u->username = $entry['samaccountname'][0];
+                    $u->nome = $entry['givenname'][0];
+                    $u->cognome = $entry['sn'][0]; 
+                    $u->email = $entry['mail'][0];
                     $u->ruolo = '0';
-                    $this->crea($u);
+                    //$this->crea($u);
                     ++$utenti_inseriti;
                 }
             }

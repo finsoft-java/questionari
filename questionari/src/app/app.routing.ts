@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     { path: 'utenti', component: UtentiComponent, canActivate: [Role2Guard] },
     { path: 'login', component: LoginComponent },
     { path: 'about', component: AboutComponent },
-    { path: '**', redirectTo: 'progetti' }/**     era : '**'        **/
+    { path: '**', redirectTo: 'questionari_da_compilare' }/**     era : '**'        **/
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);
