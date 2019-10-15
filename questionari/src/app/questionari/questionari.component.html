@@ -32,7 +32,7 @@
                 <button class="btn btn-danger btn3"
                     [disabled]="q.gia_compilato=='1'"
                     [title]="q.gia_compilato=='1' ? 'Impossibile eliminare perchè già compilato' : 'Elimina'"
-                    (click)="elimina(q.id_questionario)"><i class="fa fa-trash-alt"></i></button>
+                    (click)="elimina(q.id_questionario, q.id_progetto)"><i class="fa fa-trash-alt"></i></button>
             </td>
         </tr>
     </tbody>

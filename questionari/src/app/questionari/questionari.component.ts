@@ -69,19 +69,35 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 this.loading = false;
             });
     }
-    elimina(id_questionario: number): void {
-        if(confirm("Stai per eliminare l'intero questionario! Procedere?")) {
-            this.questionariService.delete(id_questionario)
-                .subscribe(response => {
-                    let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
-                    let oldQuest = this.questionari[index];
-                    this.questionari.splice(index, 1);
-                    this.calcola_questionari_visibili();
-                    this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
-                },
-                error => {
-                    this.alertService.error(error);
-                });
+    elimina(id_questionario: number, id_progetto: any): void {
+        if(id_progetto == null){
+            if(confirm("Stai per eliminare l'intero questionario! Procedere?")) {
+                this.questionariService.delete(id_questionario)
+                    .subscribe(response => {
+                        let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
+                        let oldQuest = this.questionari[index];
+                        this.questionari.splice(index, 1);
+                        this.calcola_questionari_visibili();
+                        this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
+                    },
+                    error => {
+                        this.alertService.error(error);
+                    });
+            }
+        }else{
+            if(confirm("Il questionario ha dei progetti associati! Confermare l 'eliminazione?")) {
+                this.questionariService.delete(id_questionario)
+                    .subscribe(response => {
+                        let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
+                        let oldQuest = this.questionari[index];
+                        this.questionari.splice(index, 1);
+                        this.calcola_questionari_visibili();
+                        this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
+                    },
+                    error => {
+                        this.alertService.error(error);
+                    });
+            }
         }
     }
     duplica(id_questionario: number) {
