@@ -45,7 +45,7 @@ function check_and_load_user($username, $pwd) {
         $user->email = 'alessandrobarsanti6@gmail.com';
 
         return $user;
-    }elseif ($username == 'luca.vercelli' and $pwd == 'luca.vercelli') {
+    } elseif ($username == 'luca.vercelli' and $pwd == 'luca.vercelli') {
         $user = new Utente();
         $user->nome_utente = $username;
         $user->nome = 'Luca';
@@ -53,7 +53,7 @@ function check_and_load_user($username, $pwd) {
         $user->email = 'l.vercelli@finsoft.it';
 
         return $user;
-    }else if ($username == 'finsoft' and $pwd == 'finsoft') {
+    } elseif ($username == 'finsoft' and $pwd == 'finsoft') {
         $user = new Utente();
         $user->nome_utente = $username;
         $user->nome = 'Mario';
@@ -72,12 +72,11 @@ function check_and_load_user($username, $pwd) {
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3) or die('Unable to set LDAP protocol version');
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // We need this for doing an LDAP search.
 
-        //$ldaprdn = 'OSAI.LOC\surveyosai@OSAI.LOC';
-        $ldaprdn = "$username@OSAI.LOC";
+        $ldaprdn = $username . "@" . AD_DOMAIN;
         $bind = @ldap_bind($ldap, $ldaprdn, $pwd);
         if ($bind) {
-            $filter="(sAMAccountName=$username)";
-            $result = ldap_search($ldap,"dc=OSAI,dc=LOC",$filter);
+            $filter="(SamAccountName=$username)";
+            $result = ldap_search($ldap, AD_BASE_DN, $filter);
             ldap_sort($ldap,$result,"sn");
             $info = ldap_get_entries($ldap, $result);
 
