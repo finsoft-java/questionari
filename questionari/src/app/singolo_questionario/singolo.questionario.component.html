@@ -56,17 +56,17 @@
             </div>
             <div class="row">
                 <div class=" col"> 
-                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
-                    <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>      
-                    <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
+                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
+                    <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>      
+                    <button  class="btn btn-dark" style="margin-right:5px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
                 </div>
             </div>
         </form>
 
-        <h5>Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
+        <h5 style="float:left;width:100%;margin-bottom: 25px;">Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5>
         <button *ngIf="!editMode" (click)="creaDomanda()" class="btn btn-success" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Domanda</button>       
                
-        <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 15px;" >
+        <table class="table table-striped" style="background-color: #f8f9fa;margin-bottom:30px;float:left;width:100%;padding-bottom: 15px;" >
             <thead *ngIf="!editMode">
                 <th alt="Descrizione" title="Descrizione">Descrizione</th>
                 <th alt="Obbligatoria" title="Obbligatoria">Obblig.</th>

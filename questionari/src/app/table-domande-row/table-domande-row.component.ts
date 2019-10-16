@@ -202,11 +202,17 @@ export class TableDomandeRowComponent implements OnInit {
   }
 
   controlloDatiImmessi(){
-    if(this.domanda_in_modifica.html_min != '' &&  (this.domanda_in_modifica.html_min > this.domanda_in_modifica.html_max)){
-      this.alertService.error("Il minimo non può superare il massimo");
-      //this.scrollToTop();
-      return false;
+    console.log(this.domanda_in_modifica);
+    if(this.domanda_in_modifica.html_max == null && this.domanda_in_modifica.html_min != ''){
+      return true;
+    }else{
+      if(this.domanda_in_modifica.html_min != '' &&  (this.domanda_in_modifica.html_min > this.domanda_in_modifica.html_max)){
+        this.alertService.error("Il minimo non può superare il massimo");
+        //this.scrollToTop();
+        return false;
+      }
     }
+    
     return true;
   }
   truncate(value: string, limit =15, completeWords = false, ellipsis = '...') {
