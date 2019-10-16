@@ -88,53 +88,19 @@ export class TableRisposteRowComponent implements OnInit {
    */
  
   save() {
-    //if(this.controlloDatiImmessi()){
 
         this.domandeService.updateDomandaConRisposte(this.domanda).subscribe(resp => {
           if (this.authenticationService.currentUserValue) {
             this.risposta_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.rispostaCorrente.editing = false;
-            this.alertService.success("Risposta modificata con successo");
-            this.scrollToTop();
           }
         });
 
     }   
-  //}
 
   controlloDatiImmessi(){
-    /*
-    if(!this.domanda_in_modifica.id_questionario){
-      this.alertService.error("Seleziona un Questionario");
-      this.scrollToTop();
-      return false;
-    }
-    if(!this.domanda_in_modifica.tipo_questionario){
-      this.alertService.error("Seleziona un Tipo Questionario");
-      this.scrollToTop();
-      return false;
-    }
-    if(!this.domanda_in_modifica.gruppo_compilanti){
-      this.alertService.error("Seleziona un Gruppo Compilanti");
-      this.scrollToTop();
-      return false;
-    }
-    if (this.domanda_in_modifica.tipo_questionario == '0') {
-      // Questionario di valutazione, c'è un campo obbligatorio in più
-      if(!this.domanda_in_modifica.gruppo_valutati){
-        this.alertService.error("Seleziona un Gruppo Valutati");
-        this.scrollToTop();
-        return false;
-      }
-    } else {
-      // Questionario generico, ci sono 2 campi disabilitati
-      this.domanda_in_modifica.gruppo_valutati = null;
-      this.domanda_in_modifica.autovalutazione = '0';
-      this.domanda_in_modifica.autovalutazione_bool = false;
-    }
-    */
-    return true;
+    
   }
 
   scrollToTop(){
