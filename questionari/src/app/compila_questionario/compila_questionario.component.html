@@ -22,12 +22,13 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 
 <div *ngIf="sezione_corrente != null">
 
-        <h2>SEZIONE N. {{sezione_corrente.progressivo_sezione}} '{{sezione_corrente.titolo}}' </h2>
-        {{sezione_corrente.descrizione}}
+        <h5>SEZIONE N. {{sezione_corrente.progressivo_sezione}} '<span [innerHTML]="sezione_corrente.titolo"></span>' </h5>
+        <div [innerHTML]="sezione_corrente.descrizione | safeHtml"></div>
 
         <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
                 <thead>
-                        <th style="width:50%">Domanda</th>
+                        <th style="width:15%">N° Domanda</th>
+                        <th style="width:35%">Domanda</th>
                         <th>Risposta</th>
                         <th>Note</th>
                 </thead>

@@ -29,18 +29,27 @@ class QuestionarioCompilato {
      * @return lista di oggetti Utente
      */
     function get_utenti_valutati() {
+        
         if (!isset($this->utenti_valutati)) {
             global $con;
             $arr = [];
+
+            $sql = "SELECT DISTINCT u.username, u.nome, u.cognome
+                    FROM risposte_quest_compilati q
+                    JOIN utenti u on q.nome_utente_valutato = u.username
+                    WHERE progressivo_quest_comp='$this->progressivo_quest_comp'
+                    ORDER BY username";
+            /*
             $sql = "SELECT DISTINCT nome_utente, nome, cognome FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
                 " `id_questionario`='$this->id_questionario' AND `funzione`=`gruppo_valutati` ".
                 " ORDER BY nome_utente";
+                */
             if($result = mysqli_query($con, $sql)) {
                 $cr = 0;
                 while($row = mysqli_fetch_assoc($result))
                 {
                     $obj = new Utente();
-                    $obj->username      = $row['nome_utente'];
+                    $obj->username      = $row['username'];
                     $obj->nome          = $row['nome'];
                     $obj->cognome       = $row['cognome'];
                     $arr[$cr++] = $obj;
@@ -220,7 +229,7 @@ class VistaQuestionariCompilabili {
      * 
      * @return lista di stringhe (soltanto il nome utente)
      */
-    function get_utenti_valutati() {
+    function get_nomi_utenti_valutati() {
         global $progettiManager;
         if (!$this->utenti_valutati){
             global $con;
@@ -507,7 +516,7 @@ class QuestionariCompilatiManager {
             print_error(500, $con ->error);
         }
         $progressivo_quest_comp = mysqli_insert_id($con);
-        $utenti_valutati = $questionarioCompilabile->get_utenti_valutati();
+        $utenti_valutati = $questionarioCompilabile->get_nomi_utenti_valutati();
         foreach($utenti_valutati as $utente_valutato) {
             $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
                     "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato' ".

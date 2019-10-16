@@ -1,6 +1,8 @@
+<td>       
+        <span>{{domanda.progressivo_domanda}}</span>
+</td>
 <td>
-        {{domanda.progressivo_domanda}}.
-        {{domanda.descrizione}}
+        <span [innerHTML]="domanda.descrizione | safeHtml"></span>
 </td>
 <td>
         <div *ngIf="domanda.risposte.length > 0"> <!-- DOMANDA CHIUSA -->

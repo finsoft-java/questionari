@@ -70,8 +70,10 @@ import {
     MatToolbarModule,
     MatTooltipModule,
   } from '@angular/material';
+import { SanitizerPipe } from './_services/sanitizer.pipe';
 @NgModule({
     imports: [
+
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -140,7 +142,8 @@ import {
         FormSezioniComponent,
         LoginComponent,
         SearchComponent, 
-        AboutComponent
+        AboutComponent,
+        SanitizerPipe
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
