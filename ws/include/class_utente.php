@@ -154,7 +154,7 @@ class UtenteManager {
                     $u->nome = $entry['givenname'][0];
                     $u->cognome = $entry['sn'][0]; 
                     $u->email = $entry['mail'][0];
-                    //$this->aggiorna($u, $u);
+                    $this->aggiorna($u, $u);
                     ++$utenti_aggiornati;
                 } else {
                     // INSERT
@@ -164,7 +164,7 @@ class UtenteManager {
                     $u->cognome = $entry['sn'][0]; 
                     $u->email = $entry['mail'][0];
                     $u->ruolo = '0';
-                    //$this->crea($u);
+                    $this->crea($u);
                     ++$utenti_inseriti;
                 }
             }

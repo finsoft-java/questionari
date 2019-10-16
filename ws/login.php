@@ -89,9 +89,6 @@ function check_and_load_user($username, $pwd) {
             
             @ldap_close($ldap);
             return $user;
-        } else {
-            $msg = "Invalid email address / password";
-            echo $msg;
         }
 }
 
