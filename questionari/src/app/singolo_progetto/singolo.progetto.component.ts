@@ -106,7 +106,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
                 let id_progetto = response["value"].id_progetto;
                 //this.router.navigate(['/progetti', id_progetto]);
                 this.alertService.success("Progetto modificato con successo");
-                this.scrollToTop();
+                //this.scrollToTop();
             },
             error => {
                 this.alertService.error(error);

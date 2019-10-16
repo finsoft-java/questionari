@@ -35,7 +35,6 @@ class QuestionarioCompilato {
             $sql = "SELECT DISTINCT nome_utente, nome, cognome FROM `v_progetti_questionari_utenti` WHERE `id_progetto`='$this->id_progetto' AND ".
                 " `id_questionario`='$this->id_questionario' AND `funzione`=`gruppo_valutati` ".
                 " ORDER BY nome_utente";
-            
             if($result = mysqli_query($con, $sql)) {
                 $cr = 0;
                 while($row = mysqli_fetch_assoc($result))
@@ -511,7 +510,7 @@ class QuestionariCompilatiManager {
         $utenti_valutati = $questionarioCompilabile->get_utenti_valutati();
         foreach($utenti_valutati as $utente_valutato) {
             $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
-                    "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato->username' ".
+                    "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato' ".
                     "FROM v_questionari_domande " .
                     "WHERE id_questionario = '$questionarioCompilabile->id_questionario' ";
             mysqli_query($con, $sql);

@@ -41,7 +41,7 @@
             <div class="row" style="margin-bottom:30px;">
                 <div class=" col"> 
                     <label for="titolo_progetto">Titolo Sezione</label>
-                    <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Questionario" [(ngModel)]="sezione_corrente.titolo" [ngModelOptions]="{standalone: true}">
+                    <input type="text" class="form-control" id="titolo_progetto" placeholder="Titolo Sezione" [(ngModel)]="sezione_corrente.titolo" [ngModelOptions]="{standalone: true}">
                 </div>
                 
             </div>
@@ -56,7 +56,7 @@
             </div>
             <div class="row">
                 <div class=" col"> 
-                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Modifica Sezione</button>
+                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
                     <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>      
                     <button  class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
                 </div>

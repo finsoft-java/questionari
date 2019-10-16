@@ -96,7 +96,7 @@ export class TableQuestionariRowComponent implements OnInit {
             this.questionario.editing = false;
             this.questionario.creating = false;
             this.alertService.success("Questionario inserito nel Progetto con successo");
-            this.scrollToTop();
+            //this.scrollToTop();
           }
         },
         error => {
@@ -109,7 +109,7 @@ export class TableQuestionariRowComponent implements OnInit {
             Object.assign(this.questionario, resp["value"]); // meglio evitare this.utente = ...
             this.questionario.editing = false;
             this.alertService.success("Questionario modificato con successo");
-            this.scrollToTop();
+            //this.scrollToTop();
           }
         });
       } 
@@ -119,24 +119,24 @@ export class TableQuestionariRowComponent implements OnInit {
   controlloDatiImmessi(){
     if(!this.questionario_in_modifica.id_questionario){
       this.alertService.error("Seleziona un Questionario");
-      this.scrollToTop();
+      //this.scrollToTop();
       return false;
     }
     if(!this.questionario_in_modifica.tipo_questionario){
       this.alertService.error("Seleziona un Tipo Questionario");
-      this.scrollToTop();
+      //this.scrollToTop();
       return false;
     }
     if(!this.questionario_in_modifica.gruppo_compilanti){
       this.alertService.error("Seleziona un Gruppo Compilanti");
-      this.scrollToTop();
+      //this.scrollToTop();
       return false;
     }
     if (this.questionario_in_modifica.tipo_questionario == '0') {
       // Questionario di valutazione, c'è un campo obbligatorio in più
       if(!this.questionario_in_modifica.gruppo_valutati){
         this.alertService.error("Seleziona un Gruppo Valutati");
-        this.scrollToTop();
+        //this.scrollToTop();
         return false;
       }
     } else {

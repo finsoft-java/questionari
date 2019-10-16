@@ -97,7 +97,7 @@ export class TableUtentiRowComponent implements OnInit {
           this.utente.creating = false;
           this.itemCreated.emit(this.utente);
           this.alertService.success("Utente inserito con successo");
-          this.scrollToTop();
+          //this.scrollToTop();
         }
       },
       error => {
@@ -111,7 +111,7 @@ export class TableUtentiRowComponent implements OnInit {
           this.utente.editing = false;
           this.itemModified.emit(this.utente);          
           this.alertService.success("Utente modificato con successo");
-          this.scrollToTop();
+          //this.scrollToTop();
         }
       });
     }

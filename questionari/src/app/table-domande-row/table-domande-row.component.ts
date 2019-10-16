@@ -179,12 +179,12 @@ export class TableDomandeRowComponent implements OnInit {
             this.domanda.creating = false;
             this.changeEditMode.emit(false);
             this.alertService.success("Domanda inserita con successo");
-            this.scrollToTop();
+            //this.scrollToTop();
           }
         },
         error => {
           this.alertService.error(error);
-          this.scrollToTop();
+          //this.scrollToTop();
         });
       } else {
         this.domandeService.updateDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
@@ -193,8 +193,8 @@ export class TableDomandeRowComponent implements OnInit {
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.domanda.editing = false;
             this.changeEditMode.emit(false);
-            this.alertService.success("Domanda modificata con successo");
-            this.scrollToTop();
+            this.alertService.success("Domanda salvata con successo");
+            //this.scrollToTop();
           }
         });
       } 
@@ -204,40 +204,9 @@ export class TableDomandeRowComponent implements OnInit {
   controlloDatiImmessi(){
     if(this.domanda_in_modifica.html_min != '' &&  (this.domanda_in_modifica.html_min > this.domanda_in_modifica.html_max)){
       this.alertService.error("Il minimo non può superare il massimo");
-      this.scrollToTop();
+      //this.scrollToTop();
       return false;
     }
-    
-    /*
-    if(!this.domanda_in_modifica.id_questionario){
-      this.alertService.error("Seleziona un Questionario");
-      this.scrollToTop();
-      return false;
-    }
-    if(!this.domanda_in_modifica.tipo_questionario){
-      this.alertService.error("Seleziona un Tipo Questionario");
-      this.scrollToTop();
-      return false;
-    }
-    if(!this.domanda_in_modifica.gruppo_compilanti){
-      this.alertService.error("Seleziona un Gruppo Compilanti");
-      this.scrollToTop();
-      return false;
-    }
-    if (this.domanda_in_modifica.tipo_questionario == '0') {
-      // Questionario di valutazione, c'è un campo obbligatorio in più
-      if(!this.domanda_in_modifica.gruppo_valutati){
-        this.alertService.error("Seleziona un Gruppo Valutati");
-        this.scrollToTop();
-        return false;
-      }
-    } else {
-      // Questionario generico, ci sono 2 campi disabilitati
-      this.domanda_in_modifica.gruppo_valutati = null;
-      this.domanda_in_modifica.autovalutazione = '0';
-      this.domanda_in_modifica.autovalutazione_bool = false;
-    }
-    */
     return true;
   }
   truncate(value: string, limit =15, completeWords = false, ellipsis = '...') {
