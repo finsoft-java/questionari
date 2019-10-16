@@ -52,7 +52,7 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
                 Convalida il questionario</button>
         <button class="btn btn-dark" (click)="sezSuccessiva()"
                 [disabled]="!is_sezione_compilata"
-                [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'" [disabled]="!esiste_succ">Sez. successiva</button>
+                [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'" [disabled]="!esiste_succ">{{title_sez_succ}}</button>
 </div>
 
 </div>

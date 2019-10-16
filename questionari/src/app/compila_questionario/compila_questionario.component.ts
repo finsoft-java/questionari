@@ -21,7 +21,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     loading = true;
     esiste_prec = false;
     esiste_succ = false;
-
+    title_sez_succ = "Sez. successiva";
     constructor(
         private authenticationService: AuthenticationService,
         private questCompService: QuestionariCompilatiService,
@@ -159,6 +159,11 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         }
         if (this.indice_sezione_corrente < this.questionarioCompilato.sezioni.length) {
             ++this.indice_sezione_corrente;
+            if(this.indice_sezione_corrente < this.questionarioCompilato.sezioni.length){
+                this.title_sez_succ = "Vai a utente successivo";
+            }else{
+                this.title_sez_succ = "Sez. successiva";
+            }
         } else {
             //devo cambiare utente
             let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
@@ -168,6 +173,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
     }
     sezPrecedente() {
+        this.title_sez_succ = "Sez. successiva";
         if (this.indice_sezione_corrente == null) {
             return;
         }
