@@ -12,7 +12,6 @@
                     <div style="float:left;width:100%;">
                         <quill-editor [(ngModel)]="domanda_in_modifica.descrizione" [ngModelOptions]="{standalone:true}"></quill-editor>
                     </div>
-                    <!-- <textarea [(ngModel)]="domanda_in_modifica.descrizione">{{domanda_in_modifica.descrizione}}</textarea>-->
                 </div>
             </div>
             <div class="row" style="margin:10px 0px;">
@@ -20,11 +19,39 @@
                     <label>Obbligatorietà</label>
                     <div class="checkbox-container green">
                         <input type="checkbox" [(ngModel)]="domanda_in_modifica.obbligatorieta"
-                        [checked]="domanda.obbligatorieta" id="toggle2" />
-                        <label for="toggle2"
+                        [checked]="domanda.obbligatorieta" id="toggleobblig" />
+                        <label for="toggleobblig"
                         title="Se selezionato, l'utente dovrà compilare obbligatoriamente la domanda per poter proseguire"></label>
                     </div>
                 </div>
+                <div class="col">                    
+                    <label>Rimescola</label>
+                    <div class="checkbox-container green">
+                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
+                        [checked]="domanda.rimescola" id="togglerimescola" />
+                        <label for="togglerimescola" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
+                    </div>
+                </div>
+                         
+            </div>
+            <div class="row" style="margin:10px 0px;">
+                <div class="col">
+                    <label>Coefficiente di Valutazione</label>
+                    <input class="form-control" type="number"
+                    [(ngModel)]="domanda_in_modifica.coeff_valutazione"
+                    title="Quanto è importante la domanda?"
+                    min="1" max="300"/>                       
+                </div>     
+                <div class="col">
+                    <label>Tipo Risposta</label>
+                    <select class="form-control" (change)="setValidRisposte()" [(ngModel)]="tipo_risposta" title="">
+                        <option *ngFor="let option of tipiRisposte; index as i" value="{{i}}">
+                            {{ option }}
+                        </option>   
+                    </select>    
+                </div>                
+            </div>
+            <div class="row" style="margin:10px 0px;" *ngIf="risposta_aperta">
                 <div class="col">
                     <label>Tipo di input</label>
                     <select class="form-control" (change)="setValidInput()" [(ngModel)]="domanda_in_modifica.html_type" title="HTML input type">
@@ -32,9 +59,9 @@
                             {{ option }}
                         </option>   
                     </select>     
-                </div>             
+                </div>               
             </div>
-            <div class="row" style="margin:10px 0px;" *ngIf="setDisableText">
+            <div class="row" style="margin:10px 0px;" *ngIf="setDisableText && risposta_aperta">
                 <div class="col">
                     <label>Lunghezza massima</label>
                     <input class="form-control" type="number"
@@ -48,7 +75,7 @@
                     title="Espressione regolare. Es. [A-Za-z]{3} (solo per campi testuali)"/>      
                 </div>            
             </div>
-            <div class="row" style="margin:10px 0px;" *ngIf="setDisableNumber">
+            <div class="row" style="margin:10px 0px;" *ngIf="setDisableNumber && risposta_aperta">
                 <div class="col">
                     <label>Minimo</label>
                     <input class="form-control" type="number"
@@ -62,23 +89,6 @@
                     title="Massimo (solo per campi numerici)"/>      
                 </div>
             </div>
-            <div class="row" style="margin:10px 0px;">
-                <div class="col">                    
-                    <label>Rimescola</label>
-                    <div class="checkbox-container green">
-                        <input type="checkbox" [(ngModel)]="domanda_in_modifica.rimescola"
-                        [checked]="domanda.rimescola" id="togglerimescola" />
-                        <label for="togglerimescola" title="Se selezionato, le risposte verranno presentate in ordine casuale"></label>
-                    </div>
-                </div>
-                <div class="col">
-                    <label>Coefficiente di Valutazione</label>
-                    <input class="form-control" type="number"
-                    [(ngModel)]="domanda_in_modifica.coeff_valutazione"
-                    title="Quanto è importante la domanda?"
-                    min="1" max="300"/>                       
-                </div>  
-            </div>
             <div class="row" style="margin-top:15px;padding-bottom: 35px;">
                 <div class="col">
                     <button class="btn btn-success btn2" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda" (click)="goToEdit()" [disabled]="questionario.gia_compilato=='1'"><i class="fa fa-edit"></i></button>
@@ -88,11 +98,11 @@
                     <button style="margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Annulla</button>
                 </div>
             </div>
-            <div class="row" style="margin-bottom:30px;padding-top: 30px;border-top:1px solid;" *ngIf="domanda_in_modifica">
+            <div class="row" style="margin-bottom:30px;padding-top: 30px;border-top:1px solid;" *ngIf="domanda_in_modifica && !risposta_aperta">
                 <div class="col" style="padding:0px 30px;">
                     <div style="float:left;width:100%">
                         <h5 style="float:left">Risposte</h5>
-                        <button style="float:right" (click)="creaRisposta()" [disabled]="questionario.gia_compilato=='1'" class="btn btn-success">Crea Nuova Risposta</button>
+                        <button style="float:right" (click)="creaRisposta()" [disabled]="questionario.gia_compilato=='1'|| domanda.progressivo_domanda == null" class="btn btn-success">Crea Nuova Risposta</button>
                     </div>
 
                     <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;float:left;width:100%">

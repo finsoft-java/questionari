@@ -27,10 +27,13 @@ export class TableDomandeRowComponent implements OnInit {
   utenti: User;
   risposta_nuova: RispostaAmmessa;
   html_type_array = ["text","number"];
+  tipiRisposte = ["Risposta Aperta","Risposta Chiusa"];
   questionari_loaded = false;
   guardaRisposte = false;
   setDisableText = false;
+  risposta_aperta = false;
   setDisableNumber = false;
+  tipo_risposta: number;
   
   constructor(private authenticationService: AuthenticationService,
               private progettiService: ProgettiService,
@@ -49,9 +52,27 @@ export class TableDomandeRowComponent implements OnInit {
     this.getQuestionari();    
     this.questionatioSelezionato = this.questionario;    
     this.domanda_in_modifica = this.simpleClone(this.domanda);
+    if(this.domanda_in_modifica.risposte.length > 0){
+      this.risposta_aperta = false;
+      this.tipo_risposta = 1; 
+    }else{
+      this.risposta_aperta = true;
+      this.tipo_risposta = 0; 
+    }
     if (this.domanda.creating) 
       this.goToEdit();
     
+  }
+
+  setValidRisposte(){
+    
+    if(this.tipo_risposta == 0){
+      this.risposta_aperta = true;
+      this.domanda_in_modifica.risposte = [];
+
+    }else{
+      this.risposta_aperta = false;
+    }
   }
 
   /**
@@ -146,9 +167,7 @@ export class TableDomandeRowComponent implements OnInit {
   }
   save() {
     if(this.controlloDatiImmessi()){
-      if(this.domanda_in_modifica.obbligatorieta == ""){
-        this.domanda_in_modifica.obbligatorieta = "0";
-      }
+
     //se il flg creating è settato sarà una insert altrimenti update
       if(this.domanda_in_modifica.creating == true) {
 
