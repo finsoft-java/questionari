@@ -376,7 +376,7 @@ class SezioniManager {
     }
     function aggiornaDomandaERisposte($domanda, $json_data) {
         global $con, $sezioniManager;
-        $sql = update("domande", [ "descrizione" => $this->CleanString($con->escape_string($json_data->descrizione)),
+        $sql = update("domande", [ "descrizione" => $con->escape_string($json_data->descrizione),
                                     "obbligatorieta" => ($json_data->obbligatorieta == true ? '1' : '0'),
                                     "coeff_valutazione" => $json_data->coeff_valutazione,
                                     "html_type" => $json_data->html_type,
