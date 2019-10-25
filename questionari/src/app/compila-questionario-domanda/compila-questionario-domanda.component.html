@@ -9,16 +9,18 @@
                 <select
                         [(ngModel)]="domanda.risposta.progressivo_risposta"
                         [disabled]="!questionario_modificabile"
-                        (change)="calc_flags()">
-
+                        (change)="calc_flags()"
+                        class="form-control"
+                        [ngClass]="{'border_red': isValid === false}">
+                        <option value="" selected></option>
                         <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
                 </select>
-                <span *ngIf="domanda.obbligatorieta == '1'" style="color:red">&nbsp;*</span>
+                <span *ngIf="domanda.obbligatorieta" style="color:red">&nbsp;*</span>
         </div>
         <div *ngIf="domanda.risposte.length == 0"> <!-- DOMANDA APERTA -->
                 <input
                         [(ngModel)]="domanda.risposta.risposta_aperta"
-                        [required]="domanda.obbligatorieta == '1'"
+                        [required]="domanda.obbligatorieta"
                         [disabled]="!questionario_modificabile"
                         [type]="domanda.html_type_dec || 'text'"
                         [pattern]="domanda.html_pattern"
@@ -26,10 +28,13 @@
                         [min]="domanda.html_min"
                         [maxlength]="domanda.html_maxlength"
                         (keyup)="calc_flags()"
+                        [ngClass]="{'border_red': isValid === false}"
+                        class="form-control"
+                        title="{{titleRispostaControlli}}" 
                 />
-                <span *ngIf="domanda.obbligatorieta == '1'" style="color:red">&nbsp;*</span>
+                <span *ngIf="domanda.obbligatorieta" style="color:red">&nbsp;*</span>
         </div>
 </td>
 <td>
-        <textarea [(ngModel)]="domanda.risposta.note" [disabled]="!questionario_modificabile"></textarea>
+        <textarea [(ngModel)]="domanda.risposta.note" class="form-control" [disabled]="!questionario_modificabile"></textarea>
 </td>

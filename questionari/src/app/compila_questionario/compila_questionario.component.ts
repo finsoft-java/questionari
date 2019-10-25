@@ -3,7 +3,7 @@ import { Subscription, Observable } from 'rxjs';
 import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Sezione, RispostaAmmessa, RispostaQuestionarioCompilato, Progetto, Questionario } from '@/_models';
 import { UserService, AuthenticationService, QuestionariCompilatiService, AlertService, WebsocketService, Message } from '@/_services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({templateUrl: 'compila_questionario.component.html'})
 export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
@@ -43,9 +43,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.progressivo_quest_comp = +params['progressivo_quest_comp']; // (+) converts string 'id' to a number
             this.getQuestionarioCompilato();
-         });
-
-         
+         });         
     }
 
     ngOnDestroy() {
@@ -148,29 +146,52 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     'B' => 'week'
     */
     controllaRisposte(domande){
+        let success = true;
         for(let i = 0; i < domande.length; i++){
             let html_type = domande[i].html_type;
+            domande[i].is_valid = true;
+            if(domande[i].obbligatorieta == true && (domande[i].risposta.risposta_aperta == null || domande[i].risposta.risposta_aperta.trim() == "") 
+                                                    && 
+                                                    (domande[i].risposta.progressivo_risposta == null ||
+                                                    domande[i].risposta.progressivo_risposta.trim() == "")                                  
+                ){
+                    console.log("la domanda "+i+" è obbligatoria");
+                domande[i].is_valid = false;
+                success = false;
+            }
             switch (html_type) {
                 case "0":
-                    let camp = domande[i].risposta.risposta_aperta;
                     let html_pattern = domande[i].html_pattern;
-                    if(html_pattern != null)
+                    if(html_pattern != null){
+                        this.risposteForm = new FormGroup({
+                            'risposta_aperta': new FormControl(domande[i].risposta.risposta_aperta, [
+                                Validators.compose([Validators.pattern(domande[i].html_pattern)])                                                
+                                                ])
+                        });
+                        if (this.risposteForm.invalid) {
+                            domande[i].is_valid = false;
+                            success = false;
+                        }
+                    }
                     break;
                 case "1":
-                    let campo = domande[i].risposta.risposta_aperta;
-                    this.risposteForm = this.formBuilder.group({
-                        campo: ['', Validators.compose([Validators.minLength(domande[i].html_min), Validators.maxLength(domande[i].html_max)])]
-                      });
-                      if (this.risposteForm.invalid) {
-                        window.alert("Informations invalides");
-                        return;
-                      }
+                    this.risposteForm = new FormGroup({
+                        'risposta_aperta': new FormControl(domande[i].risposta.risposta_aperta, [
+                                                Validators.compose([Validators.min(domande[i].html_min), Validators.max(domande[i].html_max)])
+                        ])
+                    });
+                    if (this.risposteForm.invalid) {
+                        domande[i].is_valid = false;
+                        success = false;
+                    }
                     break;
             
                 default:
                     break;
             }
+            console.log(domande[i]);
         }
+        return success;
     }
     
     salvaSezione() {
@@ -178,26 +199,32 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         if (this.indice_sezione_corrente == null) {
             return;
         } 
-        this.controllaRisposte(this.sezione_corrente.domande);
-        let risposte : RispostaQuestionarioCompilato[] = [];
-        this.sezione_corrente.domande.forEach(domanda => {
-            risposte.push(domanda.risposta);
-        });
-        this.loading = true;
-        this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
-            .subscribe(response => {
-                this.alertService.success("Salvataggio effettuato.");
-                this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione salvata');
-                this.loading = false;
-                if (!this.esiste_succ) {
-                    // ultima sezione: abilito il bottone 'Convalida'
-                    this.questionarioCompilato.is_compilato = '1';
-                }
-            },
-            error => {
-                this.alertService.error(error);
-                this.loading = false;
+        if(this.controllaRisposte(this.sezione_corrente.domande)){
+
+     
+            let risposte : RispostaQuestionarioCompilato[] = [];
+            this.sezione_corrente.domande.forEach(domanda => {
+                risposte.push(domanda.risposta);
             });
+            this.loading = true;
+            this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
+                .subscribe(response => {
+                    this.alertService.success("Salvataggio effettuato.");
+                    this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione salvata');
+                    this.loading = false;
+                    if (!this.esiste_succ) {
+                        // ultima sezione: abilito il bottone 'Convalida'
+                        this.questionarioCompilato.is_compilato = '1';
+                    }
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                });
+        }else{
+            this.alertService.error("Attenzione! sono presenti degli errori");
+            return false;
+        }
     }
     sezSuccessiva() {
         if (this.indice_sezione_corrente == null) {

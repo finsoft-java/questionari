@@ -13,10 +13,10 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
   @Input()  questionario_modificabile : boolean;
 
   @Output() compiled = new EventEmitter<void>();
-  
+  @Input() isValid = true;
   is_domanda_aperta = false;
   is_domanda_compilata = false;
-
+  titleRispostaControlli : string;
   constructor(
       private authenticationService: AuthenticationService,
       private questCompService: QuestionariCompilatiService,
@@ -28,6 +28,31 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
   
   ngOnInit(): void {
     this.calc_flags();
+    this.titleRispostaControlli = this.getTitleInput();
+  }
+
+  getTitleInput(){
+    let title = '';
+    switch (this.domanda.html_type) {
+      case "0":
+        if(this.domanda.html_pattern != null)
+          title= "Pattern: "+this.domanda.html_pattern+" ";
+          
+        if(this.domanda.html_maxlength != null)
+          title+= "Lunghezza Massima: "+this.domanda.html_maxlength+" ";
+        break;
+      case "1":
+        if(this.domanda.html_min != null)
+          title= "Valore minimo : "+this.domanda.html_min+" ";
+          
+        if(this.domanda.html_maxlength != null)
+          title+= "Valore massimo: "+this.domanda.html_max+" ";
+        break;
+    
+      default:
+        break;
+    }
+    return title;
   }
   calc_flags() {
     this.is_domanda_aperta = (this.domanda.risposte == null || this.domanda.risposte.length == 0);

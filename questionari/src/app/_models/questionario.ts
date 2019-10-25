@@ -42,6 +42,7 @@ export class Domanda {
     // QUesta c'è solo al momento della compilazione del questionario
     risposta?: RispostaQuestionarioCompilato;
     is_compilata?: boolean;
+    is_valid?: boolean = true;
     editing?: boolean;
     creating?: boolean;
 }

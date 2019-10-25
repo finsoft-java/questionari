@@ -35,14 +35,16 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
                 <tr compila-questionario-domanda *ngFor="let domanda of sezione_corrente.domande"
                         [domanda]="domanda"
                         [questionario_modificabile]="questionarioCompilato.stato == '0'"
-                        (compiled)="calc_is_sezione_compilata()">
+                        (compiled)="calc_is_sezione_compilata()"
+                        [isValid] ="domanda.is_valid">
                 </tr>
         </table>
 </form>
 <div>
         <button class="btn btn-dark" (click)="sezPrecedente()" [disabled]="!esiste_prec">Sez. precedente</button>
+        <!--[disabled]="!is_sezione_compilata"-->
         <button class="btn btn-success" (click)="salvaSezione()"
-                [disabled]="!is_sezione_compilata"
+                
                 [title]="(this.is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Salva sezione</button>
         <button *ngIf="questionarioCompilato.stato == '0'"
                 [disabled]="questionarioCompilato.is_compilato != '1'" 
@@ -51,7 +53,6 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
                 [title]="questionarioCompilato.is_compilato != '1' ? 'Occorre compilare tutte le sezioni, per tutti gli utenti' : ''">
                 Convalida il questionario</button>
         <button class="btn btn-dark" (click)="sezSuccessiva()"
-                [disabled]="!is_sezione_compilata"
                 [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'" [disabled]="!esiste_succ">{{title_sez_succ}}</button>
 </div>
 
