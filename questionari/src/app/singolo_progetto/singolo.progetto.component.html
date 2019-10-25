@@ -36,8 +36,8 @@
         title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Aggiungi Questionario</button>
     <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refreshQuestionario()">Refresh</button>
 
-    <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
-        <thead>
+    <table class="table table-striped" style="margin-top:30px;">
+        <thead style="background-color: #f8f9fa;">
             <th>Nome Questionario</th>
             <th>Tipo Questionario</th>
             <th>Gruppo Compilanti</th>
@@ -50,30 +50,6 @@
                 [indexQuestionario]="i" (itemRemoved)="removeItem($event)"></tr>
         </tbody>
     </table>
-
-    <br/>
-    <!--
-    <h5>Utenti per Progetto</h5>
-    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" [disabled]="progetto.gia_compilato=='1'"
-        title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}"
-        (click)="save(progettoUtenti)">Salva</button>
-    <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refresh()">Refresh</button>
-    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-        <table mdbTable class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
-            <thead>
-                <th>Utente</th>
-                <th>Responsabile L1</th>
-                <th>Responsabile L2</th>
-                <th>Utenti Finali</th>
-            </thead>    
-            <tbody style="max-height:300px;overflow-y: scroll;"> 
-                <tr table-ruoli-row *ngFor="let utente_row of progettoUtenti; let i= index;" [progetto]="progetto"
-                    [utente]="utente_row" ></tr>
-            </tbody>
-        </table>
-    </div>
--->
-    <br>
     <button *ngIf="progetto.gia_compilato=='1'" class="btn btn-dark" (click)="download()">Scarica tutti i questionari compilati in formato Excel</button>
     <button *ngIf="progetto.gia_compilato=='1' && progetto.stato == '1'" 
         class="btn btn-danger" (click)="completa()" title="Manda il progetto in stato 'Completato'">Completa progetto</button>

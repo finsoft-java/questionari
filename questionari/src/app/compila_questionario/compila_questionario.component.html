@@ -24,9 +24,9 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
 
         <h5>SEZIONE N. {{sezione_corrente.progressivo_sezione}} '<span [innerHTML]="sezione_corrente.titolo"></span>' </h5>
         <div [innerHTML]="sezione_corrente.descrizione | safeHtml"></div>
-
-        <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
-                <thead>
+<form>
+        <table class="table table-striped" style="margin-top:30px;">
+                <thead style="background-color: #f8f9fa;">
                         <th style="width:15%">N° Domanda</th>
                         <th style="width:35%">Domanda</th>
                         <th>Risposta</th>
@@ -38,7 +38,7 @@ Questionario: {{questionarioCompilato.questionario.titolo}}<br>
                         (compiled)="calc_is_sezione_compilata()">
                 </tr>
         </table>
-
+</form>
 <div>
         <button class="btn btn-dark" (click)="sezPrecedente()" [disabled]="!esiste_prec">Sez. precedente</button>
         <button class="btn btn-success" (click)="salvaSezione()"

@@ -204,7 +204,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             html_type:"0",
             html_type_dec:"Text",
             id_questionario: this.id_questionario,
-            obbligatorieta: "0",
+            obbligatorieta: false,
             obbligatorieta_dec: "NO",
             progressivo_domanda: null,
             progressivo_sezione: this.sezione_corrente.progressivo_sezione,

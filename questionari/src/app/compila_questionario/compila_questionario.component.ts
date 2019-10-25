@@ -3,6 +3,7 @@ import { Subscription, Observable } from 'rxjs';
 import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Sezione, RispostaAmmessa, RispostaQuestionarioCompilato, Progetto, Questionario } from '@/_models';
 import { UserService, AuthenticationService, QuestionariCompilatiService, AlertService, WebsocketService, Message } from '@/_services';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({templateUrl: 'compila_questionario.component.html'})
 export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
@@ -13,7 +14,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     currentUser: User;
     questionarioCompilato: QuestionarioCompilato;
     progressivo_quest_comp: number;
-    
+    risposteForm: FormGroup;
     utente_valutato_corrente: string;
     indice_sezione_corrente: number;    // l'indice non è per forza uguale al progressivo
     sezione_corrente: Sezione;
@@ -26,6 +27,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private questCompService: QuestionariCompilatiService,
         private alertService: AlertService,
+        private formBuilder: FormBuilder,
         private websocketsService: WebsocketService,
         private route: ActivatedRoute,
         private router: Router
@@ -42,6 +44,8 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             this.progressivo_quest_comp = +params['progressivo_quest_comp']; // (+) converts string 'id' to a number
             this.getQuestionarioCompilato();
          });
+
+         
     }
 
     ngOnDestroy() {
@@ -126,10 +130,55 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    /*
+    CONTROLLI CAMPI RISPOSTE
+    html_type:
+    '0' => 'text',
+    '1' => 'number',
+    '2' => 'date',
+    '3' => 'button',
+    '4' => 'checkbox',
+    '5' => 'color',
+    '6' => 'datetime-local',
+    '7' => 'month',
+    '8' => 'range',
+    '9' => 'tel',
+    'A' => 'time',
+    'B' => 'week'
+    */
+    controllaRisposte(domande){
+        for(let i = 0; i < domande.length; i++){
+            let html_type = domande[i].html_type;
+            switch (html_type) {
+                case "0":
+                    let camp = domande[i].risposta.risposta_aperta;
+                    let html_pattern = domande[i].html_pattern;
+                    if(html_pattern != null)
+                    break;
+                case "1":
+                    let campo = domande[i].risposta.risposta_aperta;
+                    this.risposteForm = this.formBuilder.group({
+                        campo: ['', Validators.compose([Validators.minLength(domande[i].html_min), Validators.maxLength(domande[i].html_max)])]
+                      });
+                      if (this.risposteForm.invalid) {
+                        window.alert("Informations invalides");
+                        return;
+                      }
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+    }
+    
     salvaSezione() {
+        
         if (this.indice_sezione_corrente == null) {
             return;
-        }
+        } 
+        this.controllaRisposte(this.sezione_corrente.domande);
         let risposte : RispostaQuestionarioCompilato[] = [];
         this.sezione_corrente.domande.forEach(domanda => {
             risposte.push(domanda.risposta);

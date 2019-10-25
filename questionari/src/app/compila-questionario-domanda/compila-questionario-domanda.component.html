@@ -20,7 +20,7 @@
                         [(ngModel)]="domanda.risposta.risposta_aperta"
                         [required]="domanda.obbligatorieta == '1'"
                         [disabled]="!questionario_modificabile"
-                        [type]="domanda.html_type || 'text'"
+                        [type]="domanda.html_type_dec || 'text'"
                         [pattern]="domanda.html_pattern"
                         [max]="domanda.html_max"
                         [min]="domanda.html_min"

@@ -34,7 +34,7 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
 
     let compilata = true;
       
-      if (this.domanda.obbligatorieta == '1') {
+      if (this.domanda.obbligatorieta) {
           if (this.is_domanda_aperta) {
             if (!this.domanda.risposta.risposta_aperta) {
               compilata = false;

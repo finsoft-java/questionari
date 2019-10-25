@@ -27,7 +27,7 @@ export class Domanda {
     progressivo_sezione: number;
     progressivo_domanda: number;
     descrizione: string;
-    obbligatorieta: string;
+    obbligatorieta: boolean;
     obbligatorieta_dec: string;
     rimescola: boolean;
     rimescola_dec: string;

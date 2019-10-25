@@ -437,7 +437,7 @@ class SezioniManager {
                 $domanda->html_max              = $row['html_max'];
                 $domanda->html_maxlength        = $row['html_maxlength'];
                 if ($explode) {
-                    $domanda->risposte_ammesse  = $domanda->get_risposte_ammesse();
+                    $domanda->risposte  = $domanda->get_risposte_ammesse();
                 }
             } else {
                 return null;

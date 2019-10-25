@@ -64,6 +64,7 @@ export class TableRisposteRowComponent implements OnInit {
       this.risposta_in_modifica = null;
     }
   }
+  
 
   /**
    * Richiamato dopo che l'utente ha premuto il tasto Elimina

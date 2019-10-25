@@ -4,8 +4,8 @@
         <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="sync()"><i class="fa fa-retweet"></i> Sincronizza LDAP</button>
         <search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
         <div class="table-wrapper-scroll-y my-custom-scrollbar" style="margin-top:30px;">
-            <table class="table table-striped" style="background-color: #f8f9fa;">
-                <thead>
+            <table class="table table-striped" style="">
+                <thead style="background-color: #f8f9fa;">
                     <th>Username</th>
                     <th>Nome</th>
                     <th>Cognome</th>

@@ -11,8 +11,8 @@
 <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refresh()"><i class="fa fa-sync"></i> Refresh</button>
 <search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
 
-<table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;">
-    <thead>
+<table class="table table-striped" style="margin-top:30px;">
+    <thead style="background-color: #f8f9fa;">
         <th>Progetto</th>
         <th>Questionario</th>
         <th>Data compilazione</th>

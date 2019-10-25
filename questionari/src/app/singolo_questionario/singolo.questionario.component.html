@@ -35,7 +35,8 @@
     <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente" [disabled]="!esiste_prec">Sez. precendente<!--<i class="fa fa-step-backward"></i>--></button>
     <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva" [disabled]="!esiste_succ">Sez. successiva<!--<i class="fa fa-step-forward"></i>--></button>
     <button (click)="creaSezione()" class="btn btn-success" style="margin: 0px auto;display: block;" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Sezione</button>
-    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)" style="border: 1px solid;float: left;width: calc(100% - 30px);padding: 15px;margin: 30px 15px 15px 15px">
+    
+    <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)" style="border: 1px solid;float: left;width: 100%;padding: 15px;margin-top: 30px;">
         <form style="margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 30px;border-bottom:1px solid"> 
             <h5>Sezione N° {{sezione_corrente.progressivo_sezione}}</h5> <br>
             <div class="row" style="margin-bottom:30px;">
@@ -63,11 +64,11 @@
             </div>
         </form>
 
-        <h5 style="float:left;width:100%;margin-bottom: 25px;">Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5>
-        <button *ngIf="!editMode" (click)="creaDomanda()" class="btn btn-success" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Domanda</button>       
+        <h5 style="float:left;width:100%;margin-bottom: 30px;">Domande Sezione N° {{sezione_corrente.progressivo_sezione}}</h5>
+        <button *ngIf="!editMode" (click)="creaDomanda()" style="margin-bottom: 25px;" class="btn btn-success" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Domanda</button>       
                
-        <table class="table table-striped" style="background-color: #f8f9fa;margin-bottom:30px;float:left;width:100%;padding-bottom: 15px;" >
-            <thead *ngIf="!editMode">
+        <table class="table table-striped" style="margin-bottom:0px;float:left;width:100%;padding-bottom: 15px;" >
+            <thead *ngIf="!editMode" style="background-color: #f8f9fa;">
                 <th alt="Descrizione" title="Descrizione">Descrizione</th>
                 <th alt="Obbligatoria" title="Obbligatoria">Obblig.</th>
                 <th alt="Coefficiente valutazione" title="Coefficiente valutazione">Coeff.</th>

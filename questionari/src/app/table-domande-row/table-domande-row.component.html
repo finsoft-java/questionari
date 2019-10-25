@@ -105,8 +105,8 @@
                         <button style="float:right" (click)="creaRisposta()" [disabled]="questionario.gia_compilato=='1'|| domanda.progressivo_domanda == null" class="btn btn-success">Crea Nuova Risposta</button>
                     </div>
 
-                    <table class="table table-striped" style="background-color: #f8f9fa;margin-top:30px;float:left;width:100%">
-                        <thead>
+                    <table class="table table-striped" style="margin-top:30px;float:left;width:100%">
+                        <thead style="background-color: #f8f9fa;">
                             <th alt="Descrizione" title="Descrizione">Descrizione</th>
                             <th alt="Valore Risposta" title="Valore Risposta">Valore Risposta</th>
                             <th>Azioni</th>       
@@ -118,7 +118,7 @@
                     </table>
                 </div>
             </div>
-            <button style="margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Chiudi domanda</button>
+            <!--<button style="margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()">Chiudi domanda</button>-->
         </td>
         
         
