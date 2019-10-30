@@ -79,6 +79,7 @@ class QuestionarioCompilato {
             }
             
             $sql = "SELECT * FROM risposte_quest_compilati WHERE progressivo_quest_comp = '$this->progressivo_quest_comp' ";
+            echo $sql;
             if($result = mysqli_query($con, $sql)) {
                 while($row = mysqli_fetch_assoc($result))
                 {
@@ -246,6 +247,31 @@ class VistaQuestionariCompilabili {
 
 class QuestionariCompilatiManager {
     
+       
+    function get_domande_mancanti($progressivo_quest_comp) {
+            global $con;
+            $arr = [];
+            $sql = "SELECT r.progressivo_sezione, r.progressivo_domanda, r.nome_utente_valutato, d.descrizione, ut.nome, ut.cognome FROM risposte_quest_compilati r JOIN questionari_compilati qc on r.progressivo_quest_comp = qc.progressivo_quest_comp JOIN domande d on d.id_questionario = qc.id_questionario and d.progressivo_sezione = r.progressivo_sezione and d.progressivo_domanda = r.progressivo_domanda LEFT JOIN utenti ut on ut.username = r.nome_utente_valutato where r.progressivo_quest_comp = '$progressivo_quest_comp' and d.obbligatorieta = '1' and r.progressivo_risposta is NULL AND r.risposta_aperta is NULL";
+            if($result = mysqli_query($con, $sql)) {
+                $cr = 0;
+                while($row = mysqli_fetch_assoc($result))
+                {
+                    $obj = new stdClass();
+                    $obj->progressivo_sezione    = $row['progressivo_sezione'];
+                    $obj->progressivo_domanda    = $row['progressivo_domanda'];
+                    $obj->nome_utente_valutato   = $row['nome_utente_valutato'];
+                    $obj->descrizione            = $row['descrizione'];
+                    $obj->nominativo             = $row['cognome']." ".$row['nome'];
+                    // NON carico le domande
+                    $arr[$cr++] = $obj;
+                }
+            } else {
+                print_error(500, $con ->error);
+            }
+            return $arr;
+    }
+
+
     function get_questionario_compilato($progressivo_quest_comp) {
         global $con, $STATO_QUEST_COMP;
         $obj = new QuestionarioCompilato();
@@ -576,23 +602,23 @@ class QuestionariCompilatiManager {
             $indice_old = $this->get_indice_sezione_utente($questionario_compilato, $old_progressivo_sezione, $old_utente_valutato);
         }
         $indice_new = $this->get_indice_sezione_utente($questionario_compilato, $progressivo_sezione, $utente_valutato);
-        if ($indice_new > $indice_old+1) {
+        /*if ($indice_new > $indice_old+1) {
             print_error(500, "Qualcosa è andato storto. Stai salvando la sezione sbagliata. Prova a risalvarle tutte dalla prima all'ultima.");
-        }
+        }*/
         if ($indice_new < $indice_old+1) {
             return;
             // l'utente sta risalvando una vecchia sezione, salvataggio ok ma non aggiorno i progressivi
         }
 
         // e la posso aggiornare solo se davvero è stata completata
-        $sezione = $this->get_sezione_questionario_compilato($questionario_compilato->progressivo_quest_comp, $progressivo_sezione, $utente_valutato);
+        /*$sezione = $this->get_sezione_questionario_compilato($questionario_compilato->progressivo_quest_comp, $progressivo_sezione, $utente_valutato);
         foreach ($sezione->domande as $d) {
             if ($d->obbligatorieta == '1') {
                 if (!$d->risposta || ($d->risposta->risposta_aperta == null && $d->risposta->progressivo_risposta == null)) {
                     print_error(403, "La sezione non è completa");
                 }
             }
-        }
+        }*/
 
         // ok, procedo ad aggiornarla
         $sql = "UPDATE questionari_compilati SET progr_sezione_corrente='$progressivo_sezione' ";

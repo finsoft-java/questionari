@@ -12,6 +12,11 @@ export class QuestionariCompilatiService {
         let storico_str: string = storico ? '1' : '0';
         return this.http.get<VistaQuestionariCompilabili[]>(`${config.apiUrl}/QuestionariCompilati.php?storico=${storico_str}`);
     }
+    getRisposteUtenti(progressivo_quest_comp) {
+        // gli ultimi due possono anche essere null
+        return this.http.get<Object[]>(`${config.apiUrl}/QuestionariValidati.php?progressivo_quest_comp=${progressivo_quest_comp}`);
+    }
+    
     getById(progressivo_quest_comp) {
         // gli ultimi due possono anche essere null
         let url = `${config.apiUrl}/QuestionariCompilati.php?progressivo_quest_comp=${progressivo_quest_comp}`;

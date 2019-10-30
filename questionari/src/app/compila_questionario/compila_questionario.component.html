@@ -1,63 +1,60 @@
-
-<h3>Questionario</h3>
+<!--<h3>Questionario</h3>-->
 
 
 <div *ngIf="questionarioCompilato != null">
+    <div>
+        <h3 style="text-align:center">{{questionarioCompilato.progetto.titolo}}</h3>
+        <h4 style="text-align:center">{{questionarioCompilato.questionario.titolo}}</h4>
+    </div>
+    <br/>
 
-Progetto: {{questionarioCompilato.progetto.titolo}}<br>
-Questionario: {{questionarioCompilato.questionario.titolo}}<br>
-
-
-<div *ngIf="questionarioCompilato.utenti_valutati">
-        Quale utente stai valutando?
-        <select [(ngModel)]="utente_valutato_corrente" >
+    <div *ngIf="sezione_corrente != null">
+        <div style="float:left;">
+            <h5>Sezione {{sezione_corrente.progressivo_sezione}}</h5>
+            <h5><span [innerHTML]="sezione_corrente.titolo"></span></h5>
+            <div [innerHTML]="sezione_corrente.descrizione | safeHtml"></div>
+        </div>
+        <div *ngIf="questionarioCompilato.utenti_valutati" style="float:right;">
+            Valutazione Utente
+            <select class="form-control" style="display: inline;margin: 30px 0px 0px 15px;width: auto;" [(ngModel)]="utente_valutato_corrente" (ngModelChange)="goToUtente()">
                 <option *ngFor="let utente of questionarioCompilato.utenti_valutati"
                         value="{{utente.username}}"
-                        [disabled]="utente.username > questionarioCompilato.utente_valutato_corrente"
                         >{{ utente.nome }} {{ utente.cognome }}</option>
-        </select>
-</div>
+            </select>
+        </div>
 
-<br/>
 
-<div *ngIf="sezione_corrente != null">
-
-        <h5>SEZIONE N. {{sezione_corrente.progressivo_sezione}} '<span [innerHTML]="sezione_corrente.titolo"></span>' </h5>
-        <div [innerHTML]="sezione_corrente.descrizione | safeHtml"></div>
-<form>
         <table class="table table-striped" style="margin-top:30px;">
-                <thead style="background-color: #f8f9fa;">
-                        <th style="width:15%">N° Domanda</th>
-                        <th style="width:35%">Domanda</th>
-                        <th>Risposta</th>
-                        <th>Note</th>
-                </thead>
-                <tr compila-questionario-domanda *ngFor="let domanda of sezione_corrente.domande"
-                        [domanda]="domanda"
-                        [questionario_modificabile]="questionarioCompilato.stato == '0'"
-                        (compiled)="calc_is_sezione_compilata()"
-                        [isValid] ="domanda.is_valid">
-                </tr>
+            <thead style="background-color: #f8f9fa;">
+                <th style="width:15%">N° Domanda</th>
+                <th style="width:35%">Domanda</th>
+                <th>Risposta</th>
+                <th>Note</th>
+            </thead>
+            <tr compila-questionario-domanda *ngFor="let domanda of sezione_corrente.domande" [domanda]="domanda" [questionario_modificabile]="questionarioCompilato.stato == '0'" [isValid]="domanda.is_valid">
+            </tr>
         </table>
-</form>
-<div>
-        <button class="btn btn-dark" (click)="sezPrecedente()" [disabled]="!esiste_prec">Sez. precedente</button>
-        <!--[disabled]="!is_sezione_compilata"-->
-        <button class="btn btn-success" (click)="salvaSezione()"
-                
-                [title]="(this.is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'">Salva sezione</button>
-        <button *ngIf="questionarioCompilato.stato == '0'"
-                [disabled]="questionarioCompilato.is_compilato != '1'" 
-                class="btn btn-danger"
-                (click)="convalida()" 
-                [title]="questionarioCompilato.is_compilato != '1' ? 'Occorre compilare tutte le sezioni, per tutti gli utenti' : ''">
-                Convalida il questionario</button>
-        <button class="btn btn-dark" (click)="sezSuccessiva()"
-                [title]="(is_sezione_compilata) ? '' : 'Compilare tutti i campi richiesti'" [disabled]="!esiste_succ">{{title_sez_succ}}</button>
-</div>
 
-</div>
-
-
-
+        <div style="float:left;width:100%">
+            <div style="float: left;width: calc(100% / 6);">
+                <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="utentePrecedente()" [disabled]="!esiste_utente_prec">Utente precedente</button>
+            </div>
+            <div style="float: left;width: calc(100% / 6);">
+                <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="sezPrecedente()" [disabled]="!esiste_sezione_prec">Sez. precedente</button>
+            </div>
+            <div style="float: left;width: calc(100% / 6);">
+                <button class="btn btn-success" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" *ngIf="questionarioCompilato.stato == '0'" (click)="salvaSezione()">Salva sezione</button>
+            </div>
+            <div style="float: left;width: calc(100% / 6);">
+                <button style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" *ngIf="questionarioCompilato.stato == '0'" class="btn btn-danger" (click)="convalida()" title="Convalida il Questionario, solo se tutte le sezioni sono state compilate correttamente">
+                Conv. questionario</button>
+            </div>
+            <div style="float: right;width: calc(100% / 6);">
+                <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="utenteSuccessivo()" [disabled]="!esiste_utente_succ">Utente successivo</button>
+            </div>
+            <div style="float: right;width: calc(100% / 6);">
+                <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="sezSuccessiva()" [disabled]="!esiste_sezione_succ">Sez. successiva</button>
+            </div>
+        </div>
+    </div>
 </div>

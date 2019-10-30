@@ -69,13 +69,15 @@ export class TableDomandeRowComponent implements OnInit {
   }
 
   setValidRisposte(){
-    
-    if(this.tipo_risposta == 0){
+    if(this.tipo_risposta == 0){      
       if(this.domanda_in_modifica.risposte != null && this.domanda_in_modifica.risposte.length > 0){
         if(confirm("Se avevi inserito delle risposte ed hai modificato il tipo di risposta da chiusa ad aperta, le risposte verranno eliminate. Sei sicuro?")) {
           this.risposta_aperta = true;
           this.domanda_in_modifica.risposte = [];
         }
+      }else{
+        this.risposta_aperta = true;
+        this.domanda_in_modifica.risposte = [];
       }
     }else{
       this.risposta_aperta = false;
@@ -201,21 +203,15 @@ export class TableDomandeRowComponent implements OnInit {
   }
 
   save() {
-    console.log(this.domanda.obbligatorieta);
-    console.log(this.domanda_in_modifica.obbligatorieta);
-    console.log(this.domanda_in_modifica.creating);
     if(this.controlloDatiImmessi()){
     //se il flg creating è settato sarà una insert altrimenti update
       if(this.domanda_in_modifica.creating == true) {
 
         this.domandeService.creaDomandaConRisposte(this.domanda_in_modifica).subscribe(resp => {
-          if (this.authenticationService.currentUserValue) { 
-            console.log(resp["value"]);
+          if (this.authenticationService.currentUserValue) {
             this.domanda_in_modifica = null;
             this.domanda = this.simpleClone(resp["value"]);
             this.domanda_in_modifica = this.simpleClone(resp["value"]);
-            console.log(this.domanda.obbligatorieta);
-            console.log(this.domanda_in_modifica.obbligatorieta);
             this.domanda.editing = true;
             this.domanda.creating = false;
             this.changeEditMode.emit(true);
@@ -227,7 +223,6 @@ export class TableDomandeRowComponent implements OnInit {
         });
       } else {
 
-        console.log(this);
         if(this.tipo_risposta == 0){
           if(this.domanda.risposte != null){
             if(this.domanda.risposte.length > 0){
@@ -253,7 +248,7 @@ export class TableDomandeRowComponent implements OnInit {
                 this.domanda.editing = true;
                 this.changeEditMode.emit(true);
                 this.alertService.success("Domanda salvata con successo");
-                //this.router.navigate(["questionari/"+this.questionario.id_questionario]);
+                this.router.navigate(["questionari/"+this.questionario.id_questionario]);
               }
             });
         }else{
@@ -266,7 +261,7 @@ export class TableDomandeRowComponent implements OnInit {
               this.domanda.editing = true;
               this.changeEditMode.emit(true);
               this.alertService.success("Domanda salvata con successo");
-              //this.router.navigate(["questionari/"+this.questionario.id_questionario]);
+              this.router.navigate(["questionari/"+this.questionario.id_questionario]);
             }
           });
         }

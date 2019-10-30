@@ -18,10 +18,11 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     utente_valutato_corrente: string;
     indice_sezione_corrente: number;    // l'indice non è per forza uguale al progressivo
     sezione_corrente: Sezione;
-    is_sezione_compilata: boolean;
     loading = true;
-    esiste_prec = false;
-    esiste_succ = false;
+    esiste_sezione_prec = false;
+    esiste_sezione_succ = false;
+    esiste_utente_prec = false;
+    esiste_utente_succ = false;
     title_sez_succ = "Sez. successiva";
     constructor(
         private authenticationService: AuthenticationService,
@@ -81,6 +82,28 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         });
     }
     convalida() {
+        if (this.questionarioCompilato.stato == '0') {
+            if(this.salvaSezione() == false){
+                return false;
+            }
+        }
+        let message = "Si prega di completare le sezioni: ";
+        this.questCompService.getRisposteUtenti(this.progressivo_quest_comp).subscribe(response => {
+            for(let i=0; i < response["value"].length; i++){
+                message += response["value"][i].progressivo_sezione;
+                if(response["value"][i].nominativo != ""){
+                    message+= " per l'utente "+response["value"][i].nominativo;
+                }
+                message += "; ";
+                this.alertService.error(message);
+            }
+            return false;
+
+        },
+        error => {
+            this.alertService.error(error);
+        });
+
         this.questCompService.convalida(this.progressivo_quest_comp)
             .subscribe(response => {
                 this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione convalidata');
@@ -107,7 +130,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                 this.utente_valutato_corrente = nome_utente_valutato;
                 this.indice_sezione_corrente = indice;
                 this.rimescola();
-                this.calc_is_sezione_compilata();
                 this.calc_esiste_prec_succ();
                 this.loading = false;
             },
@@ -155,9 +177,9 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                                                     (domande[i].risposta.progressivo_risposta == null ||
                                                     domande[i].risposta.progressivo_risposta.trim() == "")                                  
                 ){
-                    console.log("la domanda "+i+" è obbligatoria");
                 domande[i].is_valid = false;
                 success = false;
+                
             }
             switch (html_type) {
                 case "0":
@@ -212,7 +234,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                     this.alertService.success("Salvataggio effettuato.");
                     this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione salvata');
                     this.loading = false;
-                    if (!this.esiste_succ) {
+                    if (!this.esiste_utente_succ) {
                         // ultima sezione: abilito il bottone 'Convalida'
                         this.questionarioCompilato.is_compilato = '1';
                     }
@@ -226,30 +248,58 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             return false;
         }
     }
+    utentePrecedente(){
+        if (this.questionarioCompilato.stato == '0') {
+            if(this.salvaSezione() == false){
+                return false;
+            }
+        }
+        let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
+        this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[indice_utente_corrente-1].username;
+        this.indice_sezione_corrente = 0;
+        
+
+        
+        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
+    }
+    goToUtente(){
+        if (this.questionarioCompilato.stato == '0') {
+            console.log(this.salvaSezione());
+            if(this.salvaSezione() == false){
+                
+            }
+        }
+        this.indice_sezione_corrente = 0;
+        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
+    }
+    utenteSuccessivo(){
+        if (this.questionarioCompilato.stato == '0') {
+            if(this.salvaSezione() == false){
+                return false;
+            }
+        }
+        let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
+        this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[indice_utente_corrente+1].username;
+        this.indice_sezione_corrente = 0;        
+        this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
+    }
+
     sezSuccessiva() {
         if (this.indice_sezione_corrente == null) {
             return;
         }
         if (this.questionarioCompilato.stato == '0') {
-            this.salvaSezione();
+            if(this.salvaSezione() == false){
+                return false;
+            }
         }
+
         if (this.indice_sezione_corrente < this.questionarioCompilato.sezioni.length) {
             ++this.indice_sezione_corrente;
-            if(this.indice_sezione_corrente < this.questionarioCompilato.sezioni.length){
-                this.title_sez_succ = "Vai a utente successivo";
-            }else{
-                this.title_sez_succ = "Sez. successiva";
-            }
-        } else {
-            //devo cambiare utente
-            let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
-            this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[indice_utente_corrente+1].username;
-            this.indice_sezione_corrente = 0;
         }
         this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
     }
     sezPrecedente() {
-        this.title_sez_succ = "Sez. successiva";
         if (this.indice_sezione_corrente == null) {
             return;
         }
@@ -258,14 +308,11 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         }
         if (this.indice_sezione_corrente > 0) {
             --this.indice_sezione_corrente;
-        } else {
-            //devo cambiare utente
-            let indice_utente_corrente = this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente);
-            this.utente_valutato_corrente = this.questionarioCompilato.utenti_valutati[indice_utente_corrente-1].username;
-            this.indice_sezione_corrente = this.questionarioCompilato.sezioni.length-1;
-        }
+        } 
         this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
     }
+
+
     shuffle(array: any[]) {
         //see https://stackoverflow.com/questions/2450954
 
@@ -284,43 +331,36 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
           array[randomIndex] = temporaryValue;
         }
     }
-    calc_is_sezione_compilata() {
-        let success = true;
-        this.sezione_corrente.domande.forEach(domanda => {
-            if (domanda.is_compilata === false) {
-                success = false;
-            }
-        });
-        this.is_sezione_compilata = success;
-    }
     calc_esiste_prec_succ() {
+        let indice_utente_corrente = this.questionarioCompilato.utenti_valutati ? this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente) : null;
+
         let esiste_prec = true;
-        if (this.indice_sezione_corrente == 0) {
-            // Devo verificare se siamo alla prima sezione del primo utente esistente
-            if (!this.questionarioCompilato.utenti_valutati) {
-                // questionario generico
-                esiste_prec = false;
-            } else if(this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente) == 0) {
-                // questionario reale
-                esiste_prec = false;
-            }
+        let ind1 = indice_utente_corrente-1;
+        if(this.questionarioCompilato.utenti_valutati[ind1] == undefined){
+            esiste_prec = false;
         }
-        this.esiste_prec = esiste_prec;
-
+        this.esiste_utente_prec = esiste_prec;
+        
         let esiste_succ = true;
-        if (this.indice_sezione_corrente == this.questionarioCompilato.sezioni.length-1) {
-            // Devo verificare se siamo all'ultima sezione dell'ultimo utente esistente
-
-            if (!this.questionarioCompilato.utenti_valutati) {
-                // questionario generico
-                esiste_succ = false;
-            } else if(this.questionarioCompilato.utenti_valutati.findIndex(u => u.username == this.utente_valutato_corrente)
-                                                                            == this.questionarioCompilato.utenti_valutati.length-1) {
-                // questionario reale
-                esiste_succ = false;
-            }
+        let ind2 = indice_utente_corrente+1;
+        if(this.questionarioCompilato.utenti_valutati[ind2] == undefined){
+            esiste_succ = false;
         }
-        this.esiste_succ = esiste_succ;
+        this.esiste_utente_succ = esiste_succ;
+        
+        let esiste_sez_prec = true;
+        let ind3 = this.indice_sezione_corrente-1;
+        if(this.questionarioCompilato.sezioni[ind3] == undefined){
+            esiste_sez_prec = false;
+        }
+        this.esiste_sezione_prec = esiste_sez_prec;
+        
+        let esiste_sez_succ = true;
+        let ind4 = this.indice_sezione_corrente+1;
+        if(this.questionarioCompilato.sezioni[ind4] == undefined){
+            esiste_sez_succ = false;
+        }
+        this.esiste_sezione_succ = esiste_sez_succ;
     }
     sendMsgQuestComp(q : QuestionarioCompilato | VistaQuestionariCompilabili, note : string) {
         let msg : Message = {

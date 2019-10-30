@@ -95,6 +95,7 @@ export class TableRisposteRowComponent implements OnInit {
             this.risposta_in_modifica = null;
             Object.assign(this.domanda, resp["value"]); // meglio evitare this.utente = ...
             this.rispostaCorrente.editing = false;
+            this.rispostaCorrente.creating = false;
           }
         });
 
