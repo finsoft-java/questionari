@@ -21,7 +21,6 @@ import { CompilaQuestionarioComponent } from './compila_questionario';
 import { TableQuestionariRowComponent } from './table-questionari-row/table-questionari-row.component';
 import { TableRuoliRowComponent } from './table-ruoli-row';
 import { SearchComponent } from './search';
-import { FormSezioniComponent } from './form-sezioni';
 import { TableDomandeRowComponent } from './table-domande-row'; 
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
@@ -139,7 +138,6 @@ import { SanitizerPipe } from './_services/sanitizer.pipe';
         TableRuoliRowComponent,
         TableDomandeRowComponent,
         TableRisposteRowComponent,
-        FormSezioniComponent,
         LoginComponent,
         SearchComponent, 
         AboutComponent,

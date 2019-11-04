@@ -58,7 +58,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
       this.questCompService.getById(this.progressivo_quest_comp)
         .subscribe(response => {
             this.questionarioCompilato = response["value"];
-
             let utente_da_caricare = null;
             let indice_sezione_da_caricare = 0;
 
@@ -70,8 +69,10 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             } else {
                 if(this.questionarioCompilato.utenti_valutati) {
                     // l'utente è null per i questionari generici
-                    utente_da_caricare = this.questionarioCompilato.utenti_valutati[0].username;
-                }
+                    if(this.questionarioCompilato.utenti_valutati[0]){
+                        utente_da_caricare = this.questionarioCompilato.utenti_valutati[0].username;
+                    }
+                }                
             }
             this.utente_valutato_corrente = utente_da_caricare;
             this.caricaSezione(utente_da_caricare, indice_sezione_da_caricare);
@@ -82,36 +83,66 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         });
     }
     convalida() {
+        let errore= false;
         if (this.questionarioCompilato.stato == '0') {
-            if(this.salvaSezione() == false){
+            
+            if (this.indice_sezione_corrente == null) {
+                return;
+            } 
+            if(this.controllaRisposte(this.sezione_corrente.domande)){   
+         
+                let risposte : RispostaQuestionarioCompilato[] = [];
+                this.sezione_corrente.domande.forEach(domanda => {
+                    risposte.push(domanda.risposta);
+                });
+                this.loading = true;
+                this.questCompService.salvaRisposte(this.progressivo_quest_comp, risposte)
+                    .subscribe(response => {
+                        this.alertService.success("Salvataggio effettuato.");
+                        this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione salvata');
+                        this.loading = false;
+                        if (!this.esiste_utente_succ) {
+                            // ultima sezione: abilito il bottone 'Convalida'
+                            this.questionarioCompilato.is_compilato = '1';
+                        }
+
+                        let message = "Si prega di completare le sezioni:<br/> ";
+                        this.questCompService.getRisposteUtenti(this.progressivo_quest_comp).subscribe(response => {
+                            if(response["value"].length >= 1){
+                                for(let i=0; i < response["value"].length; i++){
+                                    message += response["value"][i].progressivo_sezione;
+                                    if(response["value"][i].nominativo != null && response["value"][i].nominativo.trim() != ""){
+                                        message+= " per l'utente <strong>"+response["value"][i].nominativo+"</strong>";
+                                    }
+                                    message += ";<br/>";
+                                    errore = true;
+                                    this.alertService.error(message);
+                                }
+                            }else{
+                                this.questCompService.convalida(this.progressivo_quest_comp)
+                                .subscribe(response => {
+                                    this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione convalidata');
+                                    this.router.navigate(['/questionari_compilati']);
+                                },
+                                error => {
+                                    this.alertService.error(error);
+                                });
+                            }
+                        },
+                        error => {
+                            this.alertService.error(error);
+                        });
+                    },
+                    error => {
+                        this.alertService.error(error);
+                        this.loading = false;
+                    });
+            }else{
+                this.alertService.error("Attenzione! sono presenti degli errori");
                 return false;
             }
         }
-        let message = "Si prega di completare le sezioni: ";
-        this.questCompService.getRisposteUtenti(this.progressivo_quest_comp).subscribe(response => {
-            for(let i=0; i < response["value"].length; i++){
-                message += response["value"][i].progressivo_sezione;
-                if(response["value"][i].nominativo != ""){
-                    message+= " per l'utente "+response["value"][i].nominativo;
-                }
-                message += "; ";
-                this.alertService.error(message);
-            }
-            return false;
-
-        },
-        error => {
-            this.alertService.error(error);
-        });
-
-        this.questCompService.convalida(this.progressivo_quest_comp)
-            .subscribe(response => {
-                this.sendMsgQuestComp(this.questionarioCompilato, 'Compilazione convalidata');
-                this.router.navigate(['/questionari_compilati']);
-            },
-            error => {
-            this.alertService.error(error);
-            });
+        
     }
     caricaSezione(nome_utente_valutato: string, indice: number) {
 
@@ -125,7 +156,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.questCompService.getSezione(this.progressivo_quest_comp, progressivo_sezione, nome_utente_valutato)
             .subscribe(response => {
                 this.indice_sezione_corrente = indice;
-
                 this.sezione_corrente = response["value"];
                 this.utente_valutato_corrente = nome_utente_valutato;
                 this.indice_sezione_corrente = indice;
@@ -211,7 +241,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                 default:
                     break;
             }
-            console.log(domande[i]);
         }
         return success;
     }
@@ -264,7 +293,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     }
     goToUtente(){
         if (this.questionarioCompilato.stato == '0') {
-            console.log(this.salvaSezione());
             if(this.salvaSezione() == false){
                 
             }

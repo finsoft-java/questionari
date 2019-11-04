@@ -58,22 +58,23 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
     this.is_domanda_aperta = (this.domanda.risposte == null || this.domanda.risposte.length == 0);
 
     let compilata = true;
-      
-      if (this.domanda.obbligatorieta) {
-          if (this.is_domanda_aperta) {
+    if (this.domanda.obbligatorieta) {
+        if (this.is_domanda_aperta) {
+          if(this.domanda.risposta){
             if (!this.domanda.risposta.risposta_aperta) {
               compilata = false;
             }
-          } else {
+          }
+        } else {
+          if(this.domanda.risposta){
             if (!this.domanda.risposta.progressivo_risposta) {
               compilata = false;
             }
           }
-      }
-      
-      this.domanda.is_compilata = compilata;
-      
-      this.compiled.emit();
+        }
+    }
+    this.domanda.is_compilata = compilata;
+    this.compiled.emit();
   }
 
 }

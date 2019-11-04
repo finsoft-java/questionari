@@ -82,10 +82,6 @@ export class TableUtentiRowComponent implements OnInit {
    * Richiamato dopo che l'utente ha premuto il tasto Salva
    */
   save() {
-    //console.log("QUI", this.utente_in_modifica.ruolo, this.ruoliMap[parseInt(this.utente_in_modifica.ruolo)]);
-
-    //this.utente_in_modifica.ruolo_dec = this.ruoliMap[parseInt(this.utente_in_modifica.ruolo)];
-
     //se il flg nuovo utente è settato sarà una insert altrimenti update
     if(this.utente_in_modifica.creating == true) {
       this.userService.insert(this.utente_in_modifica).subscribe(resp => {

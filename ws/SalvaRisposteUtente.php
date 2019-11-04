@@ -36,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             print_error(400, "Le risposte salvate devono appartenere tutte allo stesso questionario / sezione / utente valutato");
         }
     }
-
     $questionario_compilato = $questionariCompilatiManager->get_questionario_compilato($progressivo_quest_comp);
     if (!$questionario_compilato) {
         print_error(404, "Not found.");
@@ -50,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($questionario_compilato->get_questionario()->stato <> '1') {
         print_error(403, "Il Questionario non è in stato Valido.");
     }
-    
     $questionariCompilatiManager->update_risposte_sezione($json_data_array, $questionario_compilato, $progressivo_sezione, $nome_utente_valutato);
+    
     
 } else {
     //==========================================================

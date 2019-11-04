@@ -56,7 +56,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     private caricaSezione(indice: number) {
        
         if (!this.questionario || !this.questionario.sezioni || indice >= this.questionario.sezioni.length || indice < 0) {
-            console.log(`La sezione ${indice} non esiste`);
+            this.alertService.error(`La sezione ${indice} non esiste`);
             return;
         }
         let progressivo_sezione = this.questionario.sezioni[indice].progressivo_sezione;
@@ -118,7 +118,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
     creaSezione() {
         if (this.questionario == null) {
-            console.log("Questionario non ancora caricato, questo non dovrebbe succedere");
+            this.alertService.error("Questionario non ancora caricato, questo non dovrebbe succedere");
             return;
         }
         this.is_nuova_sezione = true;
@@ -177,7 +177,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
     duplicaSezioneCorrente() {
         if (this.sezione_corrente == null) {
-            console.log("Duplico la sezione null?!? questo non dovrebbe succedere");
+            this.alertService.error("Duplico la sezione null?!? questo non dovrebbe succedere");
             return;
         }
         this.questionariService.duplicaSezione(this.sezione_corrente)

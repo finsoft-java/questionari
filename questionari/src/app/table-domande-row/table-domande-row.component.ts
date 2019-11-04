@@ -257,7 +257,6 @@ export class TableDomandeRowComponent implements OnInit {
               this.domanda_in_modifica = null;
               this.domanda = this.simpleClone(resp["value"]);
               this.domanda_in_modifica = this.simpleClone(resp["value"]);
-              console.log(this.domanda_in_modifica);
               this.domanda.editing = true;
               this.changeEditMode.emit(true);
               this.alertService.success("Domanda salvata con successo");

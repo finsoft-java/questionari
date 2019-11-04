@@ -236,8 +236,12 @@ class VistaQuestionariCompilabili {
             global $con;
             $include_me = ($this->autovalutazione == '1');
             $funzione = $this->gruppo_valutati;
-            $progetto_utenti_valutati = $progettiManager->get_progetto_utenti($this->id_progetto, $funzione, $include_me);
-            $this->utenti_valutati = array_map(function($x) {return $x->nome_utente;}, $progetto_utenti_valutati);
+            if($funzione != null){
+                $progetto_utenti_valutati = $progettiManager->get_progetto_utenti($this->id_progetto, $funzione, $include_me);
+                $this->utenti_valutati = array_map(function($x) {return $x->nome_utente;}, $progetto_utenti_valutati);
+            }else{
+                $this->utenti_valutati = null;
+            }            
         }
         return $this->utenti_valutati;
     }
@@ -251,16 +255,18 @@ class QuestionariCompilatiManager {
     function get_domande_mancanti($progressivo_quest_comp) {
             global $con;
             $arr = [];
-            $sql = "SELECT r.progressivo_sezione, r.progressivo_domanda, r.nome_utente_valutato, d.descrizione, ut.nome, ut.cognome FROM risposte_quest_compilati r JOIN questionari_compilati qc on r.progressivo_quest_comp = qc.progressivo_quest_comp JOIN domande d on d.id_questionario = qc.id_questionario and d.progressivo_sezione = r.progressivo_sezione and d.progressivo_domanda = r.progressivo_domanda LEFT JOIN utenti ut on ut.username = r.nome_utente_valutato where r.progressivo_quest_comp = '$progressivo_quest_comp' and d.obbligatorieta = '1' and r.progressivo_risposta is NULL AND r.risposta_aperta is NULL";
+            //$sql = "SELECT r.progressivo_sezione, r.progressivo_domanda, r.nome_utente_valutato, d.descrizione, ut.nome, ut.cognome FROM risposte_quest_compilati r JOIN questionari_compilati qc on r.progressivo_quest_comp = qc.progressivo_quest_comp JOIN domande d on d.id_questionario = qc.id_questionario and d.progressivo_sezione = r.progressivo_sezione and d.progressivo_domanda = r.progressivo_domanda LEFT JOIN utenti ut on ut.username = r.nome_utente_valutato where r.progressivo_quest_comp = '$progressivo_quest_comp' and d.obbligatorieta = '1' and r.progressivo_risposta is NULL AND r.risposta_aperta is NULL";
+            $sql = "SELECT DISTINCT r.progressivo_sezione, r.nome_utente_valutato, ut.nome, ut.cognome FROM risposte_quest_compilati r JOIN questionari_compilati qc on r.progressivo_quest_comp = qc.progressivo_quest_comp JOIN domande d on d.id_questionario = qc.id_questionario and d.progressivo_sezione = r.progressivo_sezione and d.progressivo_domanda = r.progressivo_domanda LEFT JOIN utenti ut on ut.username = r.nome_utente_valutato where r.progressivo_quest_comp = '$progressivo_quest_comp' and d.obbligatorieta = '1' and r.progressivo_risposta is NULL AND r.risposta_aperta is NULL";
+
             if($result = mysqli_query($con, $sql)) {
                 $cr = 0;
                 while($row = mysqli_fetch_assoc($result))
                 {
                     $obj = new stdClass();
                     $obj->progressivo_sezione    = $row['progressivo_sezione'];
-                    $obj->progressivo_domanda    = $row['progressivo_domanda'];
+                    //$obj->progressivo_domanda    = $row['progressivo_domanda'];
                     $obj->nome_utente_valutato   = $row['nome_utente_valutato'];
-                    $obj->descrizione            = $row['descrizione'];
+                    //$obj->descrizione            = $row['descrizione'];
                     $obj->nominativo             = $row['cognome']." ".$row['nome'];
                     // NON carico le domande
                     $arr[$cr++] = $obj;
@@ -476,7 +482,6 @@ class QuestionariCompilatiManager {
         if ($id_questionario_or_null) {
             $sql .= " AND id_questionario = '$id_questionario_or_null' ";
         }
-
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
@@ -492,17 +497,17 @@ class QuestionariCompilatiManager {
                 $obj->id_progetto            = $row['id_progetto'];
                 $obj->titolo_progetto        = $row['titolo_progetto'];
                 $obj->stato_progetto         = $row['stato_progetto'];
-                $obj->stato_progetto_dec     = $STATO_PROGETTO[$row['stato_progetto']];
+                $obj->stato_progetto_dec     = $row['stato_progetto'] ? $STATO_PROGETTO[$row['stato_progetto']] : null;                
                 $obj->id_questionario        = $row['id_questionario'];
                 $obj->titolo_questionario    = $row['titolo_questionario'];
                 $obj->stato_questionario     = $row['stato_questionario'];
-                $obj->stato_questionario_dec = $STATO_QUESTIONARIO[$row['stato_questionario']];
+                $obj->stato_questionario_dec = $row['stato_questionario'] ? $STATO_QUESTIONARIO[$row['stato_questionario']] : null;
                 $obj->gruppo_compilanti      = $row['gruppo_compilanti'];
-                $obj->gruppo_compilanti_dec  = $GRUPPI[$row['gruppo_compilanti']];
+                $obj->gruppo_compilanti_dec  = $row['gruppo_compilanti'] ? $GRUPPI[$row['gruppo_compilanti']] : null;                
                 $obj->gruppo_valutati        = $row['gruppo_valutati'];
-                $obj->gruppo_valutati_dec    = $GRUPPI[$row['gruppo_valutati']];
+                $obj->gruppo_valutati_dec    = $row['gruppo_valutati'] ? $GRUPPI[$row['gruppo_valutati']] : null;
                 $obj->autovalutazione        = $row['autovalutazione'];
-                $obj->autovalutazione_dec    = $BOOLEAN[$row['autovalutazione']];
+                $obj->autovalutazione_dec    = $row['autovalutazione'] ? $BOOLEAN[$row['autovalutazione']] : null;
                 $obj->progressivo_quest_comp = $row['progressivo_quest_comp'];
                 $obj->stato_quest_comp       = $stato_quest_comp;
                 $obj->stato_quest_comp_dec   = $stato_quest_comp_dec;
@@ -543,15 +548,26 @@ class QuestionariCompilatiManager {
         }
         $progressivo_quest_comp = mysqli_insert_id($con);
         $utenti_valutati = $questionarioCompilabile->get_nomi_utenti_valutati();
-        foreach($utenti_valutati as $utente_valutato) {
-            $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
-                    "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato' ".
-                    "FROM v_questionari_domande " .
-                    "WHERE id_questionario = '$questionarioCompilabile->id_questionario' ";
-            mysqli_query($con, $sql);
-            if ($con ->error) {
-                print_error(500, $con ->error);
+        if($utenti_valutati != null && $utenti_valutati[0] != null){
+            foreach($utenti_valutati as $utente_valutato) {
+                $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
+                        "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$utente_valutato' ".
+                        "FROM v_questionari_domande " .
+                        "WHERE id_questionario = '$questionarioCompilabile->id_questionario' ";
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
             }
+        }else{
+                $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
+                        "SELECT $progressivo_quest_comp, progressivo_sezione, progressivo_domanda, null ".
+                        "FROM v_questionari_domande " .
+                        "WHERE id_questionario = '$questionarioCompilabile->id_questionario' ";
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
         }
         
         return $this->get_questionario_compilato($progressivo_quest_comp);

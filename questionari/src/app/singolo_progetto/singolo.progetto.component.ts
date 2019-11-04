@@ -192,9 +192,6 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         this.progetto.stato = '1';
         this.updProgetto();
     }
-    changeSelect(a){
-        console.log(a);
-    }
     goToSelect(livello){
         if(livello == 'l1'){
             for(let i = 0; i < this.utentiSelect.length; i++){

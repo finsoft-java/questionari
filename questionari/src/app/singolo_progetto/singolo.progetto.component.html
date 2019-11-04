@@ -1,4 +1,3 @@
-
 <div *ngIf="progetto == null">
     Loading...
 </div>
@@ -10,30 +9,26 @@
         <div class="row">
             <div class=" col">
                 <label for="titolo_progetto">Titolo Progetto</label>
-                <input type="text" class="form-control" [disabled]="progetto.gia_compilato=='1'"
-                title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : 'Un breve titolo per questo Progetto'}}"
-                id="titolo_progetto" placeholder="Titolo Progetto" [(ngModel)]="progetto.titolo" [ngModelOptions]="{standalone: true}">
+                <input type="text" class="form-control" [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : 'Un breve titolo per questo Progetto'}}" id="titolo_progetto"
+                    placeholder="Titolo Progetto" [(ngModel)]="progetto.titolo" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="col">
-                <label for="stato_progetto">Stato</label>                
-                <select class="form-control" required [disabled]="progetto.gia_compilato=='1'"
-                    title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : 'Solo i questionari di progetti Validi possono essere compilati'}}"
+                <label for="stato_progetto">Stato</label>
+                <select class="form-control" required [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : 'Solo i questionari di progetti Validi possono essere compilati'}}"
                     [(ngModel)]="progetto.stato" [ngModelOptions]="{standalone: true}">
                     <option *ngFor="let dati_stato_progetto of stato_progetto; index as i"
                         value="{{i}}">
                         {{ dati_stato_progetto }}
                     </option>   
-                </select>   
+                </select>
             </div>
-        </div>  
-        <div><button class="btn btn-success" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}"
-            [disabled]="progetto.gia_compilato=='1'" style="margin-right:5px;margin-top:10px;" (click)="updProgetto()">Salva Progetto</button></div>      
+        </div>
+        <div><button class="btn btn-success" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}" [disabled]="progetto.gia_compilato=='1'" style="margin-right:5px;margin-top:10px;" (click)="updProgetto()">Salva Progetto</button></div>
     </form>
 
 
     <h5>Questionari per Progetto</h5>
-    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="newQuestionario()" [disabled]="progetto.gia_compilato=='1'"
-        title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Aggiungi Questionario</button>
+    <button class="btn btn-success" style="margin-right:5px;margin-top:10px;" (click)="newQuestionario()" [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Aggiungi Questionario</button>
     <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="refreshQuestionario()">Refresh</button>
 
     <table class="table table-striped" style="margin-top:30px;">
@@ -43,24 +38,21 @@
             <th>Gruppo Compilanti</th>
             <th>Gruppo Valutati</th>
             <th>Autovalutazione</th>
-            <th>Azioni</th>     
-        </thead>    
+            <th>Azioni</th>
+        </thead>
         <tbody>
-            <tr table-questionari-row *ngFor="let questionario_row of progetto.questionari; let i= index;" [progetto]="progetto"  [questionario]="questionario_row"
-                [indexQuestionario]="i" (itemRemoved)="removeItem($event)"></tr>
+            <tr table-questionari-row *ngFor="let questionario_row of progetto.questionari; let i= index;" [progetto]="progetto" [questionario]="questionario_row" [indexQuestionario]="i" (itemRemoved)="removeItem($event)"></tr>
         </tbody>
     </table>
-    <button *ngIf="progetto.gia_compilato=='1'" class="btn btn-dark" (click)="download()">Scarica tutti i questionari compilati in formato Excel</button>
-    <button *ngIf="progetto.gia_compilato=='1' && progetto.stato == '1'" 
-        class="btn btn-danger" (click)="completa()" title="Manda il progetto in stato 'Completato'">Completa progetto</button>
-        <button *ngIf="progetto.stato == '3'" 
-        class="btn btn-danger" (click)="riapri()" title="Rimanda il progetto in stato 'Valido'">Riapri progetto</button>
+    <button *ngIf="progetto.gia_compilato=='1'" class="btn btn-dark" (click)="download()">Scarica (XLSX)</button>
+    <button *ngIf="progetto.gia_compilato=='1' && progetto.stato == '1'" class="btn btn-danger" (click)="completa()" title="Manda il progetto in stato 'Completato'">Completa progetto</button>
+    <button *ngIf="progetto.stato == '3'" class="btn btn-danger" (click)="riapri()" title="Rimanda il progetto in stato 'Valido'">Riapri progetto</button>
 </div>
 
 
 <br/>
 <h5>Utenti per Progetto</h5>
-<div *ngIf="success_mex != ''" role="alert" style="float:left;width:100%;margin-top: 30px;margin-bottom:0px;"class="alert alert-success">{{ success_mex }} <button aria-label="Close" class="close" type="button"><span aria-hidden="true">×</span></button></div>
+<div *ngIf="success_mex != ''" role="alert" style="float:left;width:100%;margin-top: 30px;margin-bottom:0px;" class="alert alert-success">{{ success_mex }} <button aria-label="Close" class="close" type="button"><span aria-hidden="true">×</span></button></div>
 <div style="float:left; width:calc(50% - 60px) ;margin-right:10px;margin-top: 30px;">
     <label>Utenze disponibili</label>
     <select class="select2" [(ngModel)]="utentiSelect" style="width:100%;min-height: 500px;max-height: 500px;overflow-y: scroll;" id="all_user" multiple>
@@ -87,7 +79,7 @@
                     {{ dati_stato_progetto.nome_utente }} 
                 </option>   
             </ng-container>
-        </select>        
+        </select>
     </div>
     <div style="float:left;width:100%;margin-bottom:30px;">
         <div style="float:left;width:50px;margin-right:10px;margin-top: 40px;">
@@ -103,7 +95,7 @@
                     {{ dati_stato_progetto.nome_utente }} 
                 </option>   
             </ng-container>
-        </select>        
+        </select>
     </div>
     <div style="float:left;width:100%;margin-bottom:30px;">
         <div style="float:left;width:50px;margin-right:10px;margin-top: 40px;">
@@ -118,6 +110,6 @@
                     {{ dati_stato_progetto.nome_utente }} 
                 </option>   
             </ng-container>
-        </select>        
+        </select>
     </div>
 </div>

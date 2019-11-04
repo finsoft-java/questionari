@@ -1,40 +1,25 @@
-<td>       
-        <span>{{domanda.progressivo_domanda}}</span>
+<td>
+    <span>{{domanda.progressivo_domanda}}</span>
 </td>
 <td>
-        <span [innerHTML]="domanda.descrizione | safeHtml"></span>
+    <span [innerHTML]="domanda.descrizione | safeHtml"></span>
 </td>
 <td>
-        <div *ngIf="domanda.risposte.length > 0"> <!-- DOMANDA CHIUSA -->
-                <select
-                        [(ngModel)]="domanda.risposta.progressivo_risposta"
-                        [disabled]="!questionario_modificabile"
-                        (change)="calc_flags()"
-                        class="form-control"
-                        [ngClass]="{'border_red': isValid === false}">
+    <div *ngIf="domanda.risposte.length > 0">
+        <!-- DOMANDA CHIUSA -->
+        <select [(ngModel)]="domanda.risposta.progressivo_risposta" [disabled]="!questionario_modificabile" (change)="calc_flags()" class="form-control" [ngClass]="{'border_red': isValid === false}">
                         <option value="" selected></option>
                         <option *ngFor="let opt of domanda.risposte"value="{{opt.progressivo_risposta}}">{{ opt.descrizione }}</option>
                 </select>
-                <span *ngIf="domanda.obbligatorieta" style="color:red">&nbsp;*</span>
-        </div>
-        <div *ngIf="domanda.risposte.length == 0"> <!-- DOMANDA APERTA -->
-                <input
-                        [(ngModel)]="domanda.risposta.risposta_aperta"
-                        [required]="domanda.obbligatorieta"
-                        [disabled]="!questionario_modificabile"
-                        [type]="domanda.html_type_dec || 'text'"
-                        [pattern]="domanda.html_pattern"
-                        [max]="domanda.html_max"
-                        [min]="domanda.html_min"
-                        [maxlength]="domanda.html_maxlength"
-                        (keyup)="calc_flags()"
-                        [ngClass]="{'border_red': isValid === false}"
-                        class="form-control"
-                        title="{{titleRispostaControlli}}" 
-                />
-                <span *ngIf="domanda.obbligatorieta" style="color:red">&nbsp;*</span>
-        </div>
+        <span *ngIf="domanda.obbligatorieta" style="color:red">&nbsp;*</span>
+    </div>
+    <div *ngIf="domanda.risposte.length == 0">
+        <!-- DOMANDA APERTA -->
+        <input [(ngModel)]="domanda.risposta.risposta_aperta" [required]="domanda.obbligatorieta" [disabled]="!questionario_modificabile" [type]="domanda.html_type_dec || 'text'" [pattern]="domanda.html_pattern" [max]="domanda.html_max" [min]="domanda.html_min"
+            [maxlength]="domanda.html_maxlength" (keyup)="calc_flags()" [ngClass]="{'border_red': isValid === false}" class="form-control" title="{{titleRispostaControlli}}" />
+        <span *ngIf="domanda.obbligatorieta" style="color:red">&nbsp;*</span>
+    </div>
 </td>
 <td>
-        <textarea [(ngModel)]="domanda.risposta.note" class="form-control" [disabled]="!questionario_modificabile"></textarea>
+    <textarea [(ngModel)]="domanda.risposta.note" class="form-control" [disabled]="!questionario_modificabile"></textarea>
 </td>

@@ -14,7 +14,7 @@
             <h5><span [innerHTML]="sezione_corrente.titolo"></span></h5>
             <div [innerHTML]="sezione_corrente.descrizione | safeHtml"></div>
         </div>
-        <div *ngIf="questionarioCompilato.utenti_valutati" style="float:right;">
+        <div *ngIf="questionarioCompilato.utenti_valutati[0]" style="float:right;">
             Valutazione Utente
             <select class="form-control" style="display: inline;margin: 30px 0px 0px 15px;width: auto;" [(ngModel)]="utente_valutato_corrente" (ngModelChange)="goToUtente()">
                 <option *ngFor="let utente of questionarioCompilato.utenti_valutati"
