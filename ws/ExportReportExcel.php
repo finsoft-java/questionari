@@ -38,6 +38,7 @@ header('Content-Description: File Transfer');
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment; filename='.basename($filename));
 header('Content-Transfer-Encoding: binary');
+header("Content-Encoding: UTF-8");
 header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');

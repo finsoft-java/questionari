@@ -46,7 +46,8 @@ class XLSXManager {
         $header = ["Utente compilante" => "string", "Utente valutato" => "string"];
         foreach ($domande as $d) {
             #la cosa pazzesca è che non posso avere 2 colonne con la stessa header!!!
-            $caption = "$d->progressivo_sezione.$d->progressivo_domanda $d->descrizione";
+           $html_dm = strip_tags($d->descrizione);
+            $caption = "$d->progressivo_sezione.$d->progressivo_domanda $html_dm";
             $header[$caption] = "string";
         }
 
