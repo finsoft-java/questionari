@@ -10,6 +10,8 @@
 #
 # a regime, questo server deve essere in esecuzione automatica con la macchina
 #
+# Dipendenze: python3-websockets
+#
 # Known bug: quando chiudo Edge va tutto in crash (questo non succede con FF e Chrome)
 
 WEBSOCKET_SERVER = "localhost"
