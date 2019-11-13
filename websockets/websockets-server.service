@@ -2,8 +2,8 @@
 Description=Websockets broadcasting daemon
 
 [Service]
-Type=notify
-ExecStart=/usr/local/bin/websockets.server
+Requires=network-online.target
+ExecStart=/usr/local/bin/websockets-server
 
 [Install]
 WantedBy=multi-user.target
