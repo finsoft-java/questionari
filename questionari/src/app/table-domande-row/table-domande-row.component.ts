@@ -4,6 +4,7 @@ import { AuthenticationService, UserService, AlertService, ProgettiService, Ques
 import { Subscription } from 'rxjs';
 import { DomandeService } from '@/_services/domande.service';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: '[table-domande-row]',
@@ -36,6 +37,7 @@ export class TableDomandeRowComponent implements OnInit {
   risposta_aperta = false;
   setDisableNumber = false;
   tipo_risposta: number;
+  descrizione_truncate: SafeHtml;
   
   constructor(private authenticationService: AuthenticationService,
               private progettiService: ProgettiService,
@@ -43,7 +45,8 @@ export class TableDomandeRowComponent implements OnInit {
               private questionariService: QuestionariService,              
               private userService: UserService,       
               private router: Router,       
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private sanitizer:DomSanitizer) {
                 
               this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
                   this.currentUser = user;
@@ -63,11 +66,16 @@ export class TableDomandeRowComponent implements OnInit {
       this.tipo_risposta = 0; 
     }
     */
+   this.descrizione_truncate = this.htmlToPlaintext(this.domanda.descrizione);
+   //this.descrizione_truncate = this.truncate(this.domanda.descrizione);
+   console.log(this.descrizione_truncate);
     if (this.domanda.creating) 
       this.goToEdit();
     
   }
-
+  htmlToPlaintext(text) {
+    return text ? String(text).replace(/<[^>]+>/gm, '') : '';
+  }
   setValidRisposte(){
     if(this.tipo_risposta == 0){      
       if(this.domanda_in_modifica.risposte != null && this.domanda_in_modifica.risposte.length > 0){

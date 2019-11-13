@@ -196,6 +196,7 @@ class ProgettiManager {
         $sql = insert_select("progetti", ["id_progetto", "stato", "titolo", "utente_creazione"],
                                             ["id_progetto" => null,
                                             "stato" => '0',
+                                            "titolo" => str_replace("'","''",$progetto->titolo)." (Copia)",
                                             "gia_compilato" => '0',
                                             "utente_creazione" => $logged_user->nome_utente],
                                             ["id_progetto" => $progetto->id_progetto]

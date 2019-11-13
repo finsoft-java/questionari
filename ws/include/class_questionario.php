@@ -247,12 +247,14 @@ class QuestionariManager {
     }
 
     function duplica($questionario) {
+        
         // Di fatto copio soltanto il titolo
         global $con, $logged_user, $questionariManager;
         $sql = insert_select("questionari", ["id_questionario", "stato", "flag_comune", "titolo", "utente_creazione"],
                                             ["id_questionario" => null,
                                             "stato" => '0',
                                             "flag_comune" => '0',
+                                            "titolo" => $questionario->titolo." (Copia)",
                                             "gia_compilato" => '0',
                                             "utente_creazione" => $logged_user->nome_utente],
                                             ["id_questionario" => $questionario->id_questionario]
