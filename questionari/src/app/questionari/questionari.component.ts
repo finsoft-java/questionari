@@ -15,18 +15,15 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     questionari_visibili : Questionario[];
     loading = true;
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private questionariService: QuestionariService,
-        private alertService: AlertService,
-        private websocketsService: WebsocketService,
-        private router: Router
-    ) {
+    constructor(private authenticationService: AuthenticationService,
+                private questionariService: QuestionariService,
+                private alertService: AlertService,
+                private websocketsService: WebsocketService,
+                private router: Router){
         this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
             this.currentUser = user;
         });
         this.websocketsSubscription = websocketsService.messages.subscribe(msg => { this.onWebsocketMessage(msg); });
-        
     } 
 
     ngOnInit() {
@@ -85,9 +82,9 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                     });
             }
         }else{
-            if(confirm("Il questionario ha dei progetti associati! Confermare l 'eliminazione?")) {
-                this.questionariService.delete(id_questionario)
-                    .subscribe(response => {
+            if(confirm("Stai per eliminare l'intero questionario! Procedere?")) {
+                if(confirm("Il questionario è associato ad almeno un progetto! Confermare l 'eliminazione?")) {
+                    this.questionariService.delete(id_questionario).subscribe(response => {
                         let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
                         let oldQuest = this.questionari[index];
                         this.questionari.splice(index, 1);
@@ -97,9 +94,11 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                     error => {
                         this.alertService.error(error);
                     });
+                }
             }
         }
     }
+
     duplica(id_questionario: number) {
         this.questionariService.duplica(id_questionario)
             .subscribe(response => {
@@ -112,13 +111,16 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 this.alertService.error(error);
             });
     }
+
     refresh() {
         this.getQuestionari();
     }
+
     set_search_string(searchString) {
         this.searchString = searchString;
         this.calcola_questionari_visibili();
     }
+
     calcola_questionari_visibili() {
         if (!this.searchString) {
             this.questionari_visibili = this.questionari;
@@ -131,6 +133,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             );
         }
     }
+
     sendMsgQuestionario(q : Questionario, note : string) {
         let msg : Message = {
             what_has_changed: 'questionari',
@@ -139,9 +142,11 @@ export class QuestionariComponent implements OnInit, OnDestroy {
           }
       this.websocketsService.sendMsg(msg);
     }
+
     onWebsocketMessage(msg : Message) {
         if (msg.what_has_changed == "questionari") {
             this.refresh();
         }
     }
+
 }

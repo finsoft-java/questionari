@@ -6,6 +6,8 @@ function connect() {
     die("Failed to connect:" . mysqli_connect_error());
   }
   mysqli_set_charset($connect, "utf8");
+  mysqli_query($connect, "SET lc_messages = 'it_IT';");
+  
   return $connect;
 }
 
