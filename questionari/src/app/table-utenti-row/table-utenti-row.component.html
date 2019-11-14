@@ -1,44 +1,42 @@
-<td>
+<td style="width:10%;">
     <div *ngIf="utente.creating">
-        <input class="form-control" style="width: auto;max-width: 130px;" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" placeholder="LDAP username" />
+        <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" placeholder="LDAP username" />
     </div>
     <div *ngIf="!utente.creating">
         <div tabindex="0" style="outline: none !important; line-height: 38px;" title="{{utente.username}}">{{ this.truncate(utente.username) }}&nbsp;</div>
     </div>
 </td>
-<td>
+<td style="width:15%;">
     <div *ngIf="utente.editing">
-        <input class="form-control" style="width: auto;max-width: 130px;" [(ngModel)]="utente_in_modifica.nome" required title="Nome" placeholder="Nome" />
+        <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.nome" required title="Nome" placeholder="Nome" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.nome}}&nbsp;</div>
     </div>
 </td>
-<td>
+<td style="width:15%;">
     <div *ngIf="utente.editing">
-        <input class="form-control" style="width: auto;max-width: 130px;" [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" placeholder="Cognome" />
+        <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" placeholder="Cognome" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.cognome}}&nbsp;</div>
     </div>
 </td>
-<td>
+<td style="width:30%;">
     <div *ngIf="utente.editing">
-        <input type="email" class="form-control" style="width: auto;max-width: 130px;" alt="{{utente.email}}" [(ngModel)]="utente_in_modifica.email" title="Email" placeholder="Email" />
+        <input type="email" class="form-control input_utente" alt="{{utente.email}}" [(ngModel)]="utente_in_modifica.email" title="Email" placeholder="Email" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.email}}&nbsp;</div>
     </div>
 </td>
-<td>
+<td style="width:15%;">
     <div *ngIf="utente.editing">
-        <select class="form-control" [(ngModel)]="utente_in_modifica.ruolo" required>
+        <select class="form-control input_utente" [(ngModel)]="utente_in_modifica.ruolo" required>
             <option *ngFor="let option of ruoliMap; index as i"
                 value="{{i}}">
                 {{ option }}
             </option>
-
-
         </select>
     </div>
     <div *ngIf="!utente.editing">
@@ -46,7 +44,7 @@
     </div>
 </td>
 <td>
-    <div>
+    <div style="width:120px;">
         <button class="btn btn-success btn2" *ngIf="!utente.editing" (click)="goToEdit()" title="Modifica"><i class="fa fa-edit"></i></button>
         <button class="btn btn-danger btn2" *ngIf="!utente.editing" (click)="delete(this.utente.username)" title="Elimina"><i class="fa fa-trash-alt"></i></button>
         <button class="btn btn-success btn2" *ngIf="utente.editing" (click)="save()" title="Salva"><i class="fa fa-save"></i></button>

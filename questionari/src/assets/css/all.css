@@ -87,6 +87,10 @@ button:focus {
     color: #fff;
 }
 
+.input_utente {
+    width: 90%;
+}
+
 .dropdown-menu {
     position: absolute;
     top: 72px;
