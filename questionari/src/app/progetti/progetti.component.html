@@ -2,36 +2,35 @@
 <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="crea()"><i class="fa fa-plus-square"></i> Nuovo progetto</button>
 <button class="btn btn-dark" style="margin-top:10px;margin-right:5px;" (click)="refresh()"><i class="fa fa-sync"></i> Refresh</button>
 <search (doSearch)="set_search_string($event)" [searchString]="searchString"></search>
-
-<table class="table table-striped" style="margin-top:30px;">
-    <thead style="background-color: #f8f9fa;">
-        <th>Titolo</th>
-        <th>Stato</th>
-        <th>Creato da</th>
-        <th>Data</th>
-        <th>Azioni</th>
-    </thead>
-    <tbody>
-        <tr *ngFor="let p of progetti_visibili">
-            <td>{{p.titolo}}</td>
-            <td>{{p.stato_dec}}</td>
-            <td>{{p.utente_creazione}}</td>
-            <td>{{p.data_creazione}}</td>
-            <td style="width:30%">
-                <button class="{{p.gia_compilato=='1' ? 'btn btn3 btn-readonly' : 'btn btn3 btn-success'}}"
-                    routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active"
-                    [title]="p.gia_compilato=='1' ? 'Apri (read-only perchè esistono compilazioni)' : 'Apri'">
+<div style="background-color: #f8f9fa;float: left;width: 100%;margin-top:30px;">
+    <div style="float: left;width: 20%;padding: .75rem;text-align: center;font-weight: bold;">Titolo</div>
+    <div style="float: left;width: 10%;padding: .75rem;text-align: center;font-weight: bold;">Stato</div>
+    <div style="float: left;width: 15%;padding: .75rem;text-align: center;font-weight: bold;">Creato da</div>
+    <div style="float: left;width: 30%;padding: .75rem;text-align: center;font-weight: bold;">Data</div>
+    <div style="float: left;width:25%;padding: .75rem;text-align: center;font-weight: bold;">Azioni</div>
+</div>
+<div class="my-custom-scrollbar" style="float: left;width: 100%;">
+    <table class="table table-striped">
+        <thead style="display:none;">
+            <th style="width: 20%;">Titolo</th>
+            <th style="width: 10%;">Stato</th>
+            <th style="width: 15%;">Creato da</th>
+            <th style="width: 30%;">Data</th>
+            <th style="width: 25%;">Azioni</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of progetti_visibili">
+                <td style="text-align:center;line-height: 38px;width:20%">{{p.titolo}}</td>
+                <td style="text-align:center;line-height: 38px;width: 10%;">{{p.stato_dec}}</td>
+                <td style="text-align:center;line-height: 38px;width: 15%;">{{p.utente_creazione}}</td>
+                <td style="text-align:center;line-height: 38px;width: 30%;">{{p.data_creazione}}</td>
+                <td style="width:25%">
+                    <button class="{{p.gia_compilato=='1' ? 'btn btn3 btn-readonly' : 'btn btn3 btn-success'}}" routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active" [title]="p.gia_compilato=='1' ? 'Apri (read-only perchè esistono compilazioni)' : 'Apri'">
                     <i class="fa fa-edit"></i></button>
-                <button class="btn btn-dark btn3"
-                    (click)="duplica(p.id_progetto)"
-                    title="Duplica"><i class="fa fa-clone"></i></button>
-                <button class="btn btn-danger btn3"
-                    [disabled]="p.gia_compilato=='1'" (click)="elimina(p.id_progetto)"
-                    [title]="p.gia_compilato=='1' ? 'Impossibile eliminare perchè esistono compilazioni' : 'Elimina'"
-                     ><i class="fa fa-trash-alt"></i></button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<div>
+                    <button class="btn btn-dark btn3" (click)="duplica(p.id_progetto)" title="Duplica"><i class="fa fa-clone"></i></button>
+                    <button class="btn btn-danger btn3" [disabled]="p.gia_compilato=='1'" (click)="elimina(p.id_progetto)" [title]="p.gia_compilato=='1' ? 'Impossibile eliminare perchè esistono compilazioni' : 'Elimina'"><i class="fa fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
