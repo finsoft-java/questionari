@@ -44,10 +44,33 @@
     </div>
 </td>
 <td>
-    <div style="width:120px;">
-        <button class="btn btn-success btn2" *ngIf="!utente.editing" (click)="goToEdit()" title="Modifica"><i class="fa fa-edit"></i></button>
-        <button class="btn btn-danger btn2" *ngIf="!utente.editing" (click)="delete(this.utente.username)" title="Elimina"><i class="fa fa-trash-alt"></i></button>
+    <div>
+        <button class="btn btn-success btn3" *ngIf="!utente.editing" [disabled]="utente.from_ldap" data-toggle="modal" data-target="#myModal" (click)="showModal()" style="background-color: grey;border-color: grey;" title="Password"><i class="fa fa-key"></i></button>
+        <button class="btn btn-success btn3" *ngIf="!utente.editing" (click)="goToEdit()" title="Modifica"><i class="fa fa-edit"></i></button>
+        <button class="btn btn-danger btn3" *ngIf="!utente.editing" (click)="delete(this.utente.username)" title="Elimina"><i class="fa fa-trash-alt"></i></button>
         <button class="btn btn-success btn2" *ngIf="utente.editing" (click)="save()" title="Salva"><i class="fa fa-save"></i></button>
         <button class="btn btn-danger btn2" *ngIf="utente.editing" (click)="returnFromEdit()" title="Annulla"><i class="fa fa-undo"></i></button>
     </div>
 </td>
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Inserimento nuova Password</h4>
+                <button type="button" class="close" (click)="hideModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>La password, se già inserita, verrà sovrascritta </p>
+                <div>
+                    <input class="form-control" type="password" [(ngModel)]="utente.password" title="Password" placeholder="Inserisci qui la password" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="sendModal()">Salva</button>
+                <button type="button" class="btn btn-danger" (click)="hideModal()">Chiudi</button>
+                <button type="button" id="close-modal" data-dismiss="modal" style="display: none">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
