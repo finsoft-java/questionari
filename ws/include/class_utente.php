@@ -9,7 +9,7 @@ class Utente {
 class UtenteManager {
     
     function get_utenti() {
-        global $con, $RUOLO;
+        global $con, $RUOLO, $BOOLEAN;
         $arr = array();
         $sql = "SELECT * FROM utenti";
         
@@ -23,7 +23,10 @@ class UtenteManager {
                 $utente->cognome    = $row['cognome'];
                 $utente->email      = $row['email'];
                 $utente->ruolo      = $row['ruolo'];
-                $utente->ruolo_dec  = $RUOLO[$row['ruolo']];
+                $utente->ruolo_dec  = $RUOLO[$row['ruolo']];                
+                $utente->from_ldap      = $row['from_ldap'];
+                $utente->from_ldap_dec  = ($row['from_ldap'] == '1' ? true : false);
+                
                 $arr[$cr++] = $utente;
             }
         } else {
@@ -32,8 +35,19 @@ class UtenteManager {
         return $arr;
     }
     
+    function insert_password_utente($psw,$username) {
+        global $con;
+        $psw_md5 = md5($psw);
+        $sql = "Update utenti SET password_enc = '$psw_md5' WHERE username = '$username' ";
+        echo $sql;
+        mysqli_query($con, $sql);
+        if ($con ->error) {
+            print_error(500, $con ->error);
+        }
+    }
+
     function get_utente($username) {
-        global $con, $RUOLO;
+        global $con, $RUOLO, $BOOLEAN;
         $utente = new Utente();
         $sql = "SELECT * FROM utenti WHERE username = '$username' ";
         
@@ -46,7 +60,8 @@ class UtenteManager {
                 $utente->email      = $row['email'];
                 $utente->ruolo      = $row['ruolo'];
                 $utente->ruolo_dec  = $RUOLO[$row['ruolo']];
-
+                $utente->from_ldap      = $row['from_ldap'];
+                $utente->from_ldap_dec  = ($row['from_ldap'] == '1' ? true : false);
             } else {
                 return null;
             }

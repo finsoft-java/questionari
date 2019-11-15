@@ -13,14 +13,17 @@ declare var $: any;
 export class TableUtentiRowComponent implements OnInit {
 
   @Input() public utente: User; 
-
+  @Input() public indice_utente: number;
   @Output() public itemRemoved = new EventEmitter<string>(); //emette lo username
   @Output() public itemModified = new EventEmitter<User>();
   @Output() public itemCreated = new EventEmitter<User>();
   closeResult: string;
   currentUser: User;
+  utente_username: string;
   currentUserSubscription: Subscription;
   utente_in_modifica: User;
+  utente_con_password: User;
+  password_utente: string;
   ruoliMap = ["Utente normale", "Gestore progetti", "Amministratore"];
 
   constructor(private authenticationService: AuthenticationService,
@@ -130,15 +133,21 @@ export class TableUtentiRowComponent implements OnInit {
     return Object.assign({}, obj);
   }
 
-  showModal():void {
-    $("#myModal").modal('show');
+  showModal(utente):void {
+    console.log(utente);
+    console.log($(".myModal_"+this.indice_utente));
+    $(".myModal_"+this.indice_utente).modal('show');
   }
-  sendModal(): void {
+  sendModal(username:string): void {
     //do something here
+    console.log("sendModal");
+    this.userService.insertPassword(username, this.password_utente).subscribe(resp => {
+
+    });
     this.hideModal();
   }
   hideModal():void {
-    document.getElementById('close-modal').click();
+    document.getElementById('close-modal_'+this.indice_utente).click();
   }
 
 }

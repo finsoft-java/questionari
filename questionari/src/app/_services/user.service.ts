@@ -16,6 +16,12 @@ export class UserService {
     insert(user: User) {
         return this.http.put(`${config.apiUrl}/User.php`, user);
     }
+    insertPassword(username:string, pwd:string) {
+        return this.http.post(`${config.apiUrl}/UserPassword.php`, {
+            username : username,
+            pwd : pwd
+        });
+    }
     update(user: User) {
         return this.http.post(`${config.apiUrl}/User.php`, user);
     }

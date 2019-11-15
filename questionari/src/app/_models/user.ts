@@ -6,8 +6,10 @@
     ruolo: string;
     ruolo_dec: string;
     from_ldap: boolean;
+    from_ldap_dec: string;
     // Questi servono per gestire la modifica via web
-    password?:string;    
+    password?:string;  
+    editing_psw?: boolean;  
     editing?: boolean;
     creating?: boolean;
 }
