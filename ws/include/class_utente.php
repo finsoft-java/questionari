@@ -61,7 +61,8 @@ class UtenteManager {
         $password_enc = md5($password_cleartext);
         $utente = new Utente();
         $sql = "SELECT * FROM utenti WHERE username = '$username' and password_enc='$password_enc' and from_ldap='0' ";
-        
+        //echo $sql;
+
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result))
             {

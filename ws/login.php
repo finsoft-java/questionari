@@ -71,6 +71,7 @@ function check_and_load_user($username, $pwd) {
     global $utenteManager;
     $utente_locale = $utenteManager->get_utente_locale($username, $pwd);
     if ($utente_locale) {
+        $utente_locale->nome_utente = $utente_locale->username; // TODO questo prima o poi e' da risolvere
         return $utente_locale;
     }
 
