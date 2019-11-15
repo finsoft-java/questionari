@@ -202,7 +202,7 @@ class QuestionariManager {
     
     function aggiorna($questionario, $json_data) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN;
-        
+        $this->controllo_stato($questionario, $json_data->stato);
         $sql = update("questionari", ["titolo" => $con->escape_string($json_data->titolo),
                                   "stato" => $json_data->stato,
                                   "flag_comune" => ($json_data->flag_comune ? $json_data->flag_comune : '0')],
@@ -219,7 +219,20 @@ class QuestionariManager {
         $questionario->flag_comune_dec = $BOOLEAN[$json_data->flag_comune];
         return $questionario;
     }
-    
+    function controllo_stato($questionario, $nuovo_stato){
+        global $con;
+        $stato_old = $questionario->stato;
+        if(($nuovo_stato == '0' || $nuovo_stato == '2') && $stato_old == '1'){
+            $sql = "select count(*) from progetti_questionari pq JOIN progetti p on pq.id_progetto= p.id_progetto where pq.id_questionario = '$questionario->id_questionario' and p.stato = '1'";
+            $result = mysqli_query($con, $sql);
+            if ($con ->error) {
+                print_error(500, $con ->error);
+            }
+            if($result->field_count > 0){
+                print_error(400, "Il questionario non può ritornare in Bozza/Annullato se un Progetto a cui è associato è Valido");
+            }            
+        }
+    }
     function elimina($id_questionario) {
         global $con;
         $sql = "DELETE FROM questionari WHERE id_questionario = '$id_questionario'";  //on delete cascade! (FIXME funziona anche con i questionari?!?)

@@ -162,7 +162,6 @@ class ProgettiManager {
     function aggiorna($progetto, $json_data) {
         global $con, $STATO_PROGETTO;
         $this->controllaStato($progetto,$json_data->stato);
-        return false;
         $titolo = $con->escape_string($json_data->titolo);
         $stato = $con->escape_string($json_data->stato);
         $sql = "UPDATE progetti SET titolo='$titolo', stato='$stato' WHERE id_progetto = '$progetto->id_progetto'";
@@ -176,7 +175,7 @@ class ProgettiManager {
         global $con, $STATO_PROGETTO;
         
         $this->controllaStato($progetto,$nuovo_stato);
-        
+
         $sql = "UPDATE progetti SET stato='$nuovo_stato' WHERE id_progetto = '$progetto->id_progetto'";
         mysqli_query($con, $sql);
         if ($con ->error) {
