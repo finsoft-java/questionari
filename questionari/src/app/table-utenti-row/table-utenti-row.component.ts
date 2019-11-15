@@ -3,6 +3,7 @@ import { User, UserRole } from '@/_models';
 import { AuthenticationService, UserService, AlertService } from '@/_services';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+declare var $: any;
 
 @Component({
   selector: '[table-utenti-row]',
@@ -16,7 +17,7 @@ export class TableUtentiRowComponent implements OnInit {
   @Output() public itemRemoved = new EventEmitter<string>(); //emette lo username
   @Output() public itemModified = new EventEmitter<User>();
   @Output() public itemCreated = new EventEmitter<User>();
-  
+  closeResult: string;
   currentUser: User;
   currentUserSubscription: Subscription;
   utente_in_modifica: User;
@@ -127,6 +128,17 @@ export class TableUtentiRowComponent implements OnInit {
 
   simpleClone(obj: any) {
     return Object.assign({}, obj);
+  }
+
+  showModal():void {
+    $("#myModal").modal('show');
+  }
+  sendModal(): void {
+    //do something here
+    this.hideModal();
+  }
+  hideModal():void {
+    document.getElementById('close-modal').click();
   }
 
 }

@@ -62,7 +62,8 @@ class UtenteManager {
                              "nome" => $con->escape_string($json_data->nome),
                              "cognome" => $con->escape_string($json_data->cognome),
                              "email" => $con->escape_string($json_data->email),
-                             "ruolo" => $json_data->ruolo]);
+                             "ruolo" => $json_data->ruolo,
+                             "from_ldap" => $json_data->from_ldap]);
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con ->error);
@@ -75,8 +76,10 @@ class UtenteManager {
         $sql = update("utenti", ["nome" => $con->escape_string($json_data->nome),
                                  "cognome" => $con->escape_string($json_data->cognome),
                                  "email" => $con->escape_string($json_data->email),
-                                 "ruolo" => $json_data->ruolo],
+                                 "ruolo" => $json_data->ruolo,
+                                 "from_ldap" => $json_data->from_ldap],
                                 ["username" => $con->escape_string($utente->username)]);
+                                //echo $sql;
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con ->error);
@@ -150,10 +153,11 @@ class UtenteManager {
                 $entry = $entries[$x];
                 if (array_key_exists ($entry['samaccountname'][0], $utenti_su_db_map)) {
                     // UPDATE
-                    $u = $utenti_map[$entry['samaccountname'][0]];
+                    $u = $utenti_su_db_map[$entry['samaccountname'][0]];
                     $u->nome = $entry['givenname'][0];
                     $u->cognome = $entry['sn'][0]; 
                     $u->email = $entry['mail'][0];
+                    $u->from_ldap = 1;
                     $this->aggiorna($u, $u);
                     ++$utenti_aggiornati;
                 } else {
@@ -164,6 +168,7 @@ class UtenteManager {
                     $u->cognome = $entry['sn'][0]; 
                     $u->email = $entry['mail'][0];
                     $u->ruolo = '0';
+                    $u->from_ldap = 1;
                     $this->crea($u);
                     ++$utenti_inseriti;
                 }
