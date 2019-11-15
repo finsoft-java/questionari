@@ -56,6 +56,32 @@ class UtenteManager {
         return $utente;
     }
     
+    function get_utente_locale($username, $password_cleartext) {
+        global $con, $RUOLO;
+        $password_enc = md5($password_cleartext);
+        $utente = new Utente();
+        $sql = "SELECT * FROM utenti WHERE username = '$username' and password_enc='$password_enc' and from_ldap='0' ";
+        
+        if($result = mysqli_query($con, $sql)) {
+            if($row = mysqli_fetch_assoc($result))
+            {
+                $utente->username   = $row['username'];
+                $utente->nome       = $row['nome'];
+                $utente->cognome    = $row['cognome'];
+                $utente->email      = $row['email'];
+                $utente->ruolo      = $row['ruolo'];
+                $utente->from_ldap  = $row['from_ldap'];
+                $utente->ruolo_dec  = $RUOLO[$row['ruolo']];
+
+            } else {
+                return null;
+            }
+        } else {
+            print_error(500, $con ->error);
+        }
+        return $utente;
+    }
+    
     function crea($json_data) {
         global $con;
         $sql = insert("utenti", ["username" => $con->escape_string($json_data->username),
