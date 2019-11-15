@@ -54,11 +54,11 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription.unsubscribe();
     }
     private caricaSezione(indice: number) {
-       
+       /*
         if (!this.questionario || !this.questionario.sezioni || indice >= this.questionario.sezioni.length || indice < 0) {
             this.alertService.error(`La sezione ${indice} non esiste`);
             return;
-        }
+        }*/
         let progressivo_sezione = this.questionario.sezioni[indice].progressivo_sezione;
         this.questionariService.getSezioneById(this.id_questionario, progressivo_sezione)
             .subscribe(response => {
@@ -226,15 +226,19 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
 
     updQuestionario(questionario: Questionario){
-        this.questionariService.update(questionario).subscribe(response => {
-            let id_progetto = response["value"].id_progetto;
-            this.alertService.success("Questionario modificato con successo");
-            //this.scrollToTop();
-            //this.router.navigate(['/progetti', id_progetto]);
-        },
-        error => {
-        this.alertService.error(error);
-        });
+        if(questionario.titolo != null && questionario.titolo != ''){
+            this.questionariService.update(questionario).subscribe(response => {
+                let id_progetto = response["value"].id_progetto;
+                this.alertService.success("Questionario modificato con successo");
+                //this.scrollToTop();
+                //this.router.navigate(['/progetti', id_progetto]);
+            },
+            error => {
+            this.alertService.error(error);
+            });
+        }else{
+            this.alertService.error("Il titolo deve essere inserito");
+        }
     }
     scrollToTop(){
         let scrollToTop = window.setInterval(() => {

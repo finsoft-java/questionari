@@ -3,7 +3,7 @@
         <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" placeholder="LDAP username" />
     </div>
     <div *ngIf="!utente.creating">
-        <div tabindex="0" style="outline: none !important; line-height: 38px;" title="{{utente.username}}">{{ this.truncate(utente.username) }}&nbsp;</div>
+        <div tabindex="0" style="outline: none !important; line-height: 38px;padding-left:.75rem;text-align:center" title="{{utente.username}}">{{ this.truncate(utente.username) }}&nbsp;</div>
     </div>
 </td>
 <td style="width:15%;">
@@ -11,7 +11,7 @@
         <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.nome" required title="Nome" placeholder="Nome" />
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.nome}}&nbsp;</div>
+        <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.nome}}&nbsp;</div>
     </div>
 </td>
 <td style="width:15%;">
@@ -19,7 +19,7 @@
         <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" placeholder="Cognome" />
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.cognome}}&nbsp;</div>
+        <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.cognome}}&nbsp;</div>
     </div>
 </td>
 <td style="width:30%;">
@@ -27,7 +27,7 @@
         <input type="email" class="form-control input_utente" alt="{{utente.email}}" [(ngModel)]="utente_in_modifica.email" title="Email" placeholder="Email" />
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.email}}&nbsp;</div>
+        <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.email}}&nbsp;</div>
     </div>
 </td>
 <td style="width:15%;">
@@ -40,7 +40,7 @@
         </select>
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.ruolo_dec}}" tabindex="0" style="outline: none !important; line-height: 38px;">{{utente.ruolo_dec}}&nbsp;</div>
+        <div title="{{utente.ruolo_dec}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.ruolo_dec}}&nbsp;</div>
     </div>
 </td>
 <td>

@@ -35,10 +35,25 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         this.currentUserSubscription.unsubscribe();
         this.websocketsSubscription.unsubscribe();
     }
+    addZero(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
     crea() {
         let newQuest = new Questionario();
         newQuest.stato = "0";
-        newQuest.titolo = "Nuovo questionario";
+
+
+        var d = new Date();
+        var x = document.getElementById("demo");
+        var h = this.addZero(d.getHours());
+        var m = this.addZero(d.getMinutes());
+        var s = this.addZero(d.getSeconds());
+
+
+        newQuest.titolo = "Nuovo questionario delle "+h + ":" + m + ":" + s;
         newQuest.flag_comune = "0";
         newQuest.gia_compilato = "0";
         newQuest.utente_creazione = this.currentUser.username;

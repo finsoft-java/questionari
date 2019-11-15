@@ -102,7 +102,8 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         });
     }
     updProgetto(){        
-        this.progettiService.update(this.progetto).subscribe(response => {
+        if(this.progetto.titolo != null && this.progetto.titolo != ''){
+            this.progettiService.update(this.progetto).subscribe(response => {
                 let id_progetto = response["value"].id_progetto;
                 //this.router.navigate(['/progetti', id_progetto]);
                 this.alertService.success("Progetto modificato con successo");
@@ -111,6 +112,9 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
             error => {
                 this.alertService.error(error);
             });
+        }else{
+            this.alertService.error("Il titolo deve essere inserito");
+        }
     }
     download(): void {
         this.progettiService.download(this.id_progetto)

@@ -39,14 +39,27 @@ export class ProgettiComponent implements OnInit, OnDestroy {
         this.currentUserSubscription.unsubscribe();
         this.websocketsSubscription.unsubscribe();
     }
+    addZero(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
     crea() {
         let newProject = new Progetto();
         newProject.stato = "0";
-        newProject.titolo = "Nuovo progetto";
+
+        var d = new Date();
+        var x = document.getElementById("demo");
+        var h = this.addZero(d.getHours());
+        var m = this.addZero(d.getMinutes());
+        var s = this.addZero(d.getSeconds());
+
+        newProject.titolo = "Nuovo progetto delle "+h + ":" + m + ":" + s;
         newProject.gia_compilato = "0";
         newProject.utente_creazione = this.currentUser.username;
         newProject.data_creazione = new Date();        
-        
+         
         this.progettiService.insert(newProject)
             .subscribe(response => {
                 let p : Progetto = response["value"]; 

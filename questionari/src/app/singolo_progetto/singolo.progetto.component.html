@@ -33,12 +33,12 @@
 
     <table class="table table-striped" style="margin-top:30px;">
         <thead style="background-color: #f8f9fa;">
-            <th>Nome Questionario</th>
-            <th>Tipo Questionario</th>
-            <th>Gruppo Compilanti</th>
-            <th>Gruppo Valutati</th>
-            <th>Autovalutazione</th>
-            <th>Azioni</th>
+            <th style="padding:.75rem">Nome Questionario</th>
+            <th style="padding:.75rem">Tipo Questionario</th>
+            <th style="padding:.75rem">Gruppo Compilanti</th>
+            <th style="padding:.75rem">Gruppo Valutati</th>
+            <th style="padding:.75rem">Autovalutazione</th>
+            <th style="padding:.75rem">Azioni</th>
         </thead>
         <tbody>
             <tr table-questionari-row *ngFor="let questionario_row of progetto.questionari; let i= index;" [progetto]="progetto" [questionario]="questionario_row" [indexQuestionario]="i" (itemRemoved)="removeItem($event)"></tr>
