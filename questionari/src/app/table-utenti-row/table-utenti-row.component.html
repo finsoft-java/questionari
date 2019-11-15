@@ -1,6 +1,6 @@
 <td style="width:10%;">
     <div *ngIf="utente.creating">
-        <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" placeholder="LDAP username" />
+        <input class="form-control input_utente" [disabled]="utente.from_ldap" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" placeholder="LDAP username" />
     </div>
     <div *ngIf="!utente.creating">
         <div tabindex="0" style="outline: none !important; line-height: 38px;padding-left:.75rem;text-align:center" title="{{utente.username}}">{{ this.truncate(utente.username) }}&nbsp;</div>
@@ -8,7 +8,7 @@
 </td>
 <td style="width:15%;">
     <div *ngIf="utente.editing">
-        <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.nome" required title="Nome" placeholder="Nome" />
+        <input class="form-control input_utente" [disabled]="utente.from_ldap" [(ngModel)]="utente_in_modifica.nome" required title="Nome" placeholder="Nome" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.nome}}&nbsp;</div>
@@ -16,7 +16,7 @@
 </td>
 <td style="width:15%;">
     <div *ngIf="utente.editing">
-        <input class="form-control input_utente" [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" placeholder="Cognome" />
+        <input class="form-control input_utente" [disabled]="utente.from_ldap" [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" placeholder="Cognome" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.cognome}}&nbsp;</div>
@@ -24,7 +24,7 @@
 </td>
 <td style="width:20%;">
     <div *ngIf="utente.editing">
-        <input type="email" class="form-control input_utente" alt="{{utente.email}}" [(ngModel)]="utente_in_modifica.email" title="Email" placeholder="Email" />
+        <input type="email" class="form-control input_utente" [disabled]="utente.from_ldap" alt="{{utente.email}}" [(ngModel)]="utente_in_modifica.email" title="Email" placeholder="Email" />
     </div>
     <div *ngIf="!utente.editing">
         <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.email}}&nbsp;</div>
@@ -45,7 +45,7 @@
 </td>
 <td>
     <div>
-        <button class="btn btn-success btn3" *ngIf="!utente.editing" [disabled]="utente.from_ldap_dec" data-toggle="modal" [attr.data-target]="'#myModal_' + indice_utente" (click)="showModal(this.utente)" style="background-color: grey;border-color: grey;" title="Password"><i class="fa fa-key"></i></button>
+        <button class="btn btn-success btn3" *ngIf="!utente.editing" [disabled]="utente.from_ldap" data-toggle="modal" [attr.data-target]="'#myModal_' + indice_utente" (click)="showModal(this.utente)" style="background-color: grey;border-color: grey;" [title]="utente.from_ldap ? 'Impossibile cambiare password di utenza LDAP' : 'Cambia Password'"><i class="fa fa-key"></i></button>
         <button class="btn btn-success btn3" *ngIf="!utente.editing" (click)="goToEdit()" title="Modifica"><i class="fa fa-edit"></i></button>
         <button class="btn btn-danger btn3" *ngIf="!utente.editing" (click)="delete(this.utente.username)" title="Elimina"><i class="fa fa-trash-alt"></i></button>
         <button class="btn btn-success btn2" *ngIf="utente.editing" (click)="save()" title="Salva"><i class="fa fa-save"></i></button>

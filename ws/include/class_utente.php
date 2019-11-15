@@ -23,9 +23,9 @@ class UtenteManager {
                 $utente->cognome    = $row['cognome'];
                 $utente->email      = $row['email'];
                 $utente->ruolo      = $row['ruolo'];
-                $utente->ruolo_dec  = $RUOLO[$row['ruolo']];                
-                $utente->from_ldap      = $row['from_ldap'];
-                $utente->from_ldap_dec  = ($row['from_ldap'] == '1' ? true : false);
+                $utente->ruolo_dec  = ($row['ruolo'] != null) ? $RUOLO[$row['ruolo']] : null;
+                $utente->from_ldap      = ($row['from_ldap'] == '1' ? true : false);
+                $utente->from_ldap_dec  = ($row['from_ldap'] != null) ? $BOOLEAN[$row['from_ldap']] : null;
                 
                 $arr[$cr++] = $utente;
             }
@@ -39,7 +39,6 @@ class UtenteManager {
         global $con;
         $psw_md5 = md5($psw);
         $sql = "Update utenti SET password_enc = '$psw_md5' WHERE username = '$username' ";
-        echo $sql;
         mysqli_query($con, $sql);
         if ($con ->error) {
             print_error(500, $con ->error);
@@ -59,9 +58,9 @@ class UtenteManager {
                 $utente->cognome    = $row['cognome'];
                 $utente->email      = $row['email'];
                 $utente->ruolo      = $row['ruolo'];
-                $utente->ruolo_dec  = $RUOLO[$row['ruolo']];
-                $utente->from_ldap      = $row['from_ldap'];
-                $utente->from_ldap_dec  = ($row['from_ldap'] == '1' ? true : false);
+                $utente->ruolo_dec  = ($row['ruolo'] != null) ? $RUOLO[$row['ruolo']] : null;
+                $utente->from_ldap      = ($row['from_ldap'] == '1' ? true : false);
+                $utente->from_ldap_dec  = ($row['from_ldap'] != null) ? $BOOLEAN[$row['from_ldap']] : null;
             } else {
                 return null;
             }
@@ -86,8 +85,9 @@ class UtenteManager {
                 $utente->cognome    = $row['cognome'];
                 $utente->email      = $row['email'];
                 $utente->ruolo      = $row['ruolo'];
-                $utente->from_ldap  = $row['from_ldap'];
-                $utente->ruolo_dec  = $RUOLO[$row['ruolo']];
+                $utente->ruolo_dec  = ($row['ruolo'] != null) ? $RUOLO[$row['ruolo']] : null;
+                $utente->from_ldap      = ($row['from_ldap'] == '1' ? true : false);
+                $utente->from_ldap_dec  = ($row['from_ldap'] != null) ? $BOOLEAN[$row['from_ldap']] : null;
 
             } else {
                 return null;
