@@ -142,9 +142,9 @@ export class TableUtentiRowComponent implements OnInit {
     //do something here
     console.log("sendModal");
     this.userService.insertPassword(username, this.password_utente).subscribe(resp => {
-
+      this.alertService.success("Password modificata con successo");
+      this.hideModal();
     });
-    this.hideModal();
   }
   hideModal():void {
     document.getElementById('close-modal_'+this.indice_utente).click();

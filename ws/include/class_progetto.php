@@ -161,6 +161,8 @@ class ProgettiManager {
     
     function aggiorna($progetto, $json_data) {
         global $con, $STATO_PROGETTO;
+        $this->controllaStato($progetto,$json_data->stato);
+        return false;
         $titolo = $con->escape_string($json_data->titolo);
         $stato = $con->escape_string($json_data->stato);
         $sql = "UPDATE progetti SET titolo='$titolo', stato='$stato' WHERE id_progetto = '$progetto->id_progetto'";
@@ -172,6 +174,9 @@ class ProgettiManager {
     
     function cambia_stato($progetto, $nuovo_stato) {
         global $con, $STATO_PROGETTO;
+        
+        $this->controllaStato($progetto,$nuovo_stato);
+        
         $sql = "UPDATE progetti SET stato='$nuovo_stato' WHERE id_progetto = '$progetto->id_progetto'";
         mysqli_query($con, $sql);
         if ($con ->error) {
@@ -239,6 +244,20 @@ class ProgettiManager {
         }
     }
     
+    function controllaStato($progetto, $nuovo_stato){
+        $stato_old = $progetto->stato;
+        if($nuovo_stato == '1'){
+            if($progetto->questionari[0] == null){
+                print_error(400, "Un progetto senza questionari non può essere valido");
+            }
+            for($i = 0; $i < count($progetto->questionari); $i++){
+                if($progetto->questionari[$i]->stato_questionario == '0'){
+                    print_error(400, "Un progetto non può essere Valido se ha questionari in Bozza");
+                }
+            }
+        }
+    }
+
     function utente_puo_creare_progetti() {
         global $logged_user;
         return $logged_user->ruolo >= '1';
