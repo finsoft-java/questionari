@@ -14,6 +14,8 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     searchString : string;
     questionari_visibili : Questionario[];
     loading = true;
+    current_order: string = "asc";
+    nome_colonna_ordinamento: string = "username";
 
     constructor(private authenticationService: AuthenticationService,
                 private questionariService: QuestionariService,
@@ -75,11 +77,28 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 this.questionari = response["data"];
                 this.calcola_questionari_visibili();
                 this.loading = false;
+                if(this.current_order == 'asc'){
+                    this.current_order ='desc';
+                }else{                    
+                    this.current_order ='asc';
+                }
+                this.ordinamento(this.nome_colonna_ordinamento);
             },
             error => {
                 this.alertService.error(error);
                 this.loading = false;
             });
+    }
+    ordinamento(nome_colonna){
+        if(this.current_order == 'asc'){
+            this.questionari_visibili = this.questionari_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
+            this.current_order = 'desc';
+        }else{
+            this.questionari_visibili = this.questionari_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
+            this.current_order = 'asc';
+        }
+        this.nome_colonna_ordinamento = nome_colonna;
+ 
     }
     elimina(id_questionario: number, id_progetto: any): void {
         if(id_progetto == null){

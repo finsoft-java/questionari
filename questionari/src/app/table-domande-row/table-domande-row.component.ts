@@ -57,18 +57,7 @@ export class TableDomandeRowComponent implements OnInit {
     this.getQuestionari();    
     this.questionatioSelezionato = this.questionario;    
     this.domanda_in_modifica = this.simpleClone(this.domanda);
-    /*
-    if(this.domanda_in_modifica.risposte.length > 0){
-      this.risposta_aperta = false;
-      this.tipo_risposta = 1; 
-    }else{
-      this.risposta_aperta = true;
-      this.tipo_risposta = 0; 
-    }
-    */
-   this.descrizione_truncate = this.htmlToPlaintext(this.domanda.descrizione);
-   //this.descrizione_truncate = this.truncate(this.domanda.descrizione);
-   console.log(this.descrizione_truncate);
+    this.descrizione_truncate = this.htmlToPlaintext(this.domanda.descrizione);
     if (this.domanda.creating) 
       this.goToEdit();
     

@@ -11,6 +11,8 @@ export class UtentiComponent implements OnInit, OnDestroy {
     utenti : User[];
     editing : boolean = false;
     message : string;
+    current_order: string = "asc";
+    nome_colonna_ordinamento: string = "username";
     searchString : string;
     utenti_visibili : User[]; //sottoinsieme di this.utenti determinato dalla Search
     loading = true;
@@ -35,6 +37,17 @@ export class UtentiComponent implements OnInit, OnDestroy {
         this.websocketsSubscription.unsubscribe();
         this.currentUserSubscription.unsubscribe();
     }
+    ordinamento(nome_colonna){
+        if(this.current_order == 'asc'){
+            this.utenti_visibili = this.utenti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
+            this.current_order = 'desc';
+        }else{
+            this.utenti_visibili = this.utenti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
+            this.current_order = 'asc';
+        }
+        this.nome_colonna_ordinamento = nome_colonna;
+ 
+    }
     newUser() {
         let userNew = new User();
         userNew.nome = "";
@@ -54,6 +67,12 @@ export class UtentiComponent implements OnInit, OnDestroy {
                 this.utenti = response["data"];
                 this.calcola_utenti_visibili();
                 this.loading = false;
+                if(this.current_order == 'asc'){
+                    this.current_order ='desc';
+                }else{                    
+                    this.current_order ='asc';
+                }
+                this.ordinamento(this.nome_colonna_ordinamento);
             },
             error => {
                 this.alertService.error(error);
@@ -86,6 +105,7 @@ export class UtentiComponent implements OnInit, OnDestroy {
     }
     refresh() {
         this.getUsers();
+        
     }
     sync() {
         this.loading = true;

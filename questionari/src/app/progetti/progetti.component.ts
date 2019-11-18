@@ -15,6 +15,8 @@ export class ProgettiComponent implements OnInit, OnDestroy {
     searchString : string;
     progetti_visibili : Progetto[];
     loading = true;
+    current_order: string = "asc";
+    nome_colonna_ordinamento: string = "username";
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -70,12 +72,30 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                 this.alertService.error(error);
             });
     }
+
+    ordinamento(nome_colonna){
+        if(this.current_order == 'asc'){
+            this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
+            this.current_order = 'desc';
+        }else{
+            this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
+            this.current_order = 'asc';
+        }
+        this.nome_colonna_ordinamento = nome_colonna;
+ 
+    }
     getProgetti(): void {
         this.progettiService.getAll()
             .subscribe(response => {
                 this.progetti = response["data"];
                 this.calcola_progetti_visibili();
-                this.loading = false;
+                this.loading = false;                
+                if(this.current_order == 'asc'){
+                    this.current_order ='desc';
+                }else{                    
+                    this.current_order ='asc';
+                }
+                this.ordinamento(this.nome_colonna_ordinamento);
             },
             error => {
                 this.alertService.error(error);
