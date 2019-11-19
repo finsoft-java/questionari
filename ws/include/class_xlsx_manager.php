@@ -49,6 +49,9 @@ class XLSXManager {
            $html_dm = strip_tags($d->descrizione);
             $caption = "$d->progressivo_sezione.$d->progressivo_domanda $html_dm";
             $header[$caption] = "string";
+
+            $caption = "$d->progressivo_sezione.$d->progressivo_domanda Punteggio";
+            $header[$caption] = "string";
         }
 
         // TODO AUTOSIZE ?!?
@@ -58,7 +61,7 @@ class XLSXManager {
             'font-style'=>'bold',
             'fill'=>'#66ffb3',
             'wrap_text' => true,
-            'widths' => array_merge(['20', '20'], array_fill(0, count($domande)+2,'30'))
+            'widths' => array_merge(['20', '20'], array_fill(0, count($domande)+3,'30'))
         ];
 
         $writer->writeSheetHeader($titoloSheet, $header, $col_options);
@@ -86,9 +89,12 @@ class XLSXManager {
      * 
      */
     function crea_riga_sheet($writer, $titoloSheet, $utente_compilazione, $utente_valutato, $risposte) {
-        $row = array_map(function($x){return $x->get_desc_risposta();}, $risposte);
-        $row = array_merge([$utente_compilazione, $utente_valutato], $row);
-        $row = array_map(function($x){return $x ? $x : "-";}, $row);
+        $row = [$utente_compilazione, $utente_valutato];
+        for($i = 0; $i < count($risposte); $i++){
+            $row[] = $risposte[$i]->get_desc_risposta();
+            $row[] = $risposte[$i]->prodotto;
+        }
+        $row = array_map(function($x){return ($x != null) ? $x : "-";}, $row);
         $writer->writeSheetRow($titoloSheet, $row);
-}
+    }
 }

@@ -71,11 +71,11 @@ class UtenteManager {
     }
     
     function get_utente_locale($username, $password_cleartext) {
-        global $con, $RUOLO;
+        global $con, $RUOLO,$BOOLEAN;
         $password_enc = md5($password_cleartext);
         $utente = new Utente();
         $sql = "SELECT * FROM utenti WHERE username = '$username' and password_enc='$password_enc' and from_ldap='0' ";
-        //echo $sql;
+       // echo $sql;
 
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result))

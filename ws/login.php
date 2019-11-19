@@ -37,39 +37,10 @@ if ($user) {
 }
 
 function check_and_load_user($username, $pwd) {
-
-    /*
-    if ($username == 'ale.b' and $pwd == 'ale.b') {
-        $user = new Utente();
-        $user->nome_utente = $username;
-        $user->nome = 'Alessandro';
-        $user->cognome = 'Barsanti';
-        $user->email = 'alessandrobarsanti6@gmail.com';
-
-        return $user;
-    } elseif ($username == 'luca.vercelli' and $pwd == 'luca.vercelli') {
-        $user = new Utente();
-        $user->nome_utente = $username;
-        $user->nome = 'Luca';
-        $user->cognome = 'Vercelli';
-        $user->email = 'l.vercelli@finsoft.it';
-
-        return $user;
-    } elseif ($username == 'finsoft' and $pwd == 'finsoft') {
-        $user = new Utente();
-        $user->nome_utente = $username;
-        $user->nome = 'Mario';
-        $user->cognome = 'Rossi';
-        $user->email = 'finsoft@example.com';
-
-        return $user;
-    }
-    */
-
     // PRIMA, vediamo se l'utente è un utente locale
-    
     global $utenteManager;
     $utente_locale = $utenteManager->get_utente_locale($username, $pwd);
+    
     if ($utente_locale) {
         $utente_locale->nome_utente = $utente_locale->username; // TODO questo prima o poi e' da risolvere
         return $utente_locale;

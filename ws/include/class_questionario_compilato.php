@@ -78,8 +78,7 @@ class QuestionarioCompilato {
                 $arr[$u->username] = [];
             }
             
-            $sql = "SELECT * FROM risposte_quest_compilati WHERE progressivo_quest_comp = '$this->progressivo_quest_comp' ";
-            echo $sql;
+            $sql = "SELECT rq.*,ra.valore, d.coeff_valutazione,nvl(ra.valore,1)*d.coeff_valutazione as prodotto FROM `risposte_quest_compilati` rq left join questionari_compilati qc on rq.progressivo_quest_comp = qc.progressivo_quest_comp left join risposte_ammesse ra on qc.id_questionario = ra.id_questionario and ra.progressivo_sezione = rq.progressivo_sezione and ra.progressivo_domanda = rq.progressivo_domanda and ra.progressivo_risposta = rq.progressivo_risposta LEFT JOIN domande d on d.id_questionario = qc.id_questionario and d.progressivo_sezione = rq.progressivo_sezione and d.progressivo_domanda = rq.progressivo_domanda where rq.progressivo_quest_comp = '$this->progressivo_quest_comp'";
             if($result = mysqli_query($con, $sql)) {
                 while($row = mysqli_fetch_assoc($result))
                 {
@@ -91,6 +90,9 @@ class QuestionarioCompilato {
                     $obj->progressivo_risposta      = $row['progressivo_risposta'];
                     $obj->risposta_aperta           = $row['risposta_aperta'];
                     $obj->note                      = $row['note'];
+                    $obj->valore                    = $row['valore'];
+                    $obj->coeff_valutazione         = $row['coeff_valutazione'];
+                    $obj->prodotto                  = $row['prodotto'];
                     $arr[$obj->nome_utente_valutato][] = $obj;
                 }
             } else {
