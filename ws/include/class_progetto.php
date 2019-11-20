@@ -246,7 +246,7 @@ class ProgettiManager {
     function controllaStato($progetto, $nuovo_stato){
         $stato_old = $progetto->stato;
         if($nuovo_stato == '1'){
-            if($progetto->questionari[0] == null){
+            if(count($progetto->questionari) == 0 || $progetto->questionari[0] == null){
                 print_error(400, "Un progetto senza questionari non può essere valido");
             }
             for($i = 0; $i < count($progetto->questionari); $i++){

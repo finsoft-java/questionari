@@ -192,6 +192,10 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         this.progetto.stato = '3';
         this.updProgetto();
     }
+    annulla(){
+        this.progetto.stato = '2';
+        this.updProgetto();
+    }
     riapri(){
         this.progetto.stato = '1';
         this.updProgetto();

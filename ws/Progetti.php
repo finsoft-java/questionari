@@ -88,7 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         } elseif($progetto_su_db->stato == '3' and $json_data->stato == '1') {
             $aggiorna_solo_lo_stato = true;
         } else {
-            print_error(403, "Non e' possibile modificare un progetto con questionari già compilati.");
+            $aggiorna_solo_lo_stato = true;
+            //print_error(403, "Non e' possibile modificare un progetto con questionari già compilati.");
         }
     }
 

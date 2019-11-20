@@ -92,7 +92,7 @@
 
             <table class="table table-striped" style="margin-top:30px;float:left;width:100%">
                 <thead style="background-color: #f8f9fa;">
-                    <th alt="Descrizione" title="Descrizione">Descrizione</th>
+                    <th alt="Descrizione" title="Descrizione" style="padding-left: 15px;">Descrizione</th>
                     <th alt="Valore Risposta" title="Valore Risposta">Valore Risposta</th>
                     <th>Azioni</th>
                 </thead>
@@ -107,7 +107,7 @@
 
 
 <td *ngIf="!domanda.editing && !esisteDomandaEditing">
-    <div tabindex="0" style="outline: none !important; line-height: 38px;text-align:centermax-width:110px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;padding-left:.75rem" title="" innerHTML="{{ truncate(descrizione_truncate) }}"></div>
+    <div tabindex="0" style="outline: none !important; line-height: 38px;text-align: center;max-width:110px; text-overflow:ellipsis; white-space: nowrap;overflow: hidden;padding-left:.75rem;" title="" innerHTML="{{ truncate(descrizione_truncate) }}"></div>
 </td>
 <td *ngIf="!domanda.editing && !esisteDomandaEditing">
     <div tabindex="0" style="outline: none !important; line-height: 38px;text-align:center" title="">{{ domanda.obbligatorieta_dec }}&nbsp;</div>

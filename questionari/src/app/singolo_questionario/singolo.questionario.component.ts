@@ -54,11 +54,11 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription.unsubscribe();
     }
     private caricaSezione(indice: number) {
-       /*
+       
         if (!this.questionario || !this.questionario.sezioni || indice >= this.questionario.sezioni.length || indice < 0) {
             this.alertService.error(`La sezione ${indice} non esiste`);
             return;
-        }*/
+        }
         let progressivo_sezione = this.questionario.sezioni[indice].progressivo_sezione;
         this.questionariService.getSezioneById(this.id_questionario, progressivo_sezione)
             .subscribe(response => {
@@ -86,19 +86,28 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
             
             this.questionario = response["value"];
             let prog_sess = 1;
-            if(this.questionario.sezioni != null){
+            if(this.questionario.sezioni[0] != null){
                 let prog_sess = Math.max.apply(Math, this.questionario.sezioni.map(function(o) { return o.progressivo_sezione; })) + 1;
                 this.max_sezione = prog_sess;
+                this.nuova_sezione = {
+                    id_questionario: this.id_questionario,
+                    progressivo_sezione: prog_sess,
+                    titolo: "",
+                    descrizione: "",
+                    domande: []
+                };
+                //Ora che ho il questionario, carico la prima sezione con tutte le domande
+                this.caricaSezione(0);
+            }else{
+                this.nuova_sezione = {
+                    id_questionario: this.id_questionario,
+                    progressivo_sezione: prog_sess,
+                    titolo: "",
+                    descrizione: "",
+                    domande: []
+                };
             }
-            this.nuova_sezione = {
-                id_questionario: this.id_questionario,
-                progressivo_sezione: prog_sess,
-                titolo: "",
-                descrizione: "",
-                domande: []
-            };
-            //Ora che ho il questionario, carico la prima sezione con tutte le domande
-            this.caricaSezione(0);
+            
         },
         error => {
           this.alertService.error(error);

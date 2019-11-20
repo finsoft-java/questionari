@@ -61,7 +61,7 @@ class XLSXManager {
             'font-style'=>'bold',
             'fill'=>'#66ffb3',
             'wrap_text' => true,
-            'widths' => array_merge(['20', '20'], array_fill(0, count($domande)+3,'30'))
+            'widths' => array_merge(['20', '20'], array_fill(0, count($domande)+5,'30'))
         ];
 
         $writer->writeSheetHeader($titoloSheet, $header, $col_options);

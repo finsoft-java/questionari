@@ -9,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class CompilaQuestionarioDomandaComponent implements OnInit {
   
-  @Input() domanda : Domanda; //deve includere tutte le domande e tutte le risposte
+  @Input() domanda : Domanda; //deve includere tutte le risposte
   @Input()  questionario_modificabile : boolean;
 
   @Output() compiled = new EventEmitter<void>();
@@ -27,6 +27,7 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
       }
   
   ngOnInit(): void {
+    console.log(this.domanda);
     this.calc_flags();
     this.titleRispostaControlli = this.getTitleInput();
   }
@@ -54,6 +55,7 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
     }
     return title;
   }
+  
   calc_flags() {
     this.is_domanda_aperta = (this.domanda.risposte == null || this.domanda.risposte.length == 0);
 
