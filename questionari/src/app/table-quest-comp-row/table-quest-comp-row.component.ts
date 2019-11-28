@@ -3,6 +3,7 @@ import { User, UserRole, VistaQuestionariCompilabili, QuestionarioCompilato } fr
 import { AuthenticationService, UserService, AlertService, QuestionariCompilatiService } from '@/_services';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: '[table-quest-comp-row]',

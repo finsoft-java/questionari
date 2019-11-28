@@ -27,7 +27,6 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
       }
   
   ngOnInit(): void {
-    console.log(this.domanda);
     this.calc_flags();
     this.titleRispostaControlli = this.getTitleInput();
   }

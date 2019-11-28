@@ -50,7 +50,7 @@ class XLSXManager {
             $caption = "$d->progressivo_sezione.$d->progressivo_domanda $html_dm";
             $header[$caption] = "string";
 
-            $caption = "$d->progressivo_sezione.$d->progressivo_domanda Punteggio";
+            $caption = "$d->progressivo_sezione.$d->progressivo_domanda Punteggio Calcolato";
             $header[$caption] = "string";
         }
 
