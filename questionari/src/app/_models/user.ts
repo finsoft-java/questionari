@@ -15,6 +15,7 @@
 }
 
 export class UserRuoli {
+    nominativo: string;
     nome_utente: string;
     responsabileL1: boolean;
     responsabileL2: boolean;
