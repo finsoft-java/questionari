@@ -171,9 +171,10 @@ export class TableQuestionariRowComponent implements OnInit {
 
  getQuestionari(): void {
   this.questionari_loaded = false;
-  this.questionariService.getAll()
+  this.questionariService.getAllValidi()
     .subscribe(response => {
-        this.elenco_questionari = response["data"];
+        console.log(response);
+        this.elenco_questionari = response["value"];
         this.questionari_loaded = true;
     },
     error => {

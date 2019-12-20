@@ -10,6 +10,9 @@ export class QuestionariService {
     getAll() {
         return this.http.get<Questionario[]>(`${config.apiUrl}/Questionari.php`);
     }
+    getAllValidi() {
+        return this.http.get<Questionario[]>(`${config.apiUrl}/QuestionariValidi.php`);
+    }
     getById(id_questionario: number) {
         return this.http.get(`${config.apiUrl}/Questionari.php?id_questionario=${id_questionario}`);
     }

@@ -121,7 +121,43 @@ class Questionario {
 ###############################################################################################
 
 class QuestionariManager {
-    
+    function get_questionari_validi() {
+        global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
+        $arr = array();
+        $sql = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto 
+                    FROM `questionari` q 
+                    left join progetti_questionari pq on q.id_questionario = pq.id_questionario ";
+        if (!utente_admin()) {
+            $sql .= " WHERE (utente_creazione='$logged_user->nome_utente' OR flag_comune='1') AND stato = 1 ";
+        }else{
+            $sql .= " WHERE stato = 1 ";
+        }
+        $sql .= "GROUP by q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione";
+        
+        if($result = mysqli_query($con, $sql)) {
+            $cr = 0;
+            while($row = mysqli_fetch_assoc($result))
+            {
+                $questionario = new Questionario();
+                $questionario->id_questionario        = $row['id_questionario'];
+                $questionario->titolo                 = $row['titolo'];
+                $questionario->stato                  = $row['stato'];
+                $questionario->stato_dec              = ($row['stato'] != null) ? $STATO_QUESTIONARIO[$row['stato']] : null;
+                $questionario->gia_compilato          = $row['gia_compilato'];
+                $questionario->gia_compilato_dec      = ($row['gia_compilato'] != null) ? $BOOLEAN[$row['gia_compilato']] : null;
+                $questionario->flag_comune            = ($row['flag_comune'] == '1' ? true : false);
+                $questionario->flag_comune_dec        = ($row['flag_comune'] != null) ? $BOOLEAN[$row['flag_comune']] : null;
+                $questionario->utente_creazione       = $row['utente_creazione'];
+                $questionario->data_creazione         = $row['data_creazione'];
+                $questionario->id_progetto         = $row['id_progetto'];
+                $arr[$cr++] = $questionario;
+            }
+        } else {
+            print_error(500, $con ->error);
+        }
+        return $arr;
+    }
+
     function get_questionari() {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();

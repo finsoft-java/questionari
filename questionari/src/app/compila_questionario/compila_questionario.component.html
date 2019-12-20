@@ -10,7 +10,7 @@
 
     <div *ngIf="sezione_corrente != null">
         <div style="float:left;">
-            <h5>Sezione {{sezione_corrente.progressivo_sezione}}</h5>
+            <h5>Sezione {{sezione_corrente.progressivo_sezione}} di {{ questionarioCompilato.sezioni.length}}</h5>
             <h5><span [innerHTML]="sezione_corrente.titolo"></span></h5>
             <div [innerHTML]="sezione_corrente.descrizione | safeHtml"></div>
         </div>
