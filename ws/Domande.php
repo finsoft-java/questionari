@@ -134,7 +134,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         print_error(404, 'Not found');
     }
     $sezioniManager->eliminaDomandaERisposte($id_questionario, $progressivo_sezione, $progressivo_domanda);
-
+    $sezione = $questionario->get_sezione($progressivo_sezione);
+    if(count($sezione->domande) == 0){
+        $questionariManager->cambia_stato($questionario, '0');
+    }
 } else {
     //==========================================================
     print_error(400, "Unsupported method in request: " . $_SERVER['REQUEST_METHOD']);
