@@ -173,7 +173,6 @@ export class TableQuestionariRowComponent implements OnInit {
   this.questionari_loaded = false;
   this.questionariService.getAllValidi()
     .subscribe(response => {
-        console.log(response);
         this.elenco_questionari = response["value"];
         this.questionari_loaded = true;
     },

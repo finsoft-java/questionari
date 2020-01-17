@@ -44,8 +44,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription = this.route.params.subscribe(params => {
             this.progressivo_quest_comp = +params['progressivo_quest_comp']; // (+) converts string 'id' to a number
             this.getQuestionarioCompilato();
-         });    
-         console.log(this);
+         });        
     }
 
     ngOnDestroy() {
