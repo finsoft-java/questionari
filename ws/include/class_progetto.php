@@ -378,7 +378,7 @@ class ProgettiManager {
         $arr = array();
         $sql = "SELECT ut.username as username, pr_ut.funzione as funzione, ut.nome as nome, ut.cognome as cognome FROM utenti as ut ".
             "LEFT JOIN progetti_utenti pr_ut ON ut.username = pr_ut.nome_utente AND pr_ut.id_progetto = '".$progetto."' ".
-            "ORDER BY pr_ut.funzione desc, ut.username";
+            "ORDER BY ut.cognome ASC";
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))

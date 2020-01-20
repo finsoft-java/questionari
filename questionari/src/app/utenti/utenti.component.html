@@ -14,12 +14,12 @@
 <div class="my-custom-scrollbar" style="float: left;width: 100%;">
     <table class="table table-striped hidden-sm hidden-xs">
         <thead style="display:none;">
-            <th style="width:10%;">Username</th>
+            <th style="width:14%;">Username</th>
             <th style="width:15%;">Nome</th>
             <th style="width:15%;">Cognome</th>
             <th style="width:20%;">Email</th>
             <th style="width:15%;">Ruolo</th>
-            <th style="width:25%;">Azioni</th>
+            <th style="width:21%;">Azioni</th>
         </thead>
         <tbody>
             <tr table-utenti-row *ngFor="let utente_row of utenti_visibili; let i= index;" [indice_utente]="i" [utente]="utente_row" (itemRemoved)="removeItem($event)" (itemModified)="sendMsgUtenti($event,'Utente modificato')" (itemCreated)="sendMsgUtenti($event,'Utente creato')"></tr>

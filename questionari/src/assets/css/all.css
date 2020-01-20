@@ -299,6 +299,14 @@ select[multiple] option {
     }
 }
 
+body {
+    font-size: 13px;
+}
+
+.btn {
+    font-size: 13px;
+}
+
 .fa-rotate-90 {
     -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
     -webkit-transform: rotate(90deg);

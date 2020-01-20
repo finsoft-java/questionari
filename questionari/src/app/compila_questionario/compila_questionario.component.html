@@ -26,34 +26,34 @@
 
         <table class="table table-striped" style="margin-top:30px;">
             <thead style="background-color: #f8f9fa;">
-                <th style="width:15%;padding-left:15px;">N° Domanda</th>
+                <th style="width:10%;padding-left:10px;">N° Domanda</th>
                 <th style="width:35%">Domanda</th>
-                <th>Risposta</th>
-                <th>Note</th>
+                <th style="width:35%">Risposta</th>
+                <th style="width:20%">Note</th>
             </thead>
             <tr compila-questionario-domanda *ngFor="let domanda of sezione_corrente.domande" [domanda]="domanda" [questionario_modificabile]="questionarioCompilato.stato == '0'" [isValid]="domanda.is_valid">
             </tr>
         </table>
 
         <div style="float:left;width:100%">
-            <div style="float: left;width: calc(100% / 6);">
+            <div style="float: left;width: calc(100% / 6);" *ngIf="!esiste_utente_prec_hidd">
                 <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="utentePrecedente()" [disabled]="!esiste_utente_prec">Utente precedente</button>
             </div>
             <div style="float: left;width: calc(100% / 6);">
                 <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="sezPrecedente()" [disabled]="!esiste_sezione_prec">Sez. precedente</button>
             </div>
             <div style="float: left;width: calc(100% / 6);">
-                <button class="btn btn-success" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" *ngIf="questionarioCompilato.stato == '0'" (click)="salvaSezione()">Salva sezione</button>
+                <button class="btn btn-warning" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" *ngIf="questionarioCompilato.stato == '0'" (click)="salvaSezione()">Salva sezione</button>
             </div>
-            <div style="float: left;width: calc(100% / 6);">
-                <button style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" *ngIf="questionarioCompilato.stato == '0'" class="btn btn-danger" (click)="convalida()" title="Convalida il Questionario, solo se tutte le sezioni sono state compilate correttamente">
-                Conv. questionario</button>
-            </div>
-            <div style="float: right;width: calc(100% / 6);">
+            <div style="float: right;width: calc(100% / 6);" *ngIf="!esiste_utente_succ_hidd">
                 <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="utenteSuccessivo()" [disabled]="!esiste_utente_succ">Utente successivo</button>
             </div>
             <div style="float: right;width: calc(100% / 6);">
                 <button class="btn btn-dark" style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" (click)="sezSuccessiva()" [disabled]="!esiste_sezione_succ">Sez. successiva</button>
+            </div>
+            <div style="float: right;width: calc(100% / 6);">
+                <button style="margin-right:10px;width: calc(100% - 10px);font-size: 15px;font-weight: 100;letter-spacing:0.5px" *ngIf="questionarioCompilato.stato == '0'" class="btn btn-success" (click)="convalida()" title="Convalida il Questionario, solo se tutte le sezioni sono state compilate correttamente">
+                Invia le risposte</button>
             </div>
         </div>
     </div>

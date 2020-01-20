@@ -9,7 +9,7 @@
         <!-- DOMANDA CHIUSA -->
         <div *ngFor="let opt of domanda.risposte">
             <label for="enum_answer_{{opt.progressivo_risposta}}">
-              <input id="enum_answers_{{opt.progressivo_risposta}}" name="enum_answer" type="radio"  [checked]="domanda.risposta.progressivo_risposta == opt.progressivo_risposta" [(ngModel)]="domanda.risposta.progressivo_risposta" [value]="opt.progressivo_risposta">
+              <input id="enum_answer_{{opt.progressivo_risposta}}" name="enum_answer" type="radio"  [checked]="domanda.risposta.progressivo_risposta == opt.progressivo_risposta" [(ngModel)]="domanda.risposta.progressivo_risposta" [value]="opt.progressivo_risposta">
               {{ opt.descrizione }}
             </label>
         </div>

@@ -70,12 +70,12 @@
 <h5>Utenti per Progetto</h5>
 <div *ngIf="success_mex != ''" role="alert" style="float:left;width:100%;margin-top: 30px;margin-bottom:0px;" class="alert alert-success">{{ success_mex }} <button aria-label="Close" class="close" type="button"><span aria-hidden="true">×</span></button></div>
 <div style="float:left; width:calc(50% - 60px) ;margin-right:10px;margin-top: 30px;">
-    <label>Acronimi Osai</label>
+    <label>Utenze Osai</label>
     <select class="select2" [(ngModel)]="utentiSelect" style="width:100%;min-height: 500px;max-height: 500px;overflow-y: scroll;" id="all_user" multiple>
         <ng-container *ngFor="let dati_stato_progetto of progettoUtenti; index as i">
             <option *ngIf="!dati_stato_progetto.responsabileL1 && !dati_stato_progetto.responsabileL2 && !dati_stato_progetto.utenteFinale" 
                 value="{{i}}">
-                {{ dati_stato_progetto.nome_utente }} -  {{ dati_stato_progetto.nominativo }}
+                {{ dati_stato_progetto.nominativo }}
             </option>   
         </ng-container>
     </select>
@@ -92,7 +92,7 @@
             <ng-container *ngFor="let dati_stato_progetto of progettoUtenti; index as i">
                 <option *ngIf="dati_stato_progetto.responsabileL1 && !dati_stato_progetto.responsabileL2 && !dati_stato_progetto.utenteFinale" 
                     value="{{i}}">
-                    {{ dati_stato_progetto.nome_utente }} -  {{ dati_stato_progetto.nominativo }}
+                    {{ dati_stato_progetto.nominativo }}
                 </option>   
             </ng-container>
         </select>
@@ -108,7 +108,7 @@
             <ng-container *ngFor="let dati_stato_progetto of progettoUtenti; index as i">
                 <option *ngIf="!dati_stato_progetto.responsabileL1 && dati_stato_progetto.responsabileL2 && !dati_stato_progetto.utenteFinale" 
                     value="{{i}}">
-                    {{ dati_stato_progetto.nome_utente }} -  {{ dati_stato_progetto.nominativo }}
+                    {{ dati_stato_progetto.nominativo }}
                 </option>   
             </ng-container>
         </select>
