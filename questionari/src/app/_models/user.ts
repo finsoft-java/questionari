@@ -6,6 +6,7 @@
     ruolo: string;
     ruolo_dec: string;
     from_ldap: boolean;
+    nome_utente:string;
     from_ldap_dec: string;
     // Questi servono per gestire la modifica via web
     password?:string;  

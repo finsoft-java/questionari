@@ -15,6 +15,7 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
     storico: boolean;
     loading = true;
     searchString : string;
+    mostra_solo_admin: boolean= false;
     quest_comp_visibili : VistaQuestionariCompilabili[];
 
     constructor(
@@ -59,6 +60,16 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
     }
     refresh() {
         this.getLista();
+    }
+    filter_admin() {
+        this.mostra_solo_admin = !this.mostra_solo_admin;
+        if(this.mostra_solo_admin){
+            let utente_collegato = this.currentUser.nome_utente;
+            this.questionari = this.questionari.filter(obj => obj.nome_utente == utente_collegato);
+            this.calcola_questionari_visibili();
+        }else{
+            this.refresh();
+        }
     }
     removeItem(progressivoQuestComp: number) {
         let index = this.questionari.findIndex(obj => obj.progressivo_quest_comp == progressivoQuestComp);

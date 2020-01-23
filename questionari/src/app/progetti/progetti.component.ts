@@ -34,7 +34,6 @@ export class ProgettiComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.getProgetti();
-        console.log(this);
     }
 
     ngOnDestroy() {

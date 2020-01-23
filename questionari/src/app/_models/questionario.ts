@@ -2,6 +2,7 @@ import { RispostaQuestionarioCompilato } from ".";
 
 export class Questionario {
     id_questionario: number;
+    id_progetto: number;
     titolo: string;
     stato: string;
     stato_dec: string;

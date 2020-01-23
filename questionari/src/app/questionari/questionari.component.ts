@@ -98,8 +98,6 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             this.current_order = 'asc';
         }
         this.nome_colonna_ordinamento = nome_colonna;
-        console.log(this);
- 
     }
     elimina(id_questionario: number, id_progetto: any): void {
         if(id_progetto == null){

@@ -78,11 +78,8 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             }
             this.utente_valutato_corrente = utente_da_caricare;
             this.caricaSezione(utente_da_caricare, indice_sezione_da_caricare);
-            console.log(this.questionarioCompilato.progetto);
             for(let i=0; i < this.questionarioCompilato.progetto.questionari.length; i++){
                 if(this.questionarioCompilato.id_questionario == this.questionarioCompilato.progetto.questionari[i].id_questionario){
-                    console.log("inizio");
-                    console.log(this.questionarioCompilato.progetto.questionari[i]);
                     if(this.questionarioCompilato.progetto.questionari[i].tipo_questionario == "1"){
                         this.esiste_utente_succ_hidd = true;
                         this.esiste_utente_prec_hidd = true;
@@ -90,7 +87,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                         this.esiste_utente_succ_hidd = false;
                         this.esiste_utente_prec_hidd = false;
                     }
-                    console.log("fine");
                 }
             }
         },
@@ -318,7 +314,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
         this.caricaSezione(this.utente_valutato_corrente, this.indice_sezione_corrente);
     }
     utenteSuccessivo(){
-        console.log(this.questionarioCompilato.progetto.questionari);
         if (this.questionarioCompilato.stato == '0') {
             if(this.salvaSezione() == false){
                 return false;
