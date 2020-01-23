@@ -161,8 +161,9 @@ class QuestionariManager {
     function get_questionari() {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
-        $sql = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto 
+        $sql = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome  
                     FROM `questionari` q 
+                    JOIN utenti u ON q.utente_creazione = u.username
                     left join progetti_questionari pq on q.id_questionario = pq.id_questionario ";
         if (!utente_admin()) {
             $sql .= " WHERE utente_creazione='$logged_user->nome_utente' OR flag_comune='1' ";
@@ -182,8 +183,10 @@ class QuestionariManager {
                 $questionario->flag_comune            = ($row['flag_comune'] == '1' ? true : false);
                 $questionario->flag_comune_dec        = ($row['flag_comune'] != null) ? $BOOLEAN[$row['flag_comune']] : null;
                 $questionario->utente_creazione       = $row['utente_creazione'];
+                $questionario->nome                   = $row['nome'];
+                $questionario->cognome                = $row['cognome'];
                 $questionario->data_creazione         = $row['data_creazione'];
-                $questionario->id_progetto         = $row['id_progetto'];
+                $questionario->id_progetto            = $row['id_progetto'];
                 $arr[$cr++] = $questionario;
             }
         } else {

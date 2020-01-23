@@ -27,7 +27,7 @@
             <tr *ngFor="let p of progetti_visibili">
                 <td style="text-align:center;line-height: 38px;width:30%">{{p.titolo}}</td>
                 <td style="text-align:center;line-height: 38px;width: 10%;">{{p.stato_dec}}</td>
-                <td style="text-align:center;line-height: 38px;width: 15%;">{{p.utente_creazione}}</td>
+                <td style="text-align:center;line-height: 38px;width: 15%;">{{p.cognome}} {{p.nome}}</td>
                 <td style="text-align:center;line-height: 38px;width: 20%;">{{p.data_creazione | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
                 <td style="width:25%">
                     <button class="{{p.gia_compilato=='1' ? 'btn btn3 btn-readonly' : 'btn btn3 btn-success'}}" routerLink="/progetti/{{p.id_progetto}}" routerLinkActive="active" [title]="p.gia_compilato=='1' ? 'Apri (read-only perchè esistono compilazioni)' : 'Apri'">

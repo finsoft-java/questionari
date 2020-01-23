@@ -480,7 +480,7 @@ class QuestionariCompilatiManager {
         }
         if ($id_progetto_or_null) {
             $sql .= " AND id_progetto = '$id_progetto_or_null' ";
-        }
+        } 
         if ($id_questionario_or_null) {
             $sql .= " AND id_questionario = '$id_questionario_or_null' ";
         }
@@ -515,6 +515,8 @@ class QuestionariCompilatiManager {
                 $obj->stato_quest_comp_dec   = $stato_quest_comp_dec;
                 $obj->data_compilazione      = $row['data_compilazione'];
                 $obj->nome_utente            = $row['nome_utente'];
+                $obj->nome            = $row['nome'];
+                $obj->cognome            = $row['cognome'];
                 $arr[$cr++] = $obj;
             }
         } else {

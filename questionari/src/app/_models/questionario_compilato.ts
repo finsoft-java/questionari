@@ -44,11 +44,12 @@ export class VistaQuestionariCompilabili {
     gruppo_valutati_dec: string;
     autovalutazione: string;
     autovalutazione_dec: string;
-
     progressivo_quest_comp: number;
     stato_quest_comp: string;
     stato_quest_comp_dec: string;
     nome_utente: string;
+    nome:string;
+    cognome:string;
     data_compilazione: string;
 
 }

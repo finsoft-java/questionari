@@ -38,11 +38,12 @@ SELECT p.id_progetto,p.titolo AS titolo_progetto,p.stato AS stato_progetto,
     q.id_questionario,q.titolo AS titolo_questionario,q.stato AS stato_questionario,
     x.tipo_questionario,x.gruppo_compilanti,x.gruppo_valutati,x.autovalutazione,
     u.nome_utente,u.funzione,
-    qc.progressivo_quest_comp,qc.stato as stato_quest_comp,qc.data_compilazione
+    qc.progressivo_quest_comp,qc.stato as stato_quest_comp,qc.data_compilazione,ux.nome,ux.cognome
 FROM progetti p
 JOIN progetti_questionari x ON p.id_progetto=x.id_progetto
 JOIN questionari q ON q.id_questionario=x.id_questionario
 JOIN progetti_utenti u ON p.id_progetto=u.id_progetto
+JOIN utenti ux on ux.username=u.nome_utente
 LEFT JOIN questionari_compilati qc ON qc.id_progetto=x.id_progetto AND qc.id_questionario=x.id_questionario
     AND qc.utente_compilazione=u.nome_utente AND qc.stato in ('0', '1')
 WHERE q.stato = '1' AND p.stato = '1' AND x.gruppo_compilanti = u.funzione
@@ -54,12 +55,13 @@ CREATE OR REPLACE VIEW v_questionari_storici_per_utente AS
 SELECT p.id_progetto,p.titolo AS titolo_progetto,p.stato AS stato_progetto,
     q.id_questionario,q.titolo AS titolo_questionario,q.stato AS stato_questionario,
     x.tipo_questionario,x.gruppo_compilanti,x.gruppo_valutati,x.autovalutazione,
-    u.nome_utente,u.funzione,
+    u.nome_utente,u.funzione,ux.cognome,ux.nome,
     qc.progressivo_quest_comp,qc.stato as stato_quest_comp,qc.data_compilazione
 FROM progetti p
 JOIN progetti_questionari x ON p.id_progetto=x.id_progetto
 JOIN questionari q ON q.id_questionario=x.id_questionario
 JOIN progetti_utenti u ON p.id_progetto=u.id_progetto
+JOIN utenti ux on ux.username=u.nome_utente
 JOIN questionari_compilati qc ON qc.id_progetto=x.id_progetto AND qc.id_questionario=x.id_questionario
     AND qc.utente_compilazione=u.nome_utente
 WHERE qc.stato in ('1', '2') AND x.gruppo_compilanti = u.funzione;

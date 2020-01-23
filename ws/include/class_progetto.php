@@ -95,7 +95,7 @@ class ProgettiManager {
     function get_progetti() {
         global $con, $STATO_PROGETTO, $BOOLEAN;
         $arr = array();
-        $sql = "SELECT * FROM progetti";
+        $sql = "SELECT * FROM progetti p JOIN utenti u ON p.utente_creazione = u.username";
         
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
@@ -109,6 +109,8 @@ class ProgettiManager {
                 $progetto->gia_compilato      = $row['gia_compilato'];
                 $progetto->gia_compilato_dec  = $BOOLEAN[$row['gia_compilato']];
                 $progetto->utente_creazione   = $row['utente_creazione'];
+                $progetto->nome               = $row['nome'];
+                $progetto->cognome            = $row['cognome'];
                 $progetto->data_creazione     = $row['data_creazione'];
                 $arr[$cr++] = $progetto;
             }
@@ -121,7 +123,7 @@ class ProgettiManager {
     function get_progetto($id_progetto) {
         global $con, $STATO_PROGETTO, $BOOLEAN;
         $progetto = new Progetto();
-        $sql = "SELECT * FROM progetti WHERE id_progetto = '$id_progetto'";
+        $sql = "SELECT * FROM progetti p JOIN utenti u on p.utente_creazione = u.username WHERE id_progetto = '$id_progetto'";
         if($result = mysqli_query($con, $sql)) {
             if($row = mysqli_fetch_assoc($result))
             {
@@ -132,6 +134,8 @@ class ProgettiManager {
                 $progetto->gia_compilato      = $row['gia_compilato'];
                 $progetto->gia_compilato_dec  = $BOOLEAN[$row['gia_compilato']];
                 $progetto->utente_creazione   = $row['utente_creazione'];
+                $progetto->nome               = $row['nome'];
+                $progetto->cognome            = $row['cognome'];
                 $progetto->data_creazione     = $row['data_creazione'];
                 $progetto->utenti             = $progetto->get_progetto_utenti();
                 $progetto->questionari        = $progetto->get_progetto_questionari();

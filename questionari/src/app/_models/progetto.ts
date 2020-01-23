@@ -6,6 +6,8 @@ export class Progetto {
     gia_compilato: string;
     gia_compilato_dec: string;
     utente_creazione: string;
+    nome:string;
+    cognome:string;
     data_creazione: Date;
     utenti: ProgettoUtenti[];
     questionari: ProgettoQuestionari[];

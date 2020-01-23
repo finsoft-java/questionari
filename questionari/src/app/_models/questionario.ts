@@ -10,6 +10,8 @@ export class Questionario {
     flag_comune: string;
     flag_comune_dec: string;
     utente_creazione: string;
+    nome: string;
+    cognome: string;
     data_creazione: Date;
     sezioni?: Sezione[];
 }

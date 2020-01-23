@@ -30,6 +30,7 @@ export class TableQuestCompRowComponent implements OnInit {
   }
  
   ngOnInit() {
+    console.log(this);
   }
 
   creaQuestionarioCompilato() {
