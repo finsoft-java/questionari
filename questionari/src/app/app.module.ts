@@ -25,6 +25,7 @@ import { TableDomandeRowComponent } from './table-domande-row';
 import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
+import { TruncatePipe } from './_pipes';
 
 import {A11yModule} from '@angular/cdk/a11y';
 import {BidiModule} from '@angular/cdk/bidi';
@@ -66,7 +67,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
   } from '@angular/material';
 import { SanitizerPipe } from './_services/sanitizer.pipe';
 @NgModule({
@@ -138,7 +139,11 @@ import { SanitizerPipe } from './_services/sanitizer.pipe';
         LoginComponent,
         SearchComponent, 
         AboutComponent,
-        SanitizerPipe
+        SanitizerPipe,
+        TruncatePipe
+    ],
+    exports:[
+        TruncatePipe
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
