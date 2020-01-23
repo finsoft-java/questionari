@@ -11,7 +11,7 @@
         <input class="form-control input_utente" [disabled]="utente.from_ldap" [(ngModel)]="utente_in_modifica.nome" required title="Nome" placeholder="Nome" />
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.nome}}&nbsp;</div>
+        <div title="{{utente.nome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.nome | truncate:30}}&nbsp;</div>
     </div>
 </td>
 <td style="width:15%;">
@@ -19,7 +19,7 @@
         <input class="form-control input_utente" [disabled]="utente.from_ldap" [(ngModel)]="utente_in_modifica.cognome" required title="Cognome" placeholder="Cognome" />
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.cognome}}&nbsp;</div>
+        <div title="{{utente.cognome}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.cognome | truncate:30}}&nbsp;</div>
     </div>
 </td>
 <td style="width:20%;">
@@ -27,7 +27,7 @@
         <input type="email" class="form-control input_utente" [disabled]="utente.from_ldap" alt="{{utente.email}}" [(ngModel)]="utente_in_modifica.email" title="Email" placeholder="Email" />
     </div>
     <div *ngIf="!utente.editing">
-        <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.email}}&nbsp;</div>
+        <div title="{{utente.email}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.email | truncate:30}}&nbsp;</div>
     </div>
 </td>
 <td style="width:15%;">

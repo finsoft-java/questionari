@@ -1,8 +1,8 @@
 <td style="width:25%;">
-    <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.titolo_progetto }}&nbsp;</div>
+    <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.titolo_progetto | truncate:30}}&nbsp;</div>
 </td>
 <td style="width:25%;">
-    <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.titolo_questionario }}&nbsp;</div>
+    <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.titolo_questionario | truncate:30}}&nbsp;</div>
 </td>
 <td style="width:20%;">
     <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.data_compilazione | date: 'dd/MM/yyyy h:mm:ss a'}}&nbsp;</div>
@@ -11,7 +11,7 @@
     <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.stato_quest_comp_dec }}&nbsp;</div>
 </td>
 <td style="width:10%;" *ngIf="storico && currentUser.ruolo == '2'">
-    <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ data.cognome }}&nbsp;{{ data.nome }}</div>
+    <div tabindex="0" style="outline: none !important;line-height: 38px;text-align: center;">{{ (data.cognome || '') +' '+ (data.nome || '') | truncate:30}}</div>
 </td>
 <td>
     <div style="width:120px;" *ngIf="!storico">
