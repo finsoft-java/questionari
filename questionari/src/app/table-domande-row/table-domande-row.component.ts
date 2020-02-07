@@ -158,6 +158,8 @@ export class TableDomandeRowComponent implements OnInit {
       this.domanda.creating = false;
       this.domanda.editing = false;    
       this.domanda_in_modifica = null;
+      this.changeEditMode.emit(false);
+      this.descrizione_truncate = this.htmlToPlaintext(this.domanda.descrizione);
     }
     this.changeEditMode.emit(false);
   }
@@ -213,6 +215,7 @@ export class TableDomandeRowComponent implements OnInit {
             this.domanda.creating = false;
             this.changeEditMode.emit(true);
             this.alertService.success("Domanda inserita con successo");
+            this.returnFromEdit();
           }
         },
         error => {

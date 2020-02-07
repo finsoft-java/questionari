@@ -88,10 +88,11 @@ function utente_admin() {
 
 // funzioni per creare comandi SQL
 function sql_str_or_null($s) {
-    if ($s || $s === 0 || $s === '0')
+    if ($s || $s === 0 || $s === '0'){
         return "'$s'";
-    else
+    }else{
         return "NULL";
+    }
 }
 
 function sql_eq_str_or_is_null($s) {

@@ -1,14 +1,18 @@
 <td>
     <div *ngIf="questionario.creating">
+
+        <ng-select2 *ngIf="select2Data[0] != null" [data]="select2Data" [options]="optionsSelect2" [(ngModel)]="questionario_in_modifica.id_questionario" [placeholder]="'Seleziona un questionario'">
+        </ng-select2>
+        <!--
         <select class="form-control" style="width: auto;max-width: 140px;display: block;margin: 0px auto;" required [(ngModel)]="questionario_in_modifica.id_questionario" title="Scegliere un questionario dall'elenco">
-            <option *ngFor="let dato_questionario of elenco_questionari; index as i"
-                value="{{dato_questionario.id_questionario}}">
+            <option *ngFor="let dato_questionario of elenco_questionari; index as i" value="{{dato_questionario.id_questionario}}">
                 {{ dato_questionario.titolo }}
             </option>   
         </select>
+        -->
     </div>
     <div *ngIf="!questionario.creating">
-        <div tabindex="0" style="outline: none !important; line-height: 38px;text-align:center" title="">{{ questionario.titolo_questionario | truncate:30 }}&nbsp;</div>
+        <div tabindex="0" style="outline: none !important; line-height: 38px;text-align:center" title="{{ questionario.titolo_questionario}}">{{ questionario.titolo_questionario }}&nbsp;</div>
     </div>
 </td>
 <td>

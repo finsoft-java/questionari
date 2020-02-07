@@ -25,6 +25,10 @@ export class QuestionariService {
     delete(id_questionario: number) {
         return this.http.delete(`${config.apiUrl}/Questionari.php?id_questionario=${id_questionario}`);
     }
+
+    deleteSezione(id_questionario:number,id_sezione: number) {
+        return this.http.delete(`${config.apiUrl}/Sezioni.php?progressivo_sezione=${id_sezione}&id_questionario=${id_questionario}`);
+    }
     duplica(id_questionario: number) {
         return this.http.post(`${config.apiUrl}/CopyQuestionario.php?id_questionario=${id_questionario}`, "");
     }

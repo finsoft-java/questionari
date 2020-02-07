@@ -143,7 +143,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             let s = this.searchString.toLowerCase();
             this.progetti_visibili = this.progetti.filter(p => 
                 (p.titolo != null && p.titolo.toLowerCase().includes(s)) ||
-                (p.utente_creazione != null && p.utente_creazione.toLowerCase().includes(s)) ||
+                ((p.cognome+" "+p.nome).toLowerCase().includes(s)) ||
                 (p.stato_dec != null && p.stato_dec.toLowerCase().includes(s))
             );
         }

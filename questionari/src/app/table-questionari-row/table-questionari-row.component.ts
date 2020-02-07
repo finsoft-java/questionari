@@ -2,6 +2,8 @@ import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import { User, UserRole, Questionario, ProgettoQuestionari, Progetto } from '@/_models';
 import { AuthenticationService, UserService, AlertService, ProgettiService, QuestionariService } from '@/_services';
 import { Subscription } from 'rxjs';
+import { Select2OptionData } from 'ng-select2';
+import * as jquery from 'jquery';
 
 @Component({
   selector: '[table-questionari-row]',
@@ -16,9 +18,14 @@ export class TableQuestionariRowComponent implements OnInit {
   @Input() public indexQuestionario: number;
   @Output() public itemRemoved = new EventEmitter<number>();
   currentUser: User;
+
+
+  public select2Data: Select2OptionData[] = [];
+  public optionsSelect2: Select2Options;
+
   currentUserSubscription: Subscription;
   questionario_in_modifica: ProgettoQuestionari;
-  elenco_questionari: Questionario;
+  elenco_questionari: Questionario[];
   utenti: User;
   gruppi = ["Utente finale","Responsabile L.2","Responsabile L.1"];
   tipo_questionario = ["Q. di valutazione","Q. generico"];
@@ -37,7 +44,17 @@ export class TableQuestionariRowComponent implements OnInit {
   }
  
   ngOnInit() {
+    
+    this.optionsSelect2 = {
+      multiple: false,
+      theme: 'classic',
+      closeOnSelect: true,
+      width: '80%'
+    };
+    
     this.getQuestionari();
+    console.log("this.select2Data");
+    console.log(this.select2Data);
     if (this.questionario.creating) 
       this.goToEdit();
   }
@@ -174,6 +191,13 @@ export class TableQuestionariRowComponent implements OnInit {
   this.questionariService.getAllValidi()
     .subscribe(response => {
         this.elenco_questionari = response["value"];
+        for(let i = 0;i< this.elenco_questionari.length; i++){
+          
+          if(this.elenco_questionari[i].id_questionario != null){
+            this.select2Data.push({id: this.elenco_questionari[i].id_questionario.toString(), text: this.elenco_questionari[i].titolo});
+          }
+          
+        }
         this.questionari_loaded = true;
     },
     error => {

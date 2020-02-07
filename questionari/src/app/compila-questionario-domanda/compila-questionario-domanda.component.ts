@@ -36,7 +36,7 @@ export class CompilaQuestionarioDomandaComponent implements OnInit {
     switch (this.domanda.html_type) {
       case "0":
         if(this.domanda.html_pattern != null)
-          title= "Pattern: "+this.domanda.html_pattern+" ";
+          title= "La risposta deve rispettare il pattern: "+this.domanda.html_pattern+" ";
           
         if(this.domanda.html_maxlength != null)
           title+= "Lunghezza Massima: "+this.domanda.html_maxlength+" ";

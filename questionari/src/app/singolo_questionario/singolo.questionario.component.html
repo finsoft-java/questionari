@@ -33,7 +33,7 @@
 
     <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente" [disabled]="!esiste_prec">Sez. precendente<!--<i class="fa fa-step-backward"></i>--></button>
     <button class="btn btn-dark" style="float:right" (click)="sezSuccessiva()" title="Sez. successiva" alt="Sez. successiva" [disabled]="!esiste_succ">Sez. successiva<!--<i class="fa fa-step-forward"></i>--></button>
-    <button (click)="creaSezione()" class="btn btn-success" style="margin: 0px auto;display: block;" [disabled]="questionario.gia_compilato=='1'">Crea Nuova Sezione</button>
+    <button (click)="creaSezione()" class="btn btn-success" style="margin: 0px auto;display: block;" [title]="this.disableCrea ? 'Disabilitato fino al salvataggio della Sezione':'' " [disabled]="questionario.gia_compilato=='1' || this.disableCrea == true">Crea Nuova Sezione</button>
 
     <div *ngIf="(questionario.sezioni.length > 0) && (sezione_corrente != null)" style="border: 1px solid;float: left;width: 100%;padding: 15px;margin-top: 30px;">
         <form style="margin-top:30px;margin-bottom:30px;float:left;width:100%;padding-bottom: 30px;border-bottom:1px solid">
@@ -48,7 +48,6 @@
             <div class="row" style="margin-bottom:30px;">
                 <div class="col">
                     <label for="stato_progetto">Descrizione</label>
-                    <!-- <textarea class="form-control" [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone: true}">{{sezione_corrente.descrizione}}</textarea> -->
                     <div style="float: left;width:100%">
                         <quill-editor [(ngModel)]="sezione_corrente.descrizione" [ngModelOptions]="{standalone:true}"></quill-editor>
                     </div>
@@ -58,7 +57,8 @@
                 <div class=" col">
                     <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
                     <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
-                    <button class="btn btn-dark" style="margin-right:5px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
+                    <button *ngIf="!is_nuova_sezione" class="btn btn-dark" style="margin-right:5px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
+                    <button *ngIf="!is_nuova_sezione" class="btn btn-danger" style="margin-right:5px;" (click)="eliminaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Elimina sezione</button>
                 </div>
             </div>
         </form>

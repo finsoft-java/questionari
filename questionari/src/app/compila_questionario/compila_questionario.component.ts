@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Sezione, RispostaAmmessa, RispostaQuestionarioCompilato, Progetto, Questionario } from '@/_models';
+import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Sezione, RispostaAmmessa, RispostaQuestionarioCompilato, Progetto, Questionario, Domanda } from '@/_models';
 import { UserService, AuthenticationService, QuestionariCompilatiService, AlertService, WebsocketService, Message } from '@/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -12,6 +12,9 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     questSubscription: Subscription;
     websocketsSubscription: Subscription;
     currentUser: User;
+    
+    errore_string: string[] = [];
+    dom_err : Domanda [] = [];
     questionarioCompilato: QuestionarioCompilato;
     progressivo_quest_comp: number;
     risposteForm: FormGroup;
@@ -102,8 +105,8 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             if (this.indice_sezione_corrente == null) {
                 return;
             } 
-            if(this.controllaRisposte(this.sezione_corrente.domande)){   
-         
+            this.errore_string = null;
+            if(this.controllaRisposte(this.sezione_corrente.domande)[0] == null){
                 let risposte : RispostaQuestionarioCompilato[] = [];
                 this.sezione_corrente.domande.forEach(domanda => {
                     risposte.push(domanda.risposta);
@@ -151,7 +154,10 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                         this.loading = false;
                     });
             }else{
-                this.alertService.error("Attenzione! sono presenti degli errori");
+                for(let i = 0; i < this.dom_err.length; i++){
+                    this.errore_string.push(this.dom_err[i].progressivo_sezione+"."+this.dom_err[i].progressivo_domanda);
+                }
+                this.alertService.error("Attenzione! sono presenti degli errori nelle domande: <br/>"+this.errore_string.join('<br/>'));
                 return false;
             }
         }
@@ -212,6 +218,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     */
     controllaRisposte(domande){
         let success = true;
+        
         for(let i = 0; i < domande.length; i++){
             let html_type = domande[i].html_type;
             domande[i].is_valid = true;
@@ -222,6 +229,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                 ){
                 domande[i].is_valid = false;
                 success = false;
+                this.dom_err.push(domande[i]);
                 
             }
             switch (html_type) {
@@ -236,6 +244,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                         if (this.risposteForm.invalid) {
                             domande[i].is_valid = false;
                             success = false;
+                            this.dom_err.push(domande[i]);
                         }
                     }
                     break;
@@ -248,6 +257,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                     if (this.risposteForm.invalid) {
                         domande[i].is_valid = false;
                         success = false;
+                        this.dom_err.push(domande[i]);
                     }
                     break;
             
@@ -255,15 +265,17 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                     break;
             }
         }
-        return success;
+        return this.dom_err;
     }
     
     salvaSezione() {
         
+        this.errore_string = null;
         if (this.indice_sezione_corrente == null) {
             return;
         } 
-        if(this.controllaRisposte(this.sezione_corrente.domande)){
+        
+        if(this.controllaRisposte(this.sezione_corrente.domande)[0] == null){
 
      
             let risposte : RispostaQuestionarioCompilato[] = [];
@@ -286,7 +298,11 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                     this.loading = false;
                 });
         }else{
-            this.alertService.error("Attenzione! sono presenti degli errori");
+            console.log(this.dom_err);
+            for(let i = 0; i < this.dom_err.length; i++){
+                this.errore_string.push(this.dom_err[i].progressivo_sezione+"."+this.dom_err[i].progressivo_domanda);
+            }
+            this.alertService.error("Attenzione! sono presenti degli errori nelle domande: <br/>"+this.errore_string.join('<br/>'));
             return false;
         }
     }

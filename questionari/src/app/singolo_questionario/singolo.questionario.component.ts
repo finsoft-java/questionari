@@ -28,6 +28,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     editMode:boolean;
     esiste_prec = false;
     esiste_succ = false;
+    disableCrea = false;
     
     constructor(
         private authenticationService: AuthenticationService,
@@ -126,6 +127,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.caricaSezione(this.indice_sezione_corrente-1);
     }
     creaSezione() {
+        this.disableCrea = true;
         if (this.questionario == null) {
             this.alertService.error("Questionario non ancora caricato, questo non dovrebbe succedere");
             return;
@@ -166,6 +168,7 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 };
                 this.is_nuova_sezione = false;                
                 this.alertService.success("Sezione salvata con successo");
+                this.disableCrea = false;
                 //this.scrollToTop();
           },
           error => {
@@ -196,6 +199,28 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
                 this.indice_sezione_corrente = this.questionario.sezioni.length-1;
                 this.sezione_corrente = nuova_sezione;
                 this.alertService.success("Sezione duplicata con successo");
+                //this.scrollToTop();
+          },
+          error => {
+            this.alertService.error(error);
+          });
+    }
+
+    eliminaSezioneCorrente() {
+        if (this.sezione_corrente == null) {
+            this.alertService.error("Duplico la sezione null?!? questo non dovrebbe succedere");
+            return;
+        }
+        this.questionariService.deleteSezione(this.sezione_corrente.id_questionario,this.sezione_corrente.progressivo_sezione)
+          .subscribe(response => {
+                /*
+                let nuova_sezione = response["value"];
+                this.questionario.sezioni.push(nuova_sezione);
+                this.indice_sezione_corrente = this.questionario.sezioni.length-1;
+                this.sezione_corrente = nuova_sezione;
+                */
+                this.getQuestionario();
+                this.alertService.success("Sezione eliminata con successo");
                 //this.scrollToTop();
           },
           error => {

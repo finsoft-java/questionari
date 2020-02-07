@@ -322,7 +322,7 @@ class QuestionariManager {
                                             ["id_questionario" => null,
                                             "stato" => '0',
                                             "flag_comune" => '0',
-                                            "titolo" => $questionario->titolo." (Copia)",
+                                            "titolo" => $con->escape_string($questionario->titolo)." (Copia)",
                                             "gia_compilato" => '0',
                                             "utente_creazione" => $logged_user->nome_utente],
                                             ["id_questionario" => $questionario->id_questionario]

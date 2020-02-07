@@ -1,4 +1,5 @@
-﻿<div *ngIf="message" style="position:fixed; top:96px;right:15px;z-index:10000" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }" role="alert" [innerHTML]="message.text">
+﻿<div *ngIf="message" style="position:fixed; top:96px;left:50%;-webkit-transform: translateX(-50%);-moz-transform: translateX(-50%);-o-transform: translateX(-50%);-ms-transform: translateX(-50%);transform: translateX(-50%);z-index:10000" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }"
+    role="alert" [innerHTML]="message.text">
     <button type="button" class="close" style="margin-left:15px;" (click)="messageReturnNull()" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>

@@ -109,6 +109,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                         this.questionari.splice(index, 1);
                         this.calcola_questionari_visibili();
                         this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
+                        this.alertService.success("Il questionario è appena stato eliminato");
                     },
                     error => {
                         this.alertService.error(error);
@@ -123,6 +124,8 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                         this.questionari.splice(index, 1);
                         this.calcola_questionari_visibili();
                         this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
+                        
+                        this.alertService.success("Il questionario è appena stato eliminato");
                     },
                     error => {
                         this.alertService.error(error);
@@ -139,6 +142,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 this.questionari.push(q);
                 this.calcola_questionari_visibili();
                 this.sendMsgQuestionario(q, 'Creato nuovo questionario');
+                this.alertService.success("Questionario duplicato con successo");
             },
             error => {
                 this.alertService.error(error);
@@ -161,7 +165,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             let s = this.searchString.toLowerCase();
             this.questionari_visibili = this.questionari.filter(q => 
                 (q.titolo != null && q.titolo.toLowerCase().includes(s)) ||
-                (q.utente_creazione != null && q.utente_creazione.toLowerCase().includes(s)) ||
+                ((q.cognome+" "+q.nome).toLowerCase().includes(s)) ||
                 (q.stato_dec != null && q.stato_dec.toLowerCase().includes(s))
             );
         }
