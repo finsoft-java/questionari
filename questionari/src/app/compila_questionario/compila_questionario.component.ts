@@ -298,7 +298,6 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
                     this.loading = false;
                 });
         }else{
-            console.log(this.dom_err);
             for(let i = 0; i < this.dom_err.length; i++){
                 this.errore_string.push(this.dom_err[i].progressivo_sezione+"."+this.dom_err[i].progressivo_domanda);
             }

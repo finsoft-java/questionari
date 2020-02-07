@@ -53,8 +53,6 @@ export class TableQuestionariRowComponent implements OnInit {
     };
     
     this.getQuestionari();
-    console.log("this.select2Data");
-    console.log(this.select2Data);
     if (this.questionario.creating) 
       this.goToEdit();
   }
