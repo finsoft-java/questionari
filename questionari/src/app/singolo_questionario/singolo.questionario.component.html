@@ -80,8 +80,8 @@
                 <th>Azioni</th>
             </thead>
             <tbody>
-                <tr table-domande-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" (mostraRisposte)="showRisposte($event)" [questionario]="this.questionario" [domanda]="domanda_row" [indexDomanda]="i" [esisteDomandaEditing]="editMode" (itemRemoved)="removeItem(i)"
-                    (changeEditMode)="changeEditMode($event)"></tr>
+                <tr table-domande-row *ngFor="let domanda_row of sezione_corrente.domande; let i= index;" (domandaDupl)="getQuestionario()" (mostraRisposte)="showRisposte($event)" [questionario]="this.questionario" [domanda]="domanda_row" [indexDomanda]="i" [esisteDomandaEditing]="editMode"
+                    (itemRemoved)="removeItem(i)" (changeEditMode)="changeEditMode($event)"></tr>
             </tbody>
         </table>
     </div>

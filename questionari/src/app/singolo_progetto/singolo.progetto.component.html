@@ -46,7 +46,7 @@
 
 
     <h5>Questionari per Progetto</h5>
-    <button class="btn btn-success" style="margin-right:5px;margin-top:15px;" (click)="newQuestionario()" [disabled]="progetto.gia_compilato=='1'" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Aggiungi Questionario</button>
+    <button class="btn btn-success" style="margin-right:5px;margin-top:15px;" (click)="newQuestionario()" title="{{progetto.gia_compilato=='1' ? 'Non &egrave; possibile modificare un progetto con questionari già compilati.' : ''}}">Aggiungi Questionario</button>
     <button class="btn btn-dark" style="margin-right:5px;margin-top:15px;" (click)="refreshQuestionario()">Refresh</button>
 
     <table class="table table-striped" style="margin-top:30px;">

@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { DomandeService } from '@/_services/domande.service';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CopyDomandeService } from '@/_services/copy.domande.service';
+import { ResourceLoader } from '@angular/compiler';
 
 @Component({
   selector: '[table-domande-row]',
@@ -19,6 +21,7 @@ export class TableDomandeRowComponent implements OnInit {
   @Input() public esisteDomandaEditing: boolean;
   @Output() public mostraRisposte = new EventEmitter<Domanda>();
   @Output() public itemRemoved = new EventEmitter<number>();
+  @Output() public domandaDupl = new EventEmitter<void>();
   @Output() public changeEditMode =  new EventEmitter<boolean>();
 
   currentUser: User;
@@ -42,6 +45,7 @@ export class TableDomandeRowComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService,
               private progettiService: ProgettiService,
               private domandeService: DomandeService,
+              private copydomandeService: CopyDomandeService,
               private questionariService: QuestionariService,              
               private userService: UserService,       
               private router: Router,       
@@ -81,6 +85,15 @@ export class TableDomandeRowComponent implements OnInit {
     }
   }
 
+  duplicaDomanda(){
+    this.copydomandeService.copiaDomandaConRisposte(this.domanda.id_questionario, this.domanda.progressivo_sezione, this.domanda.progressivo_domanda).subscribe(resp => {
+      this.alertService.success("Domanda duplicata!");
+      this.domandaDupl.emit();
+    },
+    error => {
+      this.alertService.error(error);
+    });
+  }
   /**
    * Attiva tutti i campi INPUT sulla riga corrente
    */

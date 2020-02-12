@@ -24,7 +24,7 @@ class QuestionarioCompilato {
     }
     
     /**
-     * Prende gli utenti valutati dal progetto, *non* dalla tabella questionari compilati
+     * Prende gli utenti valutati dal risposte_quest_compilati
      * 
      * @return lista di oggetti Utente
      */

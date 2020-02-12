@@ -303,7 +303,7 @@ class SezioniManager {
     function duplica_domanda($domanda) {
         global $con;
         $sezione = $domanda->get_sezione();
-        $nuovo_progressivo_domanda = $sezione->get_prossima_domanda($id_questionario, $progressivo_sezione);
+        $nuovo_progressivo_domanda = $sezione->get_prossima_domanda($domanda->id_questionario, $domanda->progressivo_sezione);
         $sql = insert_select("domande", ["id_questionario", "progressivo_sezione", "progressivo_domanda", "descrizione", "obbligatorieta", "coeff_valutazione", "html_type", "html_pattern", "html_min", "html_max", "html_maxlength", "rimescola"],
                                              ["progressivo_domanda" => $nuovo_progressivo_domanda],
                                              ["id_questionario" => $domanda->id_questionario,

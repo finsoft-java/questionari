@@ -40,16 +40,19 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     } 
 
     ngOnInit() {
-        this.getUsers();
-        this.progettoUtenti;
-        this.projectSubscription = this.route.params.subscribe(params => {
-            this.id_progetto = +params['id_progetto']; 
-            this.getProgetto();
-            this.getUtentiRuoli();
-         },
-         error => {
-           this.alertService.error(error);
-         });
+        this.userService.getAll()
+        .subscribe(response => {
+            this.utenti = response["data"];
+            this.projectSubscription = this.route.params.subscribe(params => {
+                this.id_progetto = +params['id_progetto']; 
+                this.getProgetto();
+                this.getUtentiRuoli();
+            },
+            error => {
+            this.alertService.error(error);
+            });
+        });
+            
     }
     ngOnDestroy() {
         // unsubscribe to ensure no memory leaks
@@ -62,18 +65,18 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
             this.progetto = response["value"];
             this.stato_modifica = this.progetto.stato;
             for(var i = 0;i < this.progetto.utenti.length; i++ ){
-                var aa = this.progetto.utenti[i];
+                var all_utenti = this.progetto.utenti[i];
                 if(this.progetto.utenti[i].funzione == "0"){
                     this.utenti_finali.push(this.progetto.utenti[i].nome_utente);
-                    this.utenti.splice(aa.id_progetto, 1);
+                    this.utenti.splice(all_utenti.id_progetto, 1);
                 }
                 if(this.progetto.utenti[i].funzione == "1"){
                     this.resp_primo_livello.push(this.progetto.utenti[i].nome_utente);
-                    this.utenti.splice(aa.id_progetto, 1);
+                    this.utenti.splice(all_utenti.id_progetto, 1);
                 }
                 if(this.progetto.utenti[i].funzione == "2"){
                     this.resp_secondo_livello.push(this.progetto.utenti[i].nome_utente);
-                    this.utenti.splice(aa.id_progetto, 1);
+                    this.utenti.splice(all_utenti.id_progetto, 1);
                 }
             }            
         },
@@ -119,7 +122,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     download(): void {
         this.progettiService.download(this.id_progetto)
             .subscribe(response => {
-                this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Report-${this.id_progetto}.xlsx`)
+                this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Report-${this.progetto.titolo}.xlsx`)
             },
             error => {
               this.alertService.error(error);
@@ -173,12 +176,6 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         this.getProgetto();
     }
     
-    getUsers(): void {
-        this.userService.getAll()
-        .subscribe(response => {
-            this.utenti = response["data"];
-        });
-    }
     removeItem(index: number) {
         this.progetto.questionari.splice(index, 1);
     

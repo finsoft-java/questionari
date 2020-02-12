@@ -40,17 +40,21 @@ class XLSXManager {
      */
     function crea_sheet_questionario($writer, $progetto_questionario) {
         global $questionariCompilatiManager;
+        global $progettiManager;
         
         $titoloSheet = $progetto_questionario->titolo_questionario;
         $domande = $progetto_questionario->get_questionario()->get_domande_appiattite();
         $header = ["Utente compilante" => "string", "Utente valutato" => "string"];
         foreach ($domande as $d) {
             #la cosa pazzesca è che non posso avere 2 colonne con la stessa header!!!
-           $html_dm = strip_tags($d->descrizione);
+            $html_dm = strip_tags($d->descrizione);
             $caption = "$d->progressivo_sezione.$d->progressivo_domanda $html_dm";
             $header[$caption] = "string";
 
             $caption = "$d->progressivo_sezione.$d->progressivo_domanda Punteggio Calcolato";
+            $header[$caption] = "string";
+
+            $caption = "$d->progressivo_sezione.$d->progressivo_domanda Note";
             $header[$caption] = "string";
         }
 
@@ -67,7 +71,8 @@ class XLSXManager {
         $writer->writeSheetHeader($titoloSheet, $header, $col_options);
 
         $questionatiCompilati = $questionariCompilatiManager->get_questionari_compilati($progetto_questionario->id_progetto, $progetto_questionario->id_questionario);
-
+        $utenti_compilanti = $progettiManager->get_utenti_compilanti($progetto_questionario->id_progetto, $progetto_questionario->id_questionario);
+        //ora cerco gli utenti mancanticd
         if (!$questionatiCompilati) {
             $writer->writeSheetRow($titoloSheet, ['Questo Questionario non è mai stato compilato!']);
         } else {
@@ -75,10 +80,15 @@ class XLSXManager {
             foreach ($questionatiCompilati as $qc) {
 
                 $tutte_le_risposte = $qc->get_tutte_le_risposte_divise_per_utente();
-
+                $pos = array_search($qc->utente_compilazione, $utenti_compilanti);
+                unset($utenti_compilanti[$pos]);
+                
                 foreach($tutte_le_risposte as $utente_valutato => $risposte) {
                     $this->crea_riga_sheet($writer, $titoloSheet, $qc->utente_compilazione, $utente_valutato, $risposte);
                 }
+            }
+            foreach($utenti_compilanti as $u) {
+                $this->crea_riga_sheet($writer, $titoloSheet, $u, "", []);
             }
         }
     }
@@ -93,6 +103,7 @@ class XLSXManager {
         for($i = 0; $i < count($risposte); $i++){
             $row[] = $risposte[$i]->get_desc_risposta();
             $row[] = $risposte[$i]->prodotto;
+            $row[] = $risposte[$i]->note;
         }
         $row = array_map(function($x){return ($x != null) ? $x : "-";}, $row);
         $writer->writeSheetRow($titoloSheet, $row);

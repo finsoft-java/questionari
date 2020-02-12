@@ -88,6 +88,16 @@ class ProgettoQuestionari {
         }
         return $this->progetto;
     }
+
+    function get_utenti_compilanti() {
+        global $progettiManager;
+        if (!$this->progetto) {
+            $this->progetto = $progettiManager->get_utenti_compilanti($this->id_progetto,$this->id_questionario);
+        }
+        return $this->progetto;
+    }
+    
+    
 }
 
 class ProgettiManager {
@@ -114,6 +124,22 @@ class ProgettiManager {
                 $progetto->data_creazione     = $row['data_creazione'];
                 $arr[$cr++] = $progetto;
             }
+        } else {
+            print_error(500, $con ->error);
+        }
+        return $arr;
+    }
+
+    function get_utenti_compilanti($id_progetto,$id_questionario) {
+        global $con, $STATO_PROGETTO, $BOOLEAN;
+        $arr = array();
+        $sql = "SELECT pu.nome_utente FROM progetti_questionari pq INNER JOIN progetti_utenti pu on pq.id_progetto = pu.id_progetto AND pu.funzione= pq.gruppo_compilanti INNER join  utenti ut on pu.nome_utente = ut.username where pq.id_progetto= '$id_progetto' and pq.id_questionario = '$id_questionario'";
+        if($result = mysqli_query($con, $sql)) {
+            $cr = 0;
+            while($row = mysqli_fetch_assoc($result))
+            {
+                $arr[$cr++] = $row['nome_utente'];
+            } 
         } else {
             print_error(500, $con ->error);
         }

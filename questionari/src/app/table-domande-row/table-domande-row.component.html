@@ -136,6 +136,7 @@
 <td *ngIf="!domanda.editing && !esisteDomandaEditing">
     <div>
         <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="!domanda.editing" alt="Modifica Domanda" title="Modifica Domanda" (click)="goToEdit()"><i class="fa fa-edit"></i></button>
+        <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-dark" *ngIf="!domanda.editing" alt="Duplica Domanda" title="Duplica Domanda" (click)="duplicaDomanda()"><i class="fa fa-copy"></i></button>
         <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="!domanda.editing" (click)="delete(this.domanda)" [disabled]="questionatioSelezionato.gia_compilato=='1'" title="Elimina Domanda"><i class="fa fa-trash-alt"></i></button>
         <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-success" *ngIf="domanda.editing" alt="Salva Domanda" [disabled]="questionatioSelezionato.gia_compilato=='1'" title="Salva Domanda" (click)="save()"><i class="fa fa-save"></i></button>
         <button style="min-width: calc((100% / 3) - 35px);margin-right: 5px;" class="btn btn-danger" *ngIf="domanda.editing" (click)="returnFromEdit()" title="Annulla"><i class="fa fa-undo"></i></button>

@@ -10,17 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     //do nothing, HTTP 200
     exit();
 }
-
+$id_questionario = '';
+$progressivo_sezione = '';
+$progressivo_domanda = '';
 require_logged_user_JWT();
-
-if (isset($_POST['id_questionario'])) {
-    $id_questionario = $con->escape_string($_POST['id_questionario']);
+if (isset($_GET['id_questionario'])) {
+    $id_questionario = $con->escape_string($_GET['id_questionario']);
 }
-if (isset($_POST['progressivo_sezione'])) {
-    $progressivo_sezione = $con->escape_string($_POST['progressivo_sezione']);
+if (isset($_GET['progressivo_sezione'])) {
+    $progressivo_sezione = $con->escape_string($_GET['progressivo_sezione']);
 }
-if (isset($_POST['progressivo_domanda'])) {
-    $progressivo_domanda = $con->escape_string($_POST['progressivo_domanda']);
+if (isset($_GET['progressivo_domanda'])) {
+    $progressivo_domanda = $con->escape_string($_GET['progressivo_domanda']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
