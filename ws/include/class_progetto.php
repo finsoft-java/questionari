@@ -459,7 +459,9 @@ class ProgettiManager {
         
         $old_utenti = $this->get_utenti_funzioni($progetto->id_progetto);
         foreach($old_utenti as $u) {
-            $old_utenti[$u->nome_utente] = $u;
+            if ($u !== null && $u->funzione !== null) {
+                $old_utenti[$u->nome_utente] = $u;
+            }
         }
         $gia_compilato = $progetto->is_gia_compilato();
 
