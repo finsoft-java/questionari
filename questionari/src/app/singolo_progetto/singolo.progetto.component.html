@@ -5,6 +5,11 @@
 
     <form style="margin-bottom:30px">
         <h3>Progetto</h3> <br>
+        
+        <div *ngIf="this.progetto.gia_compilato=='1'" style="margin-bottom: 30px;background-color: #c82333;padding: 15px;font-size: 16px;font-weight: 500;color: #fff;border-radius: 10px;text-align: center;">
+            Attenzione! Qualcuno ha gi&agrave; iniziato a compilare questionari di questo progetto.
+        </div>
+
         <h5>Dati Generali</h5> <br>
         <div class="row">
             <div class=" col">

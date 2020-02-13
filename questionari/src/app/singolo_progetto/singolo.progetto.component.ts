@@ -95,7 +95,7 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     }
     save(utenti){
         this.progettiService.saveProgettiUtenti(utenti).subscribe(response => {
-            this.alertService.success("Utenti Progetto modificati con successo");
+            this.alertService.success("Utenti del progetto aggiornati correttamente");
         },
         error => {
           this.alertService.error(error);
@@ -195,6 +195,11 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
         this.updProgetto();
     }
     goToSelect(livello){
+        if (this.progetto.gia_compilato == '1') {
+            if (!confirm("Attenzione! Aggiungere un utente significa invalidare tutti i questionari che richiedono il nuovo utente valutato! Procedere?")) {
+                return;
+            }
+        }
         if(livello == 'l1'){
             for(let i = 0; i < this.utentiSelect.length; i++){
                 this.progettoUtenti[this.utentiSelect[i]].responsabileL1 = true;
@@ -212,6 +217,11 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
 
     }
     returnToSelect(livello){
+        if (this.progetto.gia_compilato == '1') {
+            if (!confirm("Attenzione! Rimuovere un utente significa eliminare eventuali questionari da lui compilati! procedere?")) {
+                return;
+            }
+        }
         if(livello == 'l1'){
             for(let i = 0; i < this.utentiSelect.length; i++){
                 this.progettoUtenti[this.utentiSelect[i]].responsabileL1 = false;
