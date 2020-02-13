@@ -96,9 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$questionario->utente_puo_modificarlo()) {
         print_error(403, "Utente non autorizzato a modificare questo Questionario.");
     }
+    /*
     if ($questionario->is_gia_compilato()) {
         print_error(403, "Questionario non modificabile perchè già compilato.");
     }
+    */
     $sezione = $questionario->get_sezione($json_data->progressivo_sezione);
     if (!$sezione) {
         print_error(404, 'Not found');

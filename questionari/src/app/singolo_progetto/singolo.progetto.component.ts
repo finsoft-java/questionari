@@ -19,7 +19,6 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     resp_secondo_livello: Array<String> = [];
     utenti_finali: Array<String> = [];
     @Input() stato_modifica: Object;
-    success_mex:any ='';
     utentiSelect: number[];
     l1: User []= [];
     l2: User []= [];
@@ -96,11 +95,9 @@ export class SingoloProgettoComponent implements OnInit, OnDestroy {
     }
     save(utenti){
         this.progettiService.saveProgettiUtenti(utenti).subscribe(response => {
-            
-            this.success_mex = "Utenti Progetto modificati con successo";
+            this.alertService.success("Utenti Progetto modificati con successo");
         },
         error => {
-            this.success_mex = '';
           this.alertService.error(error);
         });
     }

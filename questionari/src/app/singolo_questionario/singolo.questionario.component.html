@@ -5,6 +5,12 @@
 
     <form style="margin-bottom:30px;margin-bottom:30px; border-bottom: 1px solid;float:left;width:100%;padding-bottom: 15px;">
         <h3>Questionario</h3> <br>
+
+        <div *ngIf="this.questionario.gia_compilato=='1'" style="margin-bottom: 30px;background-color: #c82333;padding: 15px;font-size: 16px;font-weight: 500;color: #fff;border-radius: 10px;text-align: center;">
+            NB: Attenzione! Qualcuno ha gi&agrave; iniziato a compilare questo questionario.
+        </div>
+
+
         <h5>Dati Generali</h5> <br>
         <div class="row">
             <div class=" col">
@@ -28,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)" [disabled]="questionario.gia_compilato=='1'">Salva Questionario</button></div>
+        <div><button class="btn btn-success" style="float:right;margin-right:5px;margin-top:10px;" (click)="updQuestionario(questionario)">Salva Questionario</button></div>
     </form>
 
     <button class="btn btn-dark" style="float:left" (click)="sezPrecedente()" title="Sez. precendente" alt="Sez. precendente" [disabled]="!esiste_prec">Sez. precendente<!--<i class="fa fa-step-backward"></i>--></button>
@@ -55,7 +61,7 @@
             </div>
             <div class="row">
                 <div class=" col">
-                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="modificaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
+                    <button *ngIf="!is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="modificaSezione(sezione_corrente)">Salva Sezione</button>
                     <button *ngIf="is_nuova_sezione" class="btn btn-success" style="margin-right:5px;" (click)="salvaSezione(sezione_corrente)" [disabled]="questionario.gia_compilato=='1'">Salva Sezione</button>
                     <button *ngIf="!is_nuova_sezione" class="btn btn-dark" style="margin-right:5px;" (click)="duplicaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Duplica sezione</button>
                     <button *ngIf="!is_nuova_sezione" class="btn btn-danger" style="margin-right:5px;" (click)="eliminaSezioneCorrente()" [disabled]="questionario.gia_compilato=='1'">Elimina sezione</button>

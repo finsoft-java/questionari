@@ -55,9 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if (!$progetto_su_db->utente_puo_modificarlo()) {
       print_error(403, "Utente non autorizzato a modificare questo Progetto.");
   }
+  /*
   if ($progetto_su_db->is_gia_compilato()) {
       print_error(403, "Esistono questionari già compilati, le uniche modifiche permesse sono la conferma e la riapertura");
   }
+  */
   $progettiManager->save_utenti_funzioni($progetto_su_db, $json_data);
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {

@@ -70,9 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$questionario->utente_puo_modificarlo()) {
         print_error(403, "Utente non autorizzato a modificare questo Questionario.");
     }
+    /*
     if ($questionario->is_gia_compilato()) {
         print_error(403, "Questionario non modificabile perchè già compilato");
     }
+    */
     $questionariManager->aggiorna($questionario, $json_data);
 
     header('Content-Type: application/json');
