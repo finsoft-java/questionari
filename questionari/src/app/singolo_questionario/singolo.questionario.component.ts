@@ -55,7 +55,6 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         this.questSubscription.unsubscribe();
     }
     private caricaSezione(indice: number) {
-       
         if (!this.questionario || !this.questionario.sezioni || indice >= this.questionario.sezioni.length || indice < 0) {
             this.alertService.error(`La sezione ${indice} non esiste`);
             return;
@@ -115,16 +114,24 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         });
     }
     sezSuccessiva() {
+        console.log(this.indice_sezione_corrente);
         if (this.indice_sezione_corrente == null) {
             return;
         }
+
+        console.log(this.indice_sezione_corrente+1);
         this.caricaSezione(this.indice_sezione_corrente+1);
+        this.scrollToTop();
     }
     sezPrecedente() {
+        console.log(this.indice_sezione_corrente);
         if (this.indice_sezione_corrente == null) {
             return;
         }
+        
+        console.log(this.indice_sezione_corrente-1);
         this.caricaSezione(this.indice_sezione_corrente-1);
+        this.scrollToTop();
     }
     creaSezione() {
         this.disableCrea = true;
@@ -177,11 +184,10 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
     }
     modificaSezione (nuova_sezione){
         this.questionariService.updateSezione(nuova_sezione).subscribe(response => {
-            this.indice_sezione_corrente = this.nuova_sezione.progressivo_sezione;
-            this.sezione_corrente = nuova_sezione;
+            this.indice_sezione_corrente = response['value'].progressivo_sezione-1;
+            this.sezione_corrente = response['value'];
             this.is_nuova_sezione = false;
             this.alertService.success("Sezione salvata con successo");
-            //this.scrollToTop();
         },
         error => {
             this.alertService.error(error);
@@ -213,15 +219,8 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         }
         this.questionariService.deleteSezione(this.sezione_corrente.id_questionario,this.sezione_corrente.progressivo_sezione)
           .subscribe(response => {
-                /*
-                let nuova_sezione = response["value"];
-                this.questionario.sezioni.push(nuova_sezione);
-                this.indice_sezione_corrente = this.questionario.sezioni.length-1;
-                this.sezione_corrente = nuova_sezione;
-                */
                 this.getQuestionario();
                 this.alertService.success("Sezione eliminata con successo");
-                //this.scrollToTop();
           },
           error => {
             this.alertService.error(error);
