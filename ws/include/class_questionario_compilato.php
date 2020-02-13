@@ -717,10 +717,6 @@ class QuestionariCompilatiManager {
         $ultima_sezione = $questionario_compilato->get_progr_ultima_sezione();
         return ("$questionario_compilato->utente_valutato_corrente" == "$ultimo_utente" and $questionario_compilato->progr_sezione_corrente == $ultima_sezione);
     }
-    
-    function correggiQuestionari() {
-
-    }
 }
 
 ?>

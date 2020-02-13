@@ -486,15 +486,9 @@ class ProgettiManager {
                     if ($gia_compilato) {
                         $sql = "DELETE b.* FROM `risposte_quest_compilati` AS b WHERE `nome_utente_valutato`='$u->nome_utente' AND (SELECT id_progetto FROM questionari_compilati a WHERE a.progressivo_quest_comp=b.progressivo_quest_comp AND a.id_progetto)='$progetto->id_progetto'";
                         mysqli_query($con, $sql);
-                        if ($con ->error) {
-                            print_error(500, $con ->error);
-                        }
                         $sql = "DELETE FROM `questionari_compilati` WHERE `utente_compilazione` = '$u->nome_utente' AND `id_progetto`='$progetto->id_progetto'";
                         // assuming ON DELETE CASCADE
                         mysqli_query($con, $sql);
-                        if ($con ->error) {
-                            print_error(500, $con ->error);
-                        }
                     }
                 }
                 continue;
@@ -502,40 +496,28 @@ class ProgettiManager {
             
             if (!$old_utente) {
                 // nuovo utente
-                $sql = "INSERT INTO progetti_utenti (id_progetto, nome_utente, funzione)  VALUES('$progetto->id_progetto', '$u->nome_utente', '$new_funzione')";
+                $sql = "INSERT IGNORE INTO progetti_utenti (id_progetto, nome_utente, funzione)  VALUES('$progetto->id_progetto', '$u->nome_utente', '$new_funzione')";
                 mysqli_query($con, $sql);
-                if ($con ->error) {
-                    print_error(500, $con ->error);
-                }
             } elseif ($new_funzione != $u->funzione) {
                 // modificata funzione utente (non dovrebbe succedere)
                 $sql = "UPDATE progetti_utenti SET funzione='$new_funzione' WHERE id_progetto='$progetto->id_progetto' AND nome_utente='$u->nome_utente'";
                 mysqli_query($con, $sql);
-                if ($con ->error) {
-                    print_error(500, $con ->error);
-                }
             }
             
             if ($gia_compilato) {
                 // potrei dover invalidare delle compilazioni
                 // devo guardare la tabella progetti questionari e vedere se ci sono questionari con gruppo_valutati = new_funzione
                 
-                $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
+                $sql = "INSERT IGNORE INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
                         "SELECT progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$u->nome_utente' ".
                         "FROM v_questionari_domande v " .
                         "JOIN questionari_compilati c ON c.id_questionario=v.id_questionario " .
                         "WHERE v.id_questionario IN (SELECT id_questionario FROM `progetti_questionari` WHERE `id_progetto`='$progetto->id_progetto' AND `gruppo_valutati`='$new_funzione' ) ";
                 mysqli_query($con, $sql);
-                if ($con ->error) {
-                    print_error(500, $con ->error);
-                }
 
                 $sql = "UPDATE `questionari_compilati` SET `stato`='0' WHERE `id_progetto`='$progetto->id_progetto' AND `stato`='1' AND " .
                         "id_questionario IN (SELECT id_questionario FROM `progetti_questionari` WHERE `id_progetto`='$progetto->id_progetto' AND `gruppo_valutati`='$new_funzione' ) ";
                 mysqli_query($con, $sql);
-                if ($con ->error) {
-                    print_error(500, $con ->error);
-                }
             }
             
         }
