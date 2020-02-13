@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_logged_user_JWT();
 
-$id_progetto = '';
-if (isset($_GET['id_progetto'])) {
-    $id_progetto = $con->escape_string($_GET['id_progetto']);
-}
+$id_progetto = isset($_GET['id_progetto']) ? $con->escape_string($_GET['id_progetto']) : null;
+$top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
+$skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
+$search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $progetto]);
     } else {
         //==========================================================
-        $progetti = $progettiManager->get_progetti();
+        $progetti = $progettiManager->get_progetti($top, $skip, $search);
           
         header('Content-Type: application/json');
         echo json_encode(['data' => $progetti]);

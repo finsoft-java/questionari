@@ -102,11 +102,23 @@ class ProgettoQuestionari {
 
 class ProgettiManager {
     
-    function get_progetti() {
+    function get_progetti($top=null, $skip=null, $search=null) {
         global $con, $STATO_PROGETTO, $BOOLEAN;
         $arr = array();
         $sql = "SELECT * FROM progetti p JOIN utenti u ON p.utente_creazione = u.username";
-        
+        if ($search){
+            $search = strtoupper($search);
+            $search = $con->escape_string($search);
+            $sql .= " WHERE UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%'";
+        }
+        $sql .= " ORDER BY p.data_creazione DESC";
+        if ($top){
+            if ($skip) {
+                $sql .= " LIMIT $skip,$top";
+            } else {
+                $sql .= " LIMIT $top";
+            }
+        }
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
