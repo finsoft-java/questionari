@@ -15,18 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 require_logged_user_JWT();
 
-$storico = '';
-$progressivo_quest_comp = '';
-$utente_valutato_corrente = '';
-$sezione_corrente = '';
-if (isset($_GET['storico'])) {
-    $storico = $con->escape_string($_GET['storico']);
-} else {
-    $storico = false;
-}
-if (isset($_GET['progressivo_quest_comp'])) {
-    $progressivo_quest_comp = $con->escape_string($_GET['progressivo_quest_comp']);
-}
+$storico = isset($_GET['storico']) ? $con->escape_string($_GET['storico']) : false;
+$progressivo_quest_comp = isset($_GET['progressivo_quest_comp']) ? $con->escape_string($_GET['progressivo_quest_comp']) : null;
+$top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
+$skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
+$search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -41,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $questionario_compilato]);
     } else {
         //==========================================================
-        $questionari = $questionariCompilatiManager->get_vista_questionari_compilabili_o_compilati($storico);
+        $questionari = $questionariCompilatiManager->get_vista_questionari_compilabili_o_compilati($storico, null, null, $top, $skip, $search);
         
         header('Content-Type: application/json');
         echo json_encode(['data' => $questionari]);

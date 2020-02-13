@@ -465,7 +465,7 @@ class QuestionariCompilatiManager {
         return $obj;
     }
     
-    function get_vista_questionari_compilabili_o_compilati($storici, $id_progetto_or_null = null, $id_questionario_or_null = null) {
+    function get_vista_questionari_compilabili_o_compilati($storici, $id_progetto_or_null = null, $id_questionario_or_null = null, $top=null, $skip=null, $search=null) {
         global $con, $logged_user, $BOOLEAN, $STATO_QUESTIONARIO, $STATO_PROGETTO, $GRUPPI, $STATO_QUEST_COMP;
         $arr = [];
         if ($storici) {
@@ -484,6 +484,20 @@ class QuestionariCompilatiManager {
         if ($id_questionario_or_null) {
             $sql .= " AND id_questionario = '$id_questionario_or_null' ";
         }
+        if ($search){
+            $search = strtoupper($search);
+            $search = $con->escape_string($search);
+            $sql .= " AND ( UPPER(titolo_progetto) LIKE '%$search%' OR UPPER(titolo_questionario) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' ) ";
+        }
+        $sql .= " ORDER BY id_progetto DESC, id_questionario DESC";
+        if ($top){
+            if ($skip) {
+                $sql .= " LIMIT $skip,$top";
+            } else {
+                $sql .= " LIMIT $top";
+            }
+        }
+
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
@@ -704,6 +718,9 @@ class QuestionariCompilatiManager {
         return ("$questionario_compilato->utente_valutato_corrente" == "$ultimo_utente" and $questionario_compilato->progr_sezione_corrente == $ultima_sezione);
     }
     
+    function correggiQuestionari() {
+
+    }
 }
 
 ?>
