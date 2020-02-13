@@ -17,10 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_logged_user_JWT();
-$id_questionario = '';
-if (isset($_GET['id_questionario'])) {
-    $id_questionario = $con->escape_string($_GET['id_questionario']);
-}
+
+$id_questionario = isset($_GET['id_questionario']) ? $con->escape_string($_GET['id_questionario']) : null;
+$top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
+$skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
+$search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $questionario]);
     } else {
         //==========================================================
-        $questionario = $questionariManager->get_questionari();
+        $questionario = $questionariManager->get_questionari($top, $skip, $search);
         
         header('Content-Type: application/json');
         echo json_encode(['data' => $questionario]);

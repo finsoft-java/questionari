@@ -158,17 +158,33 @@ class QuestionariManager {
         return $arr;
     }
 
-    function get_questionari() {
+    function get_questionari($top=null, $skip=null, $search=null) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
         $sql = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome  
                     FROM `questionari` q 
                     JOIN utenti u ON q.utente_creazione = u.username
-                    left join progetti_questionari pq on q.id_questionario = pq.id_questionario ";
+                    left join progetti_questionari pq on q.id_questionario = pq.id_questionario
+                    WHERE 1 ";
         if (!utente_admin()) {
-            $sql .= " WHERE utente_creazione='$logged_user->nome_utente' OR flag_comune='1' ";
+            $sql .= " AND ( utente_creazione='$logged_user->nome_utente' OR flag_comune='1' ) ";
         }
-        $sql .= "GROUP by q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione";
+        if ($search){
+            $search = strtoupper($search);
+            $search = $con->escape_string($search);
+            $sql .= " AND ( UPPER(q.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' )";
+        }
+        $sql .= " GROUP BY q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione";
+        $sql .= " ORDER BY q.data_creazione DESC";
+        if ($top){
+            if ($skip) {
+                $sql .= " LIMIT $skip,$top";
+            } else {
+                $sql .= " LIMIT $top";
+            }
+        }
+
+
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
