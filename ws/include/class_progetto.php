@@ -420,6 +420,7 @@ class ProgettiManager {
                 $utente->responsabileL1 = false;
                 $utente->responsabileL2 = false;
                 $utente->utenteFinale = false;
+                $utente->funzione = $row["funzione"];
                 if($row["funzione"] != null){                    
                     switch ($row["funzione"]) {
                         case 0:
@@ -443,29 +444,88 @@ class ProgettiManager {
     
     function save_utenti_funzioni($progetto, $lista_utenti_funzioni){
         global $con, $RUOLO;
-        $sql = "DELETE FROM progetti_utenti WHERE id_progetto = '$progetto->id_progetto'";
-        mysqli_query($con, $sql);
-        if ($con ->error) {
-            print_error(500, $con ->error);
-        }
         
-        foreach ($lista_utenti_funzioni as $row) {
-            $funzione = '';
-            if ($row->utenteFinale) {
-                $funzione = '0';
-            } elseif  ($row->responsabileL2) {
-                $funzione = '1';
-            } elseif  ($row->responsabileL1) {
-                $funzione = '2';
-            } else {
+        $old_utenti = $this->get_utenti_funzioni($progetto->id_progetto);
+        foreach($old_utenti as $u) {
+            $old_utenti[$u->nome_utente] = $u;
+        }
+        $gia_compilato = $progetto->is_gia_compilato();
+
+        foreach ($lista_utenti_funzioni as $u) {
+            $old_utente = $old_utenti[$u->nome_utente];
+            $new_funzione = null;
+            if ($u->utenteFinale) {
+                $new_funzione = '0';
+            } elseif  ($u->responsabileL2) {
+                $new_funzione = '1';
+            } elseif  ($u->responsabileL1) {
+                $new_funzione = '2';
+            }
+            
+            if ($new_funzione == null) {
                 //utente non legato al progetto
+                if ($old_utente) {
+                    // utente eliminato dal progetto
+                    $sql = "DELETE FROM progetti_utenti WHERE id_progetto = '$progetto->id_progetto' AND nome_utente='$u->nome_utente'";
+                    mysqli_query($con, $sql);
+                    if ($con ->error) {
+                        print_error(500, $con ->error);
+                    }
+                    if ($gia_compilato) {
+                        $sql = "DELETE b.* FROM `risposte_quest_compilati` AS b WHERE `nome_utente_valutato`='$u->nome_utente' AND (SELECT id_progetto FROM questionari_compilati a WHERE a.progressivo_quest_comp=b.progressivo_quest_comp AND a.id_progetto)='$progetto->id_progetto'";
+                        mysqli_query($con, $sql);
+                        if ($con ->error) {
+                            print_error(500, $con ->error);
+                        }
+                        $sql = "DELETE FROM `questionari_compilati` WHERE `utente_compilazione` = '$u->nome_utente' AND `id_progetto`='$progetto->id_progetto'";
+                        // assuming ON DELETE CASCADE
+                        mysqli_query($con, $sql);
+                        if ($con ->error) {
+                            print_error(500, $con ->error);
+                        }
+                    }
+                }
                 continue;
             }
-            $sql = "INSERT INTO progetti_utenti (id_progetto, nome_utente, funzione)  VALUES('".$progetto->id_progetto."', '".$row->nome_utente."', '".$funzione."')";
-            mysqli_query($con, $sql);
-            if ($con ->error) {
-                print_error(500, $con ->error);
+            
+            if (!$old_utente) {
+                // nuovo utente
+                $sql = "INSERT INTO progetti_utenti (id_progetto, nome_utente, funzione)  VALUES('$progetto->id_progetto', '$u->nome_utente', '$new_funzione')";
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
+            } elseif ($new_funzione != $u->funzione) {
+                // modificata funzione utente (non dovrebbe succedere)
+                $sql = "UPDATE progetti_utenti SET funzione='$new_funzione' WHERE id_progetto='$progetto->id_progetto' AND nome_utente='$u->nome_utente'";
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
             }
+            
+            if ($gia_compilato) {
+                // potrei dover invalidare delle compilazioni
+                // devo guardare la tabella progetti questionari e vedere se ci sono questionari con gruppo_valutati = new_funzione
+                
+                $sql = "INSERT INTO `risposte_quest_compilati`(`progressivo_quest_comp`, `progressivo_sezione`, `progressivo_domanda`, `nome_utente_valutato`) " .
+                        "SELECT progressivo_quest_comp, progressivo_sezione, progressivo_domanda, '$u->nome_utente' ".
+                        "FROM v_questionari_domande v " .
+                        "JOIN questionari_compilati c ON c.id_questionario=v.id_questionario " .
+                        "WHERE v.id_questionario IN (SELECT id_questionario FROM `progetti_questionari` WHERE `id_progetto`='$progetto->id_progetto' AND `gruppo_valutati`='$new_funzione' ) ";
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
+
+                $sql = "UPDATE `questionari_compilati` SET `stato`='0' WHERE `id_progetto`='$progetto->id_progetto' AND `stato`='1' AND " .
+                        "id_questionario IN (SELECT id_questionario FROM `progetti_questionari` WHERE `id_progetto`='$progetto->id_progetto' AND `gruppo_valutati`='$new_funzione' ) ";
+                mysqli_query($con, $sql);
+                if ($con ->error) {
+                    print_error(500, $con ->error);
+                }
+            }
+            
         }
     }
 }
