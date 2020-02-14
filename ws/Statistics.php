@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// TODO require_logged_user_JWT();
+require_logged_user_JWT();
 
 $con = connect();
 
