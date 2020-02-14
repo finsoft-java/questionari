@@ -310,6 +310,52 @@ class QuestionariCompilatiManager {
         return $obj;
     }
     
+    /**
+     * Conta i questionari, divisi per stato.
+     * Un record per ogni stato, più un record "tot" per il totale.
+     */
+    function count() {
+        global $con;
+        $arr = [];
+        $sql = "SELECT stato, COUNT(*) AS cnt FROM questionari_compilati GROUP BY stato";
+        if($result = mysqli_query($con, $sql)) {
+            $cr = 0;
+            $tot = 0;
+            while($row = mysqli_fetch_assoc($result)) {
+                $arr[$row["stato"]] = $row["cnt"];
+                $cr++;
+                $tot += $row['cnt'];
+            }
+            $arr['tot'] = $tot;
+        } else {
+            print_error(500, $con ->error);
+        }
+        return $arr;
+    }
+
+    /**
+     * Conta le risposte, divise per stato questionario.
+     * Un record per ogni stato, più un record "tot" per il totale.
+     */
+    function count_risposte() {
+        global $con;
+        $arr = [];
+        $sql = "SELECT q.stato, COUNT(*) AS cnt FROM questionari_compilati q JOIN risposte_quest_compilati r ON q.progressivo_quest_comp=r.progressivo_quest_comp GROUP BY q.stato";
+        if($result = mysqli_query($con, $sql)) {
+            $cr = 0;
+            $tot = 0;
+            while($row = mysqli_fetch_assoc($result)) {
+                $arr[$row["stato"]] = $row["cnt"];
+                $cr++;
+                $tot += $row['cnt'];
+            }
+            $arr['tot'] = $tot;
+        } else {
+            print_error(500, $con ->error);
+        }
+        return $arr;
+    }
+
     /*
      * Restituisce le risposte (non necessariamente compilate) per la sezione data.
      * $progressivo_sezione potrebbe essere null (scaricamento xlsx)

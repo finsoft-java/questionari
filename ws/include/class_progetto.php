@@ -186,6 +186,29 @@ class ProgettiManager {
         return $progetto;
     }
     
+    /**
+     * Conta i progetti, divisi per stato.
+     * Un record per ogni stato, più un record "tot" per il totale.
+     */
+    function count() {
+        global $con;
+        $arr = [];
+        $sql = "SELECT stato, COUNT(*) AS cnt FROM progetti GROUP BY stato";
+        if($result = mysqli_query($con, $sql)) {
+            $cr = 0;
+            $tot = 0;
+            while($row = mysqli_fetch_assoc($result)) {
+                $arr[$row["stato"]] = $row["cnt"];
+                $cr++;
+                $tot += $row['cnt'];
+            }
+            $arr['tot'] = $tot;
+        } else {
+            print_error(500, $con ->error);
+        }
+        return $arr;
+    }
+
     function crea($json_data) {
         global $con, $logged_user;
         $sql = insert("progetti", ["id_progetto" => null,
