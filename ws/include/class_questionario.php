@@ -334,11 +334,32 @@ class QuestionariManager {
         
         // Di fatto copio soltanto il titolo
         global $con, $logged_user, $questionariManager;
+
+        $titolo = $questionario->titolo;
+        if (!$titolo) {
+            $titolo = 'Nuovo questionario';
+        }
+
+        $titolo = $con->escape_string($titolo);
+        for ($i = 1; $i < 1000; ++$i) {
+            $titolo = "$titolo (Copia)";
+            $sql = "SELECT 1 FROM questionari where titolo = '$titolo'";
+            mysqli_query($con, $sql);
+            if($result = mysqli_query($con, $sql)) {
+                if(! mysqli_fetch_assoc($result)) {
+                    // La copia non esiste ancora
+                    break;
+                }
+            } else {
+                print_error(500, $con ->error);
+            }
+        }
+
         $sql = insert_select("questionari", ["id_questionario", "stato", "flag_comune", "titolo", "utente_creazione"],
                                             ["id_questionario" => null,
                                             "stato" => '0',
                                             "flag_comune" => '0',
-                                            "titolo" => $con->escape_string($questionario->titolo)." (Copia)",
+                                            "titolo" => $titolo,
                                             "gia_compilato" => '0',
                                             "utente_creazione" => $logged_user->nome_utente],
                                             ["id_questionario" => $questionario->id_questionario]

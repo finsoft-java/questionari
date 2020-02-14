@@ -239,10 +239,31 @@ class ProgettiManager {
     function duplica($progetto) {
         // Di fatto copio soltanto il titolo
         global $con, $logged_user, $progettiManager;
+        
+        $titolo = $progetto->titolo;
+        if (!$titolo) {
+            $titolo = 'Nuovo progetto';
+        }
+
+        $titolo = $con->escape_string($titolo);
+        for ($i = 1; $i < 1000; ++$i) {
+            $titolo = "$titolo (Copia)";
+            $sql = "SELECT 1 FROM progetti where titolo = '$titolo'";
+            mysqli_query($con, $sql);
+            if($result = mysqli_query($con, $sql)) {
+                if(! mysqli_fetch_assoc($result)) {
+                    // La copia non esiste ancora
+                    break;
+                }
+            } else {
+                print_error(500, $con ->error);
+            }
+        }
+
         $sql = insert_select("progetti", ["id_progetto", "stato", "titolo", "utente_creazione"],
                                             ["id_progetto" => null,
                                             "stato" => '0',
-                                            "titolo" => str_replace("'","''",$progetto->titolo)." (Copia)",
+                                            "titolo" => $titolo,
                                             "gia_compilato" => '0',
                                             "utente_creazione" => $logged_user->nome_utente],
                                             ["id_progetto" => $progetto->id_progetto]
