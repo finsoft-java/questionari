@@ -1,0 +1,4 @@
+<search (doSearch)="searchStringFunction($event)" [(searchString)]="pagination.search_string"></search>
+<p>Pag {{this.pagination.start_item}} - {{this.pagination.row_per_page}}</p>
+<button class="btn btn-dark" style="margin-top:10px;" (click)="paginationMinusFunction()">Prec</button>
+<button class="btn btn-dark" style="margin-left:15px;margin-top:10px;margin-right:5px;" (click)="paginationPlusFunction()">Succ</button>

@@ -40,11 +40,11 @@
         </thead>
         <tbody>
             <tr *ngFor="let q of questionari_visibili">
-                <td style="width:25%;text-align: center;line-height: 37px;" title="{{q.titolo}}">{{q.titolo}}</td>
-                <td style="width:10%;text-align: center;line-height: 37px;">{{q.stato_dec}}</td>
-                <td style="width:20%;text-align: center;line-height: 37px;" title="{{ (q.cognome || '') +' '+ (q.nome || '')}}">{{ (q.cognome || '') +' '+ (q.nome || '')}}</td>
-                <td style="width:20%;text-align: center;line-height: 37px;">{{q.data_creazione | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
-                <td style="width:10%;text-align: center;line-height: 37px;">{{q.flag_comune_dec}}</td>
+                <td style="width:25%;text-align: center;" title="{{q.titolo}}">{{q.titolo}}</td>
+                <td style="width:10%;text-align: center;">{{q.stato_dec}}</td>
+                <td style="width:20%;text-align: center;" title="{{ (q.cognome || '') +' '+ (q.nome || '')}}">{{ (q.cognome || '') +' '+ (q.nome || '')}}</td>
+                <td style="width:20%;text-align: center;">{{q.data_creazione | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+                <td style="width:10%;text-align: center;">{{q.flag_comune_dec}}</td>
                 <td style="width:15%;">
 
                     <button class="{{q.gia_compilato=='1' ? 'btn btn3 btn-readonly' : 'btn btn3 btn-success'}}" routerLink="/questionari/{{q.id_questionario}}" routerLinkActive="active" [title]="q.gia_compilato=='1' ? 'Apri (read-only perchè già compilato)' : 'Apri'">

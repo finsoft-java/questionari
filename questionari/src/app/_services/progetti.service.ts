@@ -16,6 +16,9 @@ export class ProgettiService {
     getAll() {
         return this.http.get<Progetto[]>(`${config.apiUrl}/Progetti.php`);
     }
+    getAllFiltered(top:number, skip:number,search : string, orderBy : string) {
+        return this.http.get<Progetto[]>(`${config.apiUrl}/Progetti.php?top=${top}&skip=${skip}&search=${search}&orderby=${orderBy}`);
+    }
     getById(id_progetto: number) {
         return this.http.get(`${config.apiUrl}/Progetti.php?id_progetto=${id_progetto}`);
     }
