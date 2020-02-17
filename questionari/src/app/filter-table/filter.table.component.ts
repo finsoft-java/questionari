@@ -17,7 +17,6 @@ export class FilterTableComponent implements OnInit {
  
   ngOnInit() {
     this.pagination = new Pagination();
-    this.searchStringFunction();
     this.numPagina();
   }
   get count(): number { 
@@ -40,7 +39,9 @@ export class FilterTableComponent implements OnInit {
     }
   }
 
-  searchStringFunction(){
+  searchStringFunction(s : string){
+    this.pagination.search_string = s;
+    this.pagination.start_item = 0;
     this.filter.emit(this.pagination);
   }
 

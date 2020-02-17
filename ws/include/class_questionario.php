@@ -176,7 +176,7 @@ class QuestionariManager {
         if ($search){
             $search = strtoupper($search);
             $search = $con->escape_string($search);
-            $sql .= " AND ( UPPER(q.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' )";
+            $sql .= " AND ( UPPER(q.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%' )";
         }
         
         if($result = mysqli_query($con, $sql0 . $sql)) {

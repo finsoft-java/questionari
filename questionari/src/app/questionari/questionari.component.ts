@@ -48,7 +48,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         return i;
       }
 
-      filter(p:Pagination){
+    filter(p:Pagination){
 
         this.questionariService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order)
         .subscribe(response => {

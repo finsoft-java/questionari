@@ -111,7 +111,7 @@ class ProgettiManager {
         if ($search){
             $search = strtoupper($search);
             $search = $con->escape_string($search);
-            $sql .= " WHERE UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%'";
+            $sql .= " WHERE UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%'";
         }
         if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
             // avoid SQL-injection

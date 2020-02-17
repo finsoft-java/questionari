@@ -23,7 +23,6 @@ export class SearchComponent implements OnInit, OnDestroy {
             return;
         }
         this.previousSearch = this.searchString;
-        console.log(this.searchString);
         this.doSearch.emit(this.searchString);
     }
 

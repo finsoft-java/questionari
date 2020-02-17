@@ -10,6 +10,9 @@ export class UserService {
     getAll() {
         return this.http.get<User[]>(`${config.apiUrl}/User.php`);
     }
+    getAllFiltered(top:number, skip:number,search : string, orderBy : string) {
+        return this.http.get<User[]>(`${config.apiUrl}/User.php?top=${top}&skip=${skip}&search=${search}&orderby=${orderBy}`);
+    }
     getById(username: string) {
         return this.http.get(`${config.apiUrl}/User.php?username=${username}`);
     }
