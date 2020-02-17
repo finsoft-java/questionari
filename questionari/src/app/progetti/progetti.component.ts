@@ -12,7 +12,6 @@ export class ProgettiComponent implements OnInit, OnDestroy {
     websocketsSubscription: Subscription;
     currentUser: User;
     progetti : Progetto[];
-    intestazione = ["Titolo", "Stato" ,"Creato da", "Data Creazione"]
     searchString : string;
     progetti_visibili : Progetto[];
     loading = true;
@@ -20,6 +19,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
     nome_colonna_ordinamento: string = "username";
     pagination_def : Pagination;
     paginazione_current : Pagination;
+    countProgetti : number;
     constructor(
         private authenticationService: AuthenticationService,
         private progettiService: ProgettiService,
@@ -36,7 +36,6 @@ export class ProgettiComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.pagination_def = new Pagination;
-        console.log(this.pagination_def);
         this.filter(this.pagination_def);
     }
 
@@ -126,6 +125,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
         this.progettiService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order)
         .subscribe(response => {
             this.progetti = response["data"];
+            this.countProgetti = response["count"];
             this.progetti_visibili = this.progetti;
             //this.calcola_progetti_visibili();
             this.loading = false;                

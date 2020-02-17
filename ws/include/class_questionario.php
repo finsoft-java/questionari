@@ -161,12 +161,15 @@ class QuestionariManager {
     function get_questionari($top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
-        $sql0 = "SELECT COUNT(*) AS cnt ";
-        $sql1 = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome "; 
-        $sql = "FROM `questionari` q 
+        $sql0 = "SELECT COUNT(*) AS cnt FROM `questionari` q 
+                    JOIN utenti u ON q.utente_creazione = u.username
+                    WHERE 1 ";
+        $sql1 = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome 
+                    FROM `questionari` q 
                     JOIN utenti u ON q.utente_creazione = u.username
                     left join progetti_questionari pq on q.id_questionario = pq.id_questionario
                     WHERE 1 ";
+        $sql = "";
         if (!utente_admin()) {
             $sql .= " AND ( utente_creazione='$logged_user->nome_utente' OR flag_comune='1' ) ";
         }
@@ -175,18 +178,19 @@ class QuestionariManager {
             $search = $con->escape_string($search);
             $sql .= " AND ( UPPER(q.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' )";
         }
+        
+        if($result = mysqli_query($con, $sql0 . $sql)) {
+            $count = mysqli_fetch_assoc($result)["cnt"];
+        } else {
+            print_error(500, $con ->error);
+        }
+
         $sql .= " GROUP BY q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione";
         if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
             // avoid SQL-injection
             $sql .= " ORDER BY $orderby";
         } else {
             $sql .= " ORDER BY q.data_creazione DESC";
-        }
-
-        if($result = mysqli_query($con, $sql0 . $sql)) {
-            $count = mysqli_fetch_assoc($result)["cnt"];
-        } else {
-            print_error(500, $con ->error);
         }
 
         if ($top){
@@ -196,7 +200,6 @@ class QuestionariManager {
                 $sql .= " LIMIT $top";
             }
         }
-
         if($result = mysqli_query($con, $sql1 . $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))

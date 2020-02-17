@@ -26,7 +26,7 @@ import { AboutComponent } from './about';
 import { CompilaQuestionarioDomandaComponent } from './compila-questionario-domanda';
 import { TableRisposteRowComponent } from './table-risposte-row';
 import { TruncatePipe } from './_pipes';
-
+import { FilterTableComponent } from './filter-table'
 import {A11yModule} from '@angular/cdk/a11y';
 import {BidiModule} from '@angular/cdk/bidi';
 import {ObserversModule} from '@angular/cdk/observers';
@@ -160,8 +160,9 @@ import { SanitizerPipe } from './_services/sanitizer.pipe';
         TableRuoliRowComponent,
         TableDomandeRowComponent,
         TableRisposteRowComponent,
+        FilterTableComponent,
         LoginComponent,
-        SearchComponent, 
+        SearchComponent,
         AboutComponent,
         SanitizerPipe,
         TruncatePipe
