@@ -105,7 +105,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
             if (this.indice_sezione_corrente == null) {
                 return;
             } 
-            this.errore_string = null;
+            this.errore_string = [];
             if(this.controllaRisposte(this.sezione_corrente.domande)[0] == null){
                 let risposte : RispostaQuestionarioCompilato[] = [];
                 this.sezione_corrente.domande.forEach(domanda => {
@@ -218,7 +218,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     */
     controllaRisposte(domande){
         let success = true;
-        
+        this.dom_err = [];
         for(let i = 0; i < domande.length; i++){
             let html_type = domande[i].html_type;
             domande[i].is_valid = true;
@@ -270,7 +270,7 @@ export class CompilaQuestionarioComponent implements OnInit, OnDestroy {
     
     salvaSezione() {
         
-        this.errore_string = null;
+        this.errore_string = [];
         if (this.indice_sezione_corrente == null) {
             return;
         } 

@@ -114,22 +114,16 @@ export class SingoloQuestionarioComponent implements OnInit, OnDestroy {
         });
     }
     sezSuccessiva() {
-        console.log(this.indice_sezione_corrente);
         if (this.indice_sezione_corrente == null) {
             return;
         }
-
-        console.log(this.indice_sezione_corrente+1);
         this.caricaSezione(this.indice_sezione_corrente+1);
         this.scrollToTop();
     }
     sezPrecedente() {
-        console.log(this.indice_sezione_corrente);
         if (this.indice_sezione_corrente == null) {
             return;
         }
-        
-        console.log(this.indice_sezione_corrente-1);
         this.caricaSezione(this.indice_sezione_corrente-1);
         this.scrollToTop();
     }
