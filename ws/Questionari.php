@@ -37,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $questionario]);
     } else {
         //==========================================================
-        $questionario = $questionariManager->get_questionari($top, $skip, $orderby, $search);
+        [$questionario, $count] = $questionariManager->get_questionari($top, $skip, $orderby, $search);
         
         header('Content-Type: application/json');
-        echo json_encode(['data' => $questionario]);
+        echo json_encode(['data' => $questionario, 'count' => $count]);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     //==========================================================

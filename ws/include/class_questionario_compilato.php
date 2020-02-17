@@ -519,7 +519,9 @@ class QuestionariCompilatiManager {
         } else {
             $vista = "v_questionari_compilabili_per_utente";
         }
-        $sql = "SELECT * FROM $vista WHERE 1=1 ";
+        $sql0 = "SELECT COUNT(*) AS cnt ";
+        $sql1 = "SELECT * ";
+        $sql = "FROM $vista WHERE 1=1 ";
         if (!($storici and utente_admin())) {
             // solo gli amministratori possono vedere tutto, e solo nella pagina dello storico
             $sql .= " AND nome_utente = '$logged_user->nome_utente' ";
@@ -543,6 +545,13 @@ class QuestionariCompilatiManager {
             $sql .= " ORDER BY id_progetto DESC, id_questionario DESC";
         }
 
+        if($result = mysqli_query($con, $sql0 . $sql)) {
+            $count = mysqli_fetch_assoc($result)["cnt"];
+        } else {
+            print_error(500, $con ->error);
+        }
+
+
         if ($top){
             if ($skip) {
                 $sql .= " LIMIT $skip,$top";
@@ -551,7 +560,7 @@ class QuestionariCompilatiManager {
             }
         }
 
-        if($result = mysqli_query($con, $sql)) {
+        if($result = mysqli_query($con, $sql1 . $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
             {
@@ -589,7 +598,7 @@ class QuestionariCompilatiManager {
         } else {
             print_error(500, $con ->error);
         }
-        return $arr;
+        return [$arr, $count];
     }
 
     function crea_questionario_compilato($questionarioCompilabile) {

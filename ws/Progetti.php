@@ -37,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $progetto]);
     } else {
         //==========================================================
-        $progetti = $progettiManager->get_progetti($top, $skip, $orderby, $search);
+        [$progetti, $count] = $progettiManager->get_progetti($top, $skip, $orderby, $search);
           
         header('Content-Type: application/json');
-        echo json_encode(['data' => $progetti]);
+        echo json_encode(['data' => $progetti, 'count' => $count]);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     //==========================================================

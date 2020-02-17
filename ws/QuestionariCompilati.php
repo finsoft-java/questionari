@@ -35,10 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $questionario_compilato]);
     } else {
         //==========================================================
-        $questionari = $questionariCompilatiManager->get_vista_questionari_compilabili_o_compilati($storico, null, null, $top, $skip, $orderby, $search);
+        [$questionari, $count] = $questionariCompilatiManager->get_vista_questionari_compilabili_o_compilati($storico, null, null, $top, $skip, $orderby, $search);
         
         header('Content-Type: application/json');
-        echo json_encode(['data' => $questionari]);
+        echo json_encode(['data' => $questionari, 'count' => $count]);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     //==========================================================

@@ -105,7 +105,9 @@ class ProgettiManager {
     function get_progetti($top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $STATO_PROGETTO, $BOOLEAN;
         $arr = array();
-        $sql = "SELECT * FROM progetti p JOIN utenti u ON p.utente_creazione = u.username";
+        $sql1 = "SELECT * ";
+        $sql0 = "SELECT COUNT(*) AS cnt ";
+        $sql = "FROM progetti p JOIN utenti u ON p.utente_creazione = u.username";
         if ($search){
             $search = strtoupper($search);
             $search = $con->escape_string($search);
@@ -118,6 +120,13 @@ class ProgettiManager {
         } else {
             $sql .= " ORDER BY p.data_creazione DESC";
         }
+
+        if($result = mysqli_query($con, $sql0 . $sql)) {
+            $count = mysqli_fetch_assoc($result)["cnt"];
+        } else {
+            print_error(500, $con ->error);
+        }
+
         if ($top){
             if ($skip) {
                 $sql .= " LIMIT $skip,$top";
@@ -125,7 +134,7 @@ class ProgettiManager {
                 $sql .= " LIMIT $top";
             }
         }
-        if($result = mysqli_query($con, $sql)) {
+        if($result = mysqli_query($con, $sql1 . $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
             {
@@ -145,7 +154,7 @@ class ProgettiManager {
         } else {
             print_error(500, $con ->error);
         }
-        return $arr;
+        return [$arr, $count];
     }
 
     function get_utenti_compilanti($id_progetto,$id_questionario) {

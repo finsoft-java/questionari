@@ -161,8 +161,9 @@ class QuestionariManager {
     function get_questionari($top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
-        $sql = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome  
-                    FROM `questionari` q 
+        $sql0 = "SELECT COUNT(*) AS cnt ";
+        $sql1 = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome "; 
+        $sql = "FROM `questionari` q 
                     JOIN utenti u ON q.utente_creazione = u.username
                     left join progetti_questionari pq on q.id_questionario = pq.id_questionario
                     WHERE 1 ";
@@ -181,6 +182,13 @@ class QuestionariManager {
         } else {
             $sql .= " ORDER BY q.data_creazione DESC";
         }
+
+        if($result = mysqli_query($con, $sql0 . $sql)) {
+            $count = mysqli_fetch_assoc($result)["cnt"];
+        } else {
+            print_error(500, $con ->error);
+        }
+
         if ($top){
             if ($skip) {
                 $sql .= " LIMIT $skip,$top";
@@ -189,7 +197,7 @@ class QuestionariManager {
             }
         }
 
-        if($result = mysqli_query($con, $sql)) {
+        if($result = mysqli_query($con, $sql1 . $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
             {
@@ -212,7 +220,7 @@ class QuestionariManager {
         } else {
             print_error(500, $con ->error);
         }
-        return $arr;
+        return [$arr, $count];
     }
     
     function get_questionario($id_questionario) {
