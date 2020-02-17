@@ -18,10 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     
 require_logged_user_JWT();
 
-$username = '';
-if (isset($_GET['username'])) {
-    $username = $con->escape_string($_GET['username']);
-}
+$username = isset($_GET['username']) ? $con->escape_string($_GET['username']) : null;
+$top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
+$skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
+$search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
+$orderby = isset($_GET['orderby']) ? $con->escape_string($_GET['orderby']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -36,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $utente]);
     } else {
         //==========================================================
-        $utenti = $utenteManager->get_utenti();
+        [$utenti, $count] = $utenteManager->get_utenti($top, $skip, $orderby, $search);
           
         header('Content-Type: application/json');
-        echo json_encode(['data' => $utenti]);
+        echo json_encode(['data' => $utenti, 'count' => $count]);
     }
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {

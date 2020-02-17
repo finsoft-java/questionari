@@ -8,12 +8,41 @@ class Utente {
 
 class UtenteManager {
     
-    function get_utenti() {
+    function get_utenti($top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $RUOLO, $BOOLEAN;
         $arr = array();
-        $sql = "SELECT * FROM utenti";
+
+        $sql0 = "SELECT COUNT(*) AS cnt ";
+        $sql1 = "SELECT * ";
+        $sql = "FROM utenti";
+
+        if ($search){
+            $search = strtoupper($search);
+            $search = $con->escape_string($search);
+            $sql .= " WHERE UPPER(username) LIKE '%$search%' OR UPPER(email) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(nome,''), ' ', IFNULL(cognome,''))) LIKE '%$search%'";
+        }
+        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
+            // avoid SQL-injection
+            $sql .= " ORDER BY $orderby";
+        } else {
+            $sql .= " ORDER BY username";
+        }
+
+        if($result = mysqli_query($con, $sql0 . $sql)) {
+            $count = mysqli_fetch_assoc($result)["cnt"];
+        } else {
+            print_error(500, $con ->error);
+        }
+
+        if ($top){
+            if ($skip) {
+                $sql .= " LIMIT $skip,$top";
+            } else {
+                $sql .= " LIMIT $top";
+            }
+        }
         
-        if($result = mysqli_query($con, $sql)) {
+        if($result = mysqli_query($con, $sql1 . $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))
             {
@@ -32,7 +61,7 @@ class UtenteManager {
         } else {
             print_error(500, $con ->error);
         }
-        return $arr;
+        return [$arr, $count];
     }
     
     function insert_password_utente($psw,$username) {
