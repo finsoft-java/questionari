@@ -511,7 +511,7 @@ class QuestionariCompilatiManager {
         return $obj;
     }
     
-    function get_vista_questionari_compilabili_o_compilati($storici, $id_progetto_or_null = null, $id_questionario_or_null = null, $top=null, $skip=null, $search=null) {
+    function get_vista_questionari_compilabili_o_compilati($storici, $id_progetto_or_null = null, $id_questionario_or_null = null, $top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $logged_user, $BOOLEAN, $STATO_QUESTIONARIO, $STATO_PROGETTO, $GRUPPI, $STATO_QUEST_COMP;
         $arr = [];
         if ($storici) {
@@ -535,7 +535,14 @@ class QuestionariCompilatiManager {
             $search = $con->escape_string($search);
             $sql .= " AND ( UPPER(titolo_progetto) LIKE '%$search%' OR UPPER(titolo_questionario) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' ) ";
         }
-        $sql .= " ORDER BY id_progetto DESC, id_questionario DESC";
+        
+        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
+            // avoid SQL-injection
+            $sql .= " ORDER BY $orderby";
+        } else {
+            $sql .= " ORDER BY id_progetto DESC, id_questionario DESC";
+        }
+
         if ($top){
             if ($skip) {
                 $sql .= " LIMIT $skip,$top";

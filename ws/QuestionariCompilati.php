@@ -20,6 +20,7 @@ $progressivo_quest_comp = isset($_GET['progressivo_quest_comp']) ? $con->escape_
 $top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
 $skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
 $search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
+$orderby = isset($_GET['orderby']) ? $con->escape_string($_GET['orderby']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $questionario_compilato]);
     } else {
         //==========================================================
-        $questionari = $questionariCompilatiManager->get_vista_questionari_compilabili_o_compilati($storico, null, null, $top, $skip, $search);
+        $questionari = $questionariCompilatiManager->get_vista_questionari_compilabili_o_compilati($storico, null, null, $top, $skip, $orderby, $search);
         
         header('Content-Type: application/json');
         echo json_encode(['data' => $questionari]);

@@ -158,7 +158,7 @@ class QuestionariManager {
         return $arr;
     }
 
-    function get_questionari($top=null, $skip=null, $search=null) {
+    function get_questionari($top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
         $sql = "SELECT q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione, MAX(id_progetto) as id_progetto,u.nome,u.cognome  
@@ -175,7 +175,12 @@ class QuestionariManager {
             $sql .= " AND ( UPPER(q.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' )";
         }
         $sql .= " GROUP BY q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione";
-        $sql .= " ORDER BY q.data_creazione DESC";
+        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
+            // avoid SQL-injection
+            $sql .= " ORDER BY $orderby";
+        } else {
+            $sql .= " ORDER BY q.data_creazione DESC";
+        }
         if ($top){
             if ($skip) {
                 $sql .= " LIMIT $skip,$top";
@@ -183,7 +188,6 @@ class QuestionariManager {
                 $sql .= " LIMIT $top";
             }
         }
-
 
         if($result = mysqli_query($con, $sql)) {
             $cr = 0;

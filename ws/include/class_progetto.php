@@ -102,7 +102,7 @@ class ProgettoQuestionari {
 
 class ProgettiManager {
     
-    function get_progetti($top=null, $skip=null, $search=null) {
+    function get_progetti($top=null, $skip=null, $orderby=null, $search=null) {
         global $con, $STATO_PROGETTO, $BOOLEAN;
         $arr = array();
         $sql = "SELECT * FROM progetti p JOIN utenti u ON p.utente_creazione = u.username";
@@ -111,7 +111,13 @@ class ProgettiManager {
             $search = $con->escape_string($search);
             $sql .= " WHERE UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%'";
         }
-        $sql .= " ORDER BY p.data_creazione DESC";
+        $matches=[];
+        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby, $matches)) {
+            // avoid SQL-injection
+            $sql .= " ORDER BY $orderby";
+        } else {
+            $sql .= " ORDER BY p.data_creazione DESC";
+        }
         if ($top){
             if ($skip) {
                 $sql .= " LIMIT $skip,$top";

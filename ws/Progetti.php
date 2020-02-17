@@ -22,6 +22,7 @@ $id_progetto = isset($_GET['id_progetto']) ? $con->escape_string($_GET['id_proge
 $top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
 $skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
 $search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
+$orderby = isset($_GET['orderby']) ? $con->escape_string($_GET['orderby']) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -36,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $progetto]);
     } else {
         //==========================================================
-        $progetti = $progettiManager->get_progetti($top, $skip, $search);
+        $progetti = $progettiManager->get_progetti($top, $skip, $orderby, $search);
           
         header('Content-Type: application/json');
         echo json_encode(['data' => $progetti]);
