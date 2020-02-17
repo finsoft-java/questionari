@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { User, Progetto } from '@/_models';
+import { User, Progetto, Pagination } from '@/_models';
 import { AuthenticationService, ProgettiService, AlertService, WebsocketService, Message } from '@/_services';
 import { Router } from '@angular/router';
 
@@ -12,12 +12,14 @@ export class ProgettiComponent implements OnInit, OnDestroy {
     websocketsSubscription: Subscription;
     currentUser: User;
     progetti : Progetto[];
+    intestazione = ["Titolo", "Stato" ,"Creato da", "Data Creazione"]
     searchString : string;
     progetti_visibili : Progetto[];
     loading = true;
     current_order: string = "asc";
     nome_colonna_ordinamento: string = "username";
-
+    pagination_def : Pagination;
+    paginazione_current : Pagination;
     constructor(
         private authenticationService: AuthenticationService,
         private progettiService: ProgettiService,
@@ -33,7 +35,9 @@ export class ProgettiComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getProgetti();
+        this.pagination_def = new Pagination;
+        console.log(this.pagination_def);
+        this.filter(this.pagination_def);
     }
 
     ngOnDestroy() {
@@ -72,36 +76,20 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                 this.alertService.error(error);
             });
     }
-
+    //TODO ??
     ordinamento(nome_colonna){
         if(this.current_order == 'asc'){
-            this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
+            //this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
             this.current_order = 'desc';
         }else{
-            this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
+            //this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
             this.current_order = 'asc';
         }
-        this.nome_colonna_ordinamento = nome_colonna;
- 
+        this.nome_colonna_ordinamento = nome_colonna; 
+        this.filter(this.paginazione_current);
     }
-    getProgetti(): void {
-        this.progettiService.getAll()
-            .subscribe(response => {
-                this.progetti = response["data"];
-                this.calcola_progetti_visibili();
-                this.loading = false;                
-                if(this.current_order == 'asc'){
-                    this.current_order ='desc';
-                }else{                    
-                    this.current_order ='asc';
-                }
-                this.ordinamento(this.nome_colonna_ordinamento);
-            },
-            error => {
-                this.alertService.error(error);
-                this.loading = false;
-            });
-    }
+
+    
     elimina(id_progetto: number): void {
         if(confirm("Stai per eliminare l'intero progetto! Procedere?")) {
             this.progettiService.delete(id_progetto)
@@ -109,7 +97,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                     let index = this.progetti.findIndex(p => p.id_progetto == id_progetto);
                     let progettoOld = this.progetti[index];
                     this.progetti.splice(index, 1);
-                    this.calcola_progetti_visibili();
+                    //this.calcola_progetti_visibili();
                     this.sendMsgProgetto(progettoOld, 'Il progetto è appena stato eliminato');
                 },
                 error => {
@@ -122,7 +110,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 let p : Progetto = response["value"];
                 this.progetti.push(p);
-                this.calcola_progetti_visibili();
+                //this.calcola_progetti_visibili();
                 this.sendMsgProgetto(p, 'Creato nuovo progetto');
             },
             error => {
@@ -130,9 +118,30 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             });
     }
     refresh() {
-        this.getProgetti();
+        this.filter(this.paginazione_current);
     }
+
+    filter(p:Pagination){
+
+        this.progettiService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order)
+        .subscribe(response => {
+            this.progetti = response["data"];
+            this.progetti_visibili = this.progetti;
+            //this.calcola_progetti_visibili();
+            this.loading = false;                
+            this.paginazione_current = p;
+            //this.ordinamento(this.nome_colonna_ordinamento);
+        },
+        error => {
+            this.alertService.error(error);
+            this.loading = false;
+        });
+
+
+    }
+    /*
     set_search_string(searchString) {
+        console.log(searchString);
         this.searchString = searchString;
         this.calcola_progetti_visibili();
     }
@@ -148,6 +157,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             );
         }
     }
+    */
     sendMsgProgetto(p : Progetto, note : string) {
         let msg : Message = {
             what_has_changed: 'progetti',
