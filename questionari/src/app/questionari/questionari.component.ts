@@ -33,6 +33,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.pagination_def = new Pagination;
+        this.pagination_def.mostra_bottone_stato = true;
         this.filter(this.pagination_def);
     }
 
@@ -50,15 +51,13 @@ export class QuestionariComponent implements OnInit, OnDestroy {
 
     filter(p:Pagination){
 
-        this.questionariService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order)
+        this.questionariService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order,p.mostra_solo_validi)
         .subscribe(response => {
             this.questionari = response["data"];
             this.countQuestionari = response["count"];
             this.questionari_visibili = this.questionari;
-            //this.calcola_progetti_visibili();
             this.loading = false;                
             this.paginazione_current = p;
-            //this.ordinamento(this.nome_colonna_ordinamento);
         },
         error => {
             this.alertService.error(error);
@@ -104,6 +103,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         this.nome_colonna_ordinamento = nome_colonna;
         this.filter(this.paginazione_current);
     }
+
     elimina(id_questionario: number, id_progetto: any): void {
         if(id_progetto == null){
             if(confirm("Stai per eliminare l'intero questionario! Procedere?")) {
@@ -145,7 +145,6 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 let q : Questionario = response["value"];
                 this.questionari.push(q);
-                //this.calcola_questionari_visibili();
                 this.sendMsgQuestionario(q, 'Creato nuovo questionario');
                 this.alertService.success("Questionario duplicato con successo");
             },
@@ -157,25 +156,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     refresh() {
         this.filter(this.paginazione_current);
     }
-/*
-    set_search_string(searchString) {
-        this.searchString = searchString;
-        this.calcola_questionari_visibili();
-    }
 
-    calcola_questionari_visibili() {
-        if (!this.searchString) {
-            this.questionari_visibili = this.questionari;
-        } else {
-            let s = this.searchString.toLowerCase();
-            this.questionari_visibili = this.questionari.filter(q => 
-                (q.titolo != null && q.titolo.toLowerCase().includes(s)) ||
-                ((q.cognome+" "+q.nome).toLowerCase().includes(s)) ||
-                (q.stato_dec != null && q.stato_dec.toLowerCase().includes(s))
-            );
-        }
-    }
-*/
     sendMsgQuestionario(q : Questionario, note : string) {
         let msg : Message = {
             what_has_changed: 'questionari',

@@ -5,7 +5,7 @@
         <button class="btn btn-dark" style="margin-top:10px;margin-right:5px;" (click)="refresh()"><i class="fa fa-sync"></i> Refresh</button>
     </div>
     <div style="float:right">
-        <filter-table [is_compilazioni]="false" (filter)="this.filter($event)" [count]="this.countProgetti"></filter-table>
+        <filter-table [is_quest_prog]="true" [is_compilazioni]="false" (filter)="this.filter($event)" [count]="this.countProgetti"></filter-table>
     </div>
 </div>
 <div style="background-color: #f8f9fa;float: left;width: 100%;margin-top:15px;">

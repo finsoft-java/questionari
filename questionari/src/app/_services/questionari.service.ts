@@ -10,8 +10,8 @@ export class QuestionariService {
     getAll() {
         return this.http.get<Questionario[]>(`${config.apiUrl}/Questionari.php`);
     }
-    getAllFiltered(top:number, skip:number,search : string, orderBy : string) {
-        return this.http.get<Questionario[]>(`${config.apiUrl}/Questionari.php?top=${top}&skip=${skip}&search=${search}&orderby=${orderBy}`);
+    getAllFiltered(top:number, skip:number,search : string, orderBy : string,mostra_solo_validi : boolean) {
+        return this.http.get<Questionario[]>(`${config.apiUrl}/Questionari.php?top=${top}&skip=${skip}&search=${search}&orderby=${orderBy}&mostra_solo_validi=${mostra_solo_validi}`);
     }
     getAllValidi() {
         return this.http.get<Questionario[]>(`${config.apiUrl}/QuestionariValidi.php`);

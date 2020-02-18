@@ -111,7 +111,7 @@ class ProgettiManager {
         if ($search){
             $search = strtoupper($search);
             $search = $con->escape_string($search);
-            $sql .= " AND UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%'";
+            $sql .= " AND (UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%')";
         }
         if ($mostra_solo_validi) {
             $sql .= " AND p.stato in ('0', '1') ";

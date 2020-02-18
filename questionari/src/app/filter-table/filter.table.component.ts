@@ -13,6 +13,7 @@ export class FilterTableComponent implements OnInit {
 
   @Output() filter = new EventEmitter<Pagination>();
   @Input() is_compilazioni : boolean;
+  @Input() is_quest_prog : boolean;
   private _count : number;
   currentUserSubscription: Subscription;
   currentUser: User;
@@ -30,8 +31,12 @@ export class FilterTableComponent implements OnInit {
     if(this.is_compilazioni){
       this.pagination.is_quest_comp = true;
     }
+    if(this.is_quest_prog){
+      this.pagination.mostra_bottone_stato = true;
+    }
     this.numPagina();
   }
+
   get count(): number { 
     return this._count;
   }
@@ -40,7 +45,11 @@ export class FilterTableComponent implements OnInit {
     this.pagination.start_item = 0;
     this.filter.emit(this.pagination);    
   }
-
+  filter_stato(s : boolean) {
+    this.pagination.mostra_solo_validi = !s;
+    this.pagination.start_item = 0;
+    this.filter.emit(this.pagination);    
+  }
   @Input()
   set count(count: number) {
     if(count == null){

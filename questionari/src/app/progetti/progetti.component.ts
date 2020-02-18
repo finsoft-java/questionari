@@ -75,13 +75,11 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                 this.alertService.error(error);
             });
     }
-    //TODO ??
+    
     ordinamento(nome_colonna){
         if(this.current_order == 'asc'){
-            //this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
             this.current_order = 'desc';
         }else{
-            //this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
             this.current_order = 'asc';
         }
         this.nome_colonna_ordinamento = nome_colonna; 
@@ -96,7 +94,6 @@ export class ProgettiComponent implements OnInit, OnDestroy {
                     let index = this.progetti.findIndex(p => p.id_progetto == id_progetto);
                     let progettoOld = this.progetti[index];
                     this.progetti.splice(index, 1);
-                    //this.calcola_progetti_visibili();
                     this.sendMsgProgetto(progettoOld, 'Il progetto è appena stato eliminato');
                 },
                 error => {
@@ -109,7 +106,6 @@ export class ProgettiComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 let p : Progetto = response["value"];
                 this.progetti.push(p);
-                //this.calcola_progetti_visibili();
                 this.sendMsgProgetto(p, 'Creato nuovo progetto');
             },
             error => {
@@ -122,15 +118,13 @@ export class ProgettiComponent implements OnInit, OnDestroy {
 
     filter(p:Pagination){
 
-        this.progettiService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order)
+        this.progettiService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order,p.mostra_solo_validi)
         .subscribe(response => {
             this.progetti = response["data"];
             this.countProgetti = response["count"];
             this.progetti_visibili = this.progetti;
-            //this.calcola_progetti_visibili();
             this.loading = false;                
             this.paginazione_current = p;
-            //this.ordinamento(this.nome_colonna_ordinamento);
         },
         error => {
             this.alertService.error(error);
@@ -139,25 +133,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
 
 
     }
-    /*
-    set_search_string(searchString) {
-        console.log(searchString);
-        this.searchString = searchString;
-        this.calcola_progetti_visibili();
-    }
-    calcola_progetti_visibili() {
-        if (!this.searchString) {
-            this.progetti_visibili = this.progetti;
-        } else {
-            let s = this.searchString.toLowerCase();
-            this.progetti_visibili = this.progetti.filter(p => 
-                (p.titolo != null && p.titolo.toLowerCase().includes(s)) ||
-                ((p.cognome+" "+p.nome).toLowerCase().includes(s)) ||
-                (p.stato_dec != null && p.stato_dec.toLowerCase().includes(s))
-            );
-        }
-    }
-    */
+    
     sendMsgProgetto(p : Progetto, note : string) {
         let msg : Message = {
             what_has_changed: 'progetti',
@@ -166,6 +142,7 @@ export class ProgettiComponent implements OnInit, OnDestroy {
           }
       this.websocketsService.sendMsg(msg);
     }
+
     onWebsocketMessage(msg : Message) {
         if (msg.what_has_changed == "progetti") {
             this.refresh();
