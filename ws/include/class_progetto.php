@@ -102,16 +102,19 @@ class ProgettoQuestionari {
 
 class ProgettiManager {
     
-    function get_progetti($top=null, $skip=null, $orderby=null, $search=null) {
+    function get_progetti($top=null, $skip=null, $orderby=null, $search=null, $mostra_solo_validi=false) {
         global $con, $STATO_PROGETTO, $BOOLEAN;
         $arr = array();
         $sql1 = "SELECT * ";
         $sql0 = "SELECT COUNT(*) AS cnt ";
-        $sql = "FROM progetti p JOIN utenti u ON p.utente_creazione = u.username";
+        $sql = "FROM progetti p JOIN utenti u ON p.utente_creazione = u.username WHERE 1 ";
         if ($search){
             $search = strtoupper($search);
             $search = $con->escape_string($search);
-            $sql .= " WHERE UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%'";
+            $sql .= " AND UPPER(p.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%'";
+        }
+        if ($mostra_solo_validi) {
+            $sql .= " AND p.stato in ('0', '1') ";
         }
         if ($orderby && preg_match("/^[a-zA-Z0-9,_ ]+$/", $orderby)) {
             // avoid SQL-injection

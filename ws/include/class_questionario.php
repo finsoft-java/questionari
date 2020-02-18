@@ -158,7 +158,7 @@ class QuestionariManager {
         return $arr;
     }
 
-    function get_questionari($top=null, $skip=null, $orderby=null, $search=null) {
+    function get_questionari($top=null, $skip=null, $orderby=null, $search=null, $mostra_solo_validi=false) {
         global $con, $STATO_QUESTIONARIO, $BOOLEAN, $logged_user;
         $arr = array();
         $sql0 = "SELECT COUNT(*) AS cnt FROM `questionari` q 
@@ -177,6 +177,9 @@ class QuestionariManager {
             $search = strtoupper($search);
             $search = $con->escape_string($search);
             $sql .= " AND ( UPPER(q.titolo) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.cognome,''), ' ', IFNULL(u.nome,''))) LIKE '%$search%' )";
+        }
+        if ($mostra_solo_validi) {
+            $sql .= " AND q.stato in ('0', '1') ";
         }
         
         if($result = mysqli_query($con, $sql0 . $sql)) {

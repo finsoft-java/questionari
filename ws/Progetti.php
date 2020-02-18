@@ -23,6 +23,7 @@ $top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
 $skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
 $search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
 $orderby = isset($_GET['orderby']) ? $con->escape_string($_GET['orderby']) : null;
+$mostra_solo_validi = isset($_GET['mostra_solo_validi']) ? ($con->escape_string($_GET['mostra_solo_validi']) === 'true' ? true : false) : false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
@@ -37,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['value' => $progetto]);
     } else {
         //==========================================================
-        [$progetti, $count] = $progettiManager->get_progetti($top, $skip, $orderby, $search);
+        [$progetti, $count] = $progettiManager->get_progetti($top, $skip, $orderby, $search, $mostra_solo_validi);
           
         header('Content-Type: application/json');
         echo json_encode(['data' => $progetti, 'count' => $count]);
