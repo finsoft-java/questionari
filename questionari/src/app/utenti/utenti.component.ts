@@ -43,14 +43,12 @@ export class UtentiComponent implements OnInit, OnDestroy {
     }
     ordinamento(nome_colonna){
         if(this.current_order == 'asc'){
-            this.utenti_visibili = this.utenti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
             this.current_order = 'desc';
         }else{
-            this.utenti_visibili = this.utenti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
             this.current_order = 'asc';
         }
         this.nome_colonna_ordinamento = nome_colonna;
- 
+        this.filter(this.pagination_def); 
     }
     newUser() {
         let userNew = new User();
@@ -91,35 +89,14 @@ export class UtentiComponent implements OnInit, OnDestroy {
             this.utenti = response["data"];
             this.countUtenti = response["count"];
             this.utenti_visibili = this.utenti;
-            //this.calcola_progetti_visibili();
             this.loading = false;                
             this.paginazione_current = p;
-            //this.ordinamento(this.nome_colonna_ordinamento);
         },
         error => {
             this.alertService.error(error);
             this.loading = false;
         });
     }
-    /*
-    set_search_string(searchString) {
-        this.searchString = searchString;
-        this.calcola_utenti_visibili();
-    }
-    calcola_utenti_visibili() {
-        if (!this.searchString) {
-            this.utenti_visibili = this.utenti;
-        } else {
-            let s = this.searchString.toLowerCase();
-            this.utenti_visibili = this.utenti.filter(user => 
-                (user.username != null && user.username.toLowerCase().includes(s)) ||
-                (user.cognome != null && user.cognome.toLowerCase().includes(s)) ||
-                (user.nome != null && user.nome.toLowerCase().includes(s)) ||
-                (user.email != null && user.email.toLowerCase().includes(s))
-            );
-        }
-    }
-    */
     removeItem(username: string) {
         let index = this.utenti.findIndex(user => user.username == username);
         let oldUtente = this.utenti[index];
