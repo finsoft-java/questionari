@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { User, Questionario } from '@/_models';
+import { User, Questionario, Pagination } from '@/_models';
 import { AuthenticationService, QuestionariService, AlertService, WebsocketService, Message } from '@/_services';
 import { Router } from '@angular/router';
 
@@ -16,6 +16,9 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     loading = true;
     current_order: string = "asc";
     nome_colonna_ordinamento: string = "username";
+    countQuestionari : number;
+    pagination_def : Pagination;
+    paginazione_current : Pagination;
 
     constructor(private authenticationService: AuthenticationService,
                 private questionariService: QuestionariService,
@@ -29,7 +32,8 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     } 
 
     ngOnInit() {
-        this.getQuestionari();
+        this.pagination_def = new Pagination;
+        this.filter(this.pagination_def);
     }
 
     ngOnDestroy() {
@@ -43,6 +47,26 @@ export class QuestionariComponent implements OnInit, OnDestroy {
         }
         return i;
       }
+
+    filter(p:Pagination){
+
+        this.questionariService.getAllFiltered(p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order)
+        .subscribe(response => {
+            this.questionari = response["data"];
+            this.countQuestionari = response["count"];
+            this.questionari_visibili = this.questionari;
+            //this.calcola_progetti_visibili();
+            this.loading = false;                
+            this.paginazione_current = p;
+            //this.ordinamento(this.nome_colonna_ordinamento);
+        },
+        error => {
+            this.alertService.error(error);
+            this.loading = false;
+        });
+
+
+    }
     crea() {
         let newQuest = new Questionario();
         newQuest.stato = "0";
@@ -70,25 +94,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                 this.alertService.error(error);
             });
     }
-    getQuestionari(): void {
-        this.loading = true;
-        this.questionariService.getAll()
-            .subscribe(response => {
-                this.questionari = response["data"];
-                this.calcola_questionari_visibili();
-                this.loading = false;
-                if(this.current_order == 'asc'){
-                    this.current_order ='desc';
-                }else{                    
-                    this.current_order ='asc';
-                }
-                this.ordinamento(this.nome_colonna_ordinamento);
-            },
-            error => {
-                this.alertService.error(error);
-                this.loading = false;
-            });
-    }
+    
     ordinamento(nome_colonna){
         if(this.current_order == 'asc'){
             this.questionari_visibili = this.questionari_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
@@ -107,7 +113,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                         let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
                         let oldQuest = this.questionari[index];
                         this.questionari.splice(index, 1);
-                        this.calcola_questionari_visibili();
+                        //this.calcola_questionari_visibili();
                         this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
                         this.alertService.success("Il questionario è appena stato eliminato");
                     },
@@ -122,7 +128,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
                         let index = this.questionari.findIndex(q => q.id_questionario == id_questionario);
                         let oldQuest = this.questionari[index];
                         this.questionari.splice(index, 1);
-                        this.calcola_questionari_visibili();
+                        //this.calcola_questionari_visibili();
                         this.sendMsgQuestionario(oldQuest, 'Il questionario è appena stato eliminato');
                         
                         this.alertService.success("Il questionario è appena stato eliminato");
@@ -140,7 +146,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 let q : Questionario = response["value"];
                 this.questionari.push(q);
-                this.calcola_questionari_visibili();
+                //this.calcola_questionari_visibili();
                 this.sendMsgQuestionario(q, 'Creato nuovo questionario');
                 this.alertService.success("Questionario duplicato con successo");
             },
@@ -150,9 +156,9 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.getQuestionari();
+        this.filter(this.paginazione_current);
     }
-
+/*
     set_search_string(searchString) {
         this.searchString = searchString;
         this.calcola_questionari_visibili();
@@ -170,7 +176,7 @@ export class QuestionariComponent implements OnInit, OnDestroy {
             );
         }
     }
-
+*/
     sendMsgQuestionario(q : Questionario, note : string) {
         let msg : Message = {
             what_has_changed: 'questionari',

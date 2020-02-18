@@ -1,4 +1,9 @@
 <search (doSearch)="searchStringFunction($event)" [(searchString)]="pagination.search_string"></search>
-<p>Pag {{this.pagination.start_item}} - {{this.pagination.row_per_page}}</p>
-<button class="btn btn-dark" style="margin-top:10px;" (click)="paginationMinusFunction()">Prec</button>
-<button class="btn btn-dark" style="margin-left:15px;margin-top:10px;margin-right:5px;" (click)="paginationPlusFunction()">Succ</button>
+
+<div style="float:right;margin-left: 15px;">
+    <button class="btn btn-dark" style="margin-top:10px;float: left;" [disabled]="this.pagination.start_item == 0" (click)="paginationMinusFunction()">Prec</button>
+    <span style=" width: auto; text-align: center;float: left;line-height: 33px;margin-top: 10px;margin-left: 15px;margin-right: 5px;">
+        Pag {{this.numPag}} / {{this.numPagine}}
+    </span>
+    <button class="btn btn-dark" style="float:right;margin-left:15px;margin-top:10px;margin-right:5px;" [disabled]="this.pagination.start_item + this.pagination.row_per_page >= this.count" (click)="paginationPlusFunction()">Succ</button>
+</div>

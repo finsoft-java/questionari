@@ -1,4 +1,4 @@
-<td style="width:10%;">
+<td style="width:14%;">
     <div *ngIf="utente.creating">
         <input class="form-control input_utente" [disabled]="utente.from_ldap" [(ngModel)]="utente_in_modifica.username" required title="LDAP username" placeholder="LDAP username" />
     </div>
@@ -42,7 +42,7 @@
         <div title="{{utente.ruolo_dec}}" tabindex="0" style="outline: none !important; line-height: 38px;text-align:center">{{utente.ruolo_dec}}&nbsp;</div>
     </div>
 </td>
-<td>
+<td style="width:21%;">
     <div>
         <button class="btn btn-success btn3" *ngIf="!utente.editing" [disabled]="utente.from_ldap" data-toggle="modal" [attr.data-target]="'#myModal_' + indice_utente" (click)="showModal(this.utente)" style="background-color: grey;border-color: grey;" [title]="utente.from_ldap ? 'Impossibile cambiare password di utenza LDAP' : 'Cambia Password'"><i class="fa fa-key"></i></button>
         <button class="btn btn-success btn3" *ngIf="!utente.editing" (click)="goToEdit()" title="Modifica"><i class="fa fa-edit"></i></button>
@@ -51,7 +51,7 @@
         <button class="btn btn-danger btn2" *ngIf="utente.editing" (click)="returnFromEdit()" title="Annulla"><i class="fa fa-undo"></i></button>
     </div>
 </td>
-<td>
+<td style="width:0px !important;padding:0px;">
     <div class="modal fade" id="myModal_{{indice_utente}}">
         <div class="modal-dialog">
             <div class="modal-content">
