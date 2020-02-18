@@ -21,7 +21,7 @@ $top = isset($_GET['top']) ? $con->escape_string($_GET['top']) : null;
 $skip = isset($_GET['skip']) ? $con->escape_string($_GET['skip']) : null;
 $search = isset($_GET['search']) ? $con->escape_string($_GET['search']) : null;
 $orderby = isset($_GET['orderby']) ? $con->escape_string($_GET['orderby']) : null;
-$mostra_solo_admin = isset($_GET['mostra_solo_admin']) ? $con->escape_string($_GET['mostra_solo_admin']) : false;
+$mostra_solo_admin = isset($_GET['mostra_solo_admin']) ? ($con->escape_string($_GET['mostra_solo_admin']) === "true" ? true : false) : false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     

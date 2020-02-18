@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { User, QuestionarioCompilato, VistaQuestionariCompilabili } from '@/_models';
+import { User, QuestionarioCompilato, VistaQuestionariCompilabili, Pagination } from '@/_models';
 import { AuthenticationService, QuestionariCompilatiService, AlertService, WebsocketService, Message } from '@/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -17,6 +17,11 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
     searchString : string;
     mostra_solo_admin: boolean= false;
     quest_comp_visibili : VistaQuestionariCompilabili[];
+    current_order: string = "asc";
+    nome_colonna_ordinamento: string = "titolo_questionario";
+    countQuestionari: number;
+    pagination_def : Pagination;
+    paginazione_current : Pagination;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -33,10 +38,14 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
     } 
 
     ngOnInit() {
+        this.pagination_def = new Pagination;
+        
+        
         this.questCompSubscription = this.route.data.subscribe(data => {
             this.storico = (data['storico'] != null && data['storico'] != '' && data['storico']);
-            this.getLista();
+            this.filter(this.pagination_def);
          });
+         
     }
 
     ngOnDestroy() {
@@ -45,6 +54,7 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
         this.questCompSubscription.unsubscribe();
         this.websocketsSubscription.unsubscribe();
     }
+    /*
     getLista(): void {
         this.loading = true;
         this.questCompService.getAll(this.storico)
@@ -57,27 +67,60 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
                 this.alertService.error(error);
                 this.loading = false;
             });
-    }
+    }*/
     refresh() {
-        this.getLista();
+        this.filter(this.paginazione_current);
     }
+    /*
     filter_admin() {
         this.mostra_solo_admin = !this.mostra_solo_admin;
         if(this.mostra_solo_admin){
             let utente_collegato = this.currentUser.nome_utente;
             this.questionari = this.questionari.filter(obj => obj.nome_utente == utente_collegato);
-            this.calcola_questionari_visibili();
+            //this.calcola_questionari_visibili();
         }else{
             this.refresh();
         }
     }
+    */
+    ordinamento(nome_colonna){
+        if(this.current_order == 'asc'){
+            //this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
+            this.current_order = 'desc';
+        }else{
+            //this.progetti_visibili = this.progetti_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
+            this.current_order = 'asc';
+        }
+        this.nome_colonna_ordinamento = nome_colonna; 
+        this.filter(this.paginazione_current);
+    }
+
+    filter(p:Pagination){
+
+        this.questCompService.getAllFiltered(this.storico,p.row_per_page,p.start_item,p.search_string,this.nome_colonna_ordinamento+' '+this.current_order,p.mostra_solo_admin)
+        .subscribe(response => {
+            this.questionari = response["data"];
+            this.countQuestionari = response["count"];
+            this.quest_comp_visibili = this.questionari;
+            this.loading = false;                
+            this.paginazione_current = p;
+        },
+        error => {
+            this.alertService.error(error);
+            this.loading = false;
+        });
+
+
+    }
+
     removeItem(progressivoQuestComp: number) {
         let index = this.questionari.findIndex(obj => obj.progressivo_quest_comp == progressivoQuestComp);
         let q = this.questionari[index];
         this.questionari.splice(index, 1);
-        this.calcola_questionari_visibili();
+        //this.calcola_questionari_visibili();
         this.sendMsgQuestComp(q, 'Il questionario è appena stato rimosso');
     }
+    /*
     set_search_string(searchString) {
         this.searchString = searchString;
         this.calcola_questionari_visibili();
@@ -94,6 +137,7 @@ export class QuestionariDaCompilareComponent implements OnInit, OnDestroy {
             );
         }
     }
+    */
     sendMsgQuestComp(q : QuestionarioCompilato | VistaQuestionariCompilabili, note : string) {
         let msg : Message = {
             what_has_changed: 'questionariCompilati',

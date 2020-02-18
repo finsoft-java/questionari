@@ -1,5 +1,8 @@
 import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import { Pagination } from '@/_models/pagination';
+import { AuthenticationService, WebsocketService } from '@/_services';
+import { Subscription } from 'rxjs';
+import { User } from '@/_models';
 
 @Component({
   selector: 'filter-table',
@@ -9,20 +12,35 @@ import { Pagination } from '@/_models/pagination';
 export class FilterTableComponent implements OnInit {
 
   @Output() filter = new EventEmitter<Pagination>();
+  @Input() is_compilazioni : boolean;
   private _count : number;
+  currentUserSubscription: Subscription;
+  currentUser: User;
   pagination : Pagination;
   numPag : number;//pagina Corrente
   numPagine: number;//pagine totali
-  constructor() {}
+  constructor(private authenticationService: AuthenticationService,private websocketsService: WebsocketService) {
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user;
+  });
+  }
  
   ngOnInit() {
     this.pagination = new Pagination();
+    if(this.is_compilazioni){
+      this.pagination.is_quest_comp = true;
+    }
     this.numPagina();
   }
   get count(): number { 
     return this._count;
   }
-  
+  filter_admin(s : boolean) {
+    this.pagination.mostra_solo_admin = !s;
+    this.pagination.start_item = 0;
+    this.filter.emit(this.pagination);    
+  }
+
   @Input()
   set count(count: number) {
     if(count == null){

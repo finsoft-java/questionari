@@ -7,7 +7,7 @@
         <button class="btn btn-dark" style="margin-right:5px;margin-top:10px;" (click)="sync()"><i class="fa fa-retweet"></i> Sincronizza LDAP</button>
     </div>
     <div style="float:right">
-        <filter-table (filter)="this.filter($event)" [count]="this.countUtenti"></filter-table>
+        <filter-table [is_compilazioni]="false" (filter)="this.filter($event)" [count]="this.countUtenti"></filter-table>
     </div>
 </div>
 

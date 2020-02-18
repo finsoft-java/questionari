@@ -5,7 +5,7 @@
         <button class="btn btn-dark" style="margin-top:10px;margin-right:5px;" (click)="refresh()"><i class="fa fa-sync"></i> Refresh</button>
     </div>
     <div style="float:right">
-        <filter-table (filter)="this.filter($event)" [count]="this.countProgetti"></filter-table>
+        <filter-table [is_compilazioni]="false" (filter)="this.filter($event)" [count]="this.countProgetti"></filter-table>
     </div>
 </div>
 <div style="background-color: #f8f9fa;float: left;width: 100%;margin-top:15px;">
@@ -13,9 +13,9 @@
         <i *ngIf="current_order == 'desc' && nome_colonna_ordinamento == 'titolo'" class="fa fa-sort-alpha-up"></i>
         <i *ngIf="current_order == 'asc' && nome_colonna_ordinamento == 'titolo'" class="fa fa-sort-alpha-down"></i>
     </div>
-    <div style="float: left;width: 10%;padding: .75rem;text-align: center;font-weight: bold;" (click)="ordinamento('stato_dec')">Stato
-        <i *ngIf="current_order == 'desc' && nome_colonna_ordinamento == 'stato_dec'" class="fa fa-sort-alpha-up"></i>
-        <i *ngIf="current_order == 'asc' && nome_colonna_ordinamento == 'stato_dec'" class="fa fa-sort-alpha-down"></i>
+    <div style="float: left;width: 10%;padding: .75rem;text-align: center;font-weight: bold;" (click)="ordinamento('stato')">Stato
+        <i *ngIf="current_order == 'desc' && nome_colonna_ordinamento == 'stato'" class="fa fa-sort-alpha-up"></i>
+        <i *ngIf="current_order == 'asc' && nome_colonna_ordinamento == 'stato'" class="fa fa-sort-alpha-down"></i>
     </div>
     <div style="float: left;width: 15%;padding: .75rem;text-align: center;font-weight: bold;" (click)="ordinamento('utente_creazione')">Creato da
         <i *ngIf="current_order == 'desc' && nome_colonna_ordinamento == 'utente_creazione'" class="fa fa-sort-alpha-up"></i>

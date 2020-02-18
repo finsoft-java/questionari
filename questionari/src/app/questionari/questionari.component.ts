@@ -97,13 +97,12 @@ export class QuestionariComponent implements OnInit, OnDestroy {
     
     ordinamento(nome_colonna){
         if(this.current_order == 'asc'){
-            this.questionari_visibili = this.questionari_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? -1 : 1));//desc
             this.current_order = 'desc';
         }else{
-            this.questionari_visibili = this.questionari_visibili.sort((a,b) =>  (a[nome_colonna] > b[nome_colonna] ? 1 : -1));//asc
             this.current_order = 'asc';
         }
         this.nome_colonna_ordinamento = nome_colonna;
+        this.filter(this.paginazione_current);
     }
     elimina(id_questionario: number, id_progetto: any): void {
         if(id_progetto == null){

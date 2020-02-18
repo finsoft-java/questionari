@@ -12,6 +12,12 @@ export class QuestionariCompilatiService {
         let storico_str: string = storico ? '1' : '0';
         return this.http.get<VistaQuestionariCompilabili[]>(`${config.apiUrl}/QuestionariCompilati.php?storico=${storico_str}`);
     }
+
+    getAllFiltered(storico: boolean,top:number, skip:number,search : string, orderBy : string,mostra_solo_admin: boolean) {
+        // FIXME bisognerebbe passare dei parametri
+        let storico_str: string = storico ? '1' : '0';
+        return this.http.get<VistaQuestionariCompilabili[]>(`${config.apiUrl}/QuestionariCompilati.php?storico=${storico_str}&top=${top}&skip=${skip}&search=${search}&orderby=${orderBy}&mostra_solo_admin=${mostra_solo_admin}`);
+    }
     getRisposteUtenti(progressivo_quest_comp) {
         // gli ultimi due possono anche essere null
         return this.http.get<Object[]>(`${config.apiUrl}/QuestionariValidati.php?progressivo_quest_comp=${progressivo_quest_comp}`);

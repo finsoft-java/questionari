@@ -186,7 +186,7 @@ class QuestionariManager {
         }
 
         $sql .= " GROUP BY q.id_questionario,q.titolo,q.stato,q.gia_compilato,q.flag_comune,q.utente_creazione,q.data_creazione";
-        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
+        if ($orderby && preg_match("/^[a-zA-Z0-9,_ ]+$/", $orderby)) {
             // avoid SQL-injection
             $sql .= " ORDER BY $orderby";
         } else {

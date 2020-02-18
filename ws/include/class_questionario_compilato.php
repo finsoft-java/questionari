@@ -536,10 +536,10 @@ class QuestionariCompilatiManager {
         if ($search){
             $search = strtoupper($search);
             $search = $con->escape_string($search);
-            $sql .= " AND ( UPPER(titolo_progetto) LIKE '%$search%' OR UPPER(titolo_questionario) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(u.nome,''), ' ', IFNULL(u.cognome,''))) LIKE '%$search%' ) ";
+            $sql .= " AND ( UPPER(titolo_progetto) LIKE '%$search%' OR UPPER(titolo_questionario) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(nome,''), ' ', IFNULL(cognome,''))) LIKE '%$search%' ) ";
         }
         
-        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
+        if ($orderby && preg_match("/^[a-zA-Z0-9,_ ]+$/", $orderby)) {
             // avoid SQL-injection
             $sql .= " ORDER BY $orderby";
         } else {
@@ -560,7 +560,6 @@ class QuestionariCompilatiManager {
                 $sql .= " LIMIT $top";
             }
         }
-
         if($result = mysqli_query($con, $sql1 . $sql)) {
             $cr = 0;
             while($row = mysqli_fetch_assoc($result))

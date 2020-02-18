@@ -21,7 +21,7 @@ class UtenteManager {
             $search = $con->escape_string($search);
             $sql .= " WHERE UPPER(username) LIKE '%$search%' OR UPPER(email) LIKE '%$search%' OR UPPER(CONCAT(IFNULL(nome,''), ' ', IFNULL(cognome,''))) LIKE '%$search%'";
         }
-        if ($orderby && preg_match("/^[a-zA-Z0-9, ]+$/", $orderby)) {
+        if ($orderby && preg_match("/^[a-zA-Z0-9,_ ]+$/", $orderby)) {
             // avoid SQL-injection
             $sql .= " ORDER BY $orderby";
         } else {
