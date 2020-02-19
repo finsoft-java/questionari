@@ -174,7 +174,7 @@ class UtenteManager {
     }
 
     function get_map_utenti() {
-        $utenti = $this->get_utenti();
+        $utenti = $this->get_utenti()[0];
         $map = [];
         foreach ($utenti as $u) {
             $map[$u->username] = $u;
@@ -189,7 +189,7 @@ class UtenteManager {
     function sync() {
 
         $utenti_su_db_map = $this->get_map_utenti();
-
+        
         $utenti_aggiornati = 0;
         $utenti_inseriti = 0;
         $utenti_eliminati_su_LDAP = 0;
